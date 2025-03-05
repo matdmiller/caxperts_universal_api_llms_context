@@ -15,6 +15,10 @@ on:
       - 'merge_api.py'
       - '.github/workflows/update-npm-package.yml'
 
+# Add permissions for the GITHUB_TOKEN
+permissions:
+  contents: write
+
 jobs:
   update-package:
     runs-on: ubuntu-latest
@@ -72,7 +76,5 @@ jobs:
           fi
       
       - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: main
+        # Use git push directly instead of the third-party action
+        run: git push
