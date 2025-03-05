@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="transparent" content="true">
+    <title>Bounding Box Text Visualizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: rgba(33, 37, 41, 0.8);
+            color: white;
+        }
+        .card {
+            background-color: rgba(50, 55, 60, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Bounding Box Text Visualizer</h2>
+            </div>
+            <div class="card-body">
+                <p>Select an object to visualize its bounding box corners with text labels.</p>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="enableEvents" checked>
+                    <label class="form-check-label" for="enableEvents">Enable Event Processing</label>
+                </div>
+                <div id="status" class="alert alert-info">Waiting for selection...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://matdmiller.github.io/caxperts_universal_api_llms_context/universal-api.umd.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusEl = document.getElementById('status');
+            const enableEventsCheckbox = document.getElementById('enableEvents');
+            let textLayer = null; // Single layer for all text elements
+            
+            // Initialize Universal API
+            const app = UniversalApi.universal_api.Application.getInstance();
+            
+            // Define corner colors (same as original app)
+            const cornerColors = {
+                minXminYminZ: { r: 255, g: 0, b: 0, alpha: 255 },      // Red
+                maxXminYminZ: { r: 255, g: 165, b: 0, alpha: 255 },     // Orange
+                minXmaxYminZ: { r: 255, g: 255, b: 0, alpha: 255 },     // Yellow
+                maxXmaxYminZ: { r: 0, g: 255, b: 0, alpha: 255 },       // Green
+                minXminYmaxZ: { r: 0, g: 255, b: 255, alpha: 255 },     // Cyan
+                maxXminYmaxZ: { r: 0, g: 0, b: 255, alpha: 255 },       // Blue
+                minXmaxYmaxZ: { r: 128, g: 0, b: 128, alpha: 255 },     // Purple
+                maxXmaxYmaxZ: { r: 255, g: 0, b: 255, alpha: 255 }      // Magenta
+            };
+            
+            // Function to create text at bounding box corners
+            async function createBoundingBoxText(bounds, name) {
+                // Clear existing layer if it exists
+                if (textLayer) {
+                    try {
+                        await textLayer.destroy();
+                    } catch (error) {
+                        console.log("Error destroying layer:", error);
+                    }
+                }
+                
+                // Create a new layer for all text elements
+                textLayer = new UniversalApi.universal_api.Layer3D("BoundingBoxText");
+                
+                // Text content - use the provided name or "N/A" if not available
+                const textContent = name || "N/A";
+                
+                const min = { x: bounds.LowX, y: bounds.LowY, z: bounds.LowZ };
+                const max = { x: bounds.HighX, y: bounds.HighY, z: bounds.HighZ };
+                
+                // Calculate all 8 corners of the bounding box
+                const corners = [
+                    { name: "minXminYminZ", pos: { X: min.x, Y: min.y, Z: min.z }, color: cornerColors.minXminYminZ },
+                    { name: "maxXminYminZ", pos: { X: max.x, Y: min.y, Z: min.z }, color: cornerColors.maxXminYminZ },
+                    { name: "minXmaxYminZ", pos: { X: min.x, Y: max.y, Z: min.z }, color: cornerColors.minXmaxYminZ },
+                    { name: "maxXmaxYminZ", pos: { X: max.x, Y: max.y, Z: min.z }, color: cornerColors.maxXmaxYminZ },
+                    { name: "minXminYmaxZ", pos: { X: min.x, Y: min.y, Z: max.z }, color: cornerColors.minXminYmaxZ },
+                    { name: "maxXminYmaxZ", pos: { X: max.x, Y: min.y, Z: max.z }, color: cornerColors.maxXminYmaxZ },
+                    { name: "minXmaxYmaxZ", pos: { X: min.x, Y: max.y, Z: max.z }, color: cornerColors.minXmaxYmaxZ },
+                    { name: "maxXmaxYmaxZ", pos: { X: max.x, Y: max.y, Z: max.z }, color: cornerColors.maxXmaxYmaxZ }
+                ];
+                
+                // Create text for each corner
+                for (const corner of corners) {
+                    try {
+                        // Create rotation vector (no rotation)
+                        const rotation = { X: 0, Y: 0, Z: 0 };
+                        
+                        // Place text at the corner position
+                        await textLayer.placeText(
+                            textContent,  // Name attribute or "N/A"
+                            corner.pos,   // Position
+                            rotation,     // Rotation
+                            0.1,          // Size
+                            corner.color  // Color
+                        );
+                    } catch (error) {
+                        console.log(`Error creating text at ${corner.name}:`, error);
+                    }
+                }
+                
+                statusEl.textContent = `Created text labels at 8 bounding box corners`;
+            }
+            
+            // Set up selection change listener
+            async function setupSelectionListener() {
+                try {
+                    app.Events.registerSelectionChangedEvent(async (data) => {
+                        try {
+                            // Check if event processing is enabled
+                            if (!enableEventsCheckbox.checked) return;
+                            
+                            // Handle selection events
+                            if (data.Objects.length > 0) {
+                                const selectedUid = data.Objects[0];
+                                statusEl.textContent = `Processing selection: ${selectedUid}`;
+                                
+                                // Get the 3D scene and set up filter
+                                const scene = (await app.Scenes3d.get())[0];
+                                const filter = scene.getNewFilter();
+                                filter.IncludeBoundingBox = true;
+                                filter.IncludeAttributes = true;
+                                filter.Condition = `Uid=${selectedUid}`;
+                                
+                                // Get the selected object
+                                const objects = await filter.getObjects();
+                                
+                                if (objects.length > 0 && objects[0].Bounds) {
+                                    // Get the Name attribute if available
+                                    const name = objects[0].getAttribute("Name");
+                                    
+                                    // Create text for the bounding box corners
+                                    await createBoundingBoxText(objects[0].Bounds, name);
+                                } else {
+                                    statusEl.textContent = "No bounding box found for selected object";
+                                }
+                            } else {
+                                statusEl.textContent = "Waiting for selection...";
+                            }
+                        } catch (error) {
+                            statusEl.textContent = `Error: ${error.message}`;
+                            console.error("Selection event error:", error);
+                        }
+                    });
+                    
+                    statusEl.textContent = "Ready - select an object to visualize its bounding box";
+                } catch (error) {
+                    statusEl.textContent = `Error setting up listener: ${error.message}`;
+                    console.error("Setup error:", error);
+                }
+            }
+            
+            // Start the app if API is available
+            if (app.available()) {
+                setupSelectionListener();
+            } else {
+                statusEl.className = "alert alert-danger";
+                statusEl.textContent = "Universal API is not available. This app must be run as an AppControl inside UPV.";
+            }
+        });
+    </script>
+</body>
+</html>
