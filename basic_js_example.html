@@ -100,6 +100,36 @@ if (available) {
         console.error(err);
       }
     });
+    
+    // Add a button to the DOM
+    const displayMessageButton = document.createElement('button');
+    displayMessageButton.id = 'displayMessage';
+    displayMessageButton.textContent = 'Display Message';
+    document.querySelector('#testApi').insertAdjacentElement('afterend', displayMessageButton);
+    
+    // Add event listener for the new button
+    document.getElementById('displayMessage').addEventListener('click', async () => {
+      const outputDiv = document.getElementById('output');
+      
+      try {
+        // Get application instance
+        const app = universal_api.Application.getInstance();
+        
+        // Check if API is available
+        const available = app.available();
+        
+        if (available) {
+          // Display a message using the UPV API
+          await app.showMessage("Hello from Universal API!", "Example Message", "info");
+          outputDiv.innerHTML = '<p>Message displayed in UPV!</p>';
+        } else {
+          outputDiv.innerHTML = '<p>API is not available. Cannot display message in UPV.</p>';
+        }
+      } catch (err) {
+        outputDiv.innerHTML = `<p>Error displaying message: ${err.message}</p>`;
+        console.error(err);
+      }
+    });
   </script>
 </body>
 </html>
