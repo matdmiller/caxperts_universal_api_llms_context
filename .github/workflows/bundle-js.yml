@@ -1,0 +1,131 @@
+name: Bundle Universal API for Browser
+
+on:
+  # Run after the main workflow updates the package
+  workflow_run:
+    workflows: ["Update NPM Package"]
+    types:
+      - completed
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  bundle-js:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: |
+          npm install --save-dev rollup @rollup/plugin-typescript @rollup/plugin-node-resolve @rollup/plugin-commonjs typescript tslib
+      
+      - name: Create temporary package.json and tsconfig.json for bundling
+        run: |
+          # Create a temporary package.json
+          echo '{
+            "name": "universal-api-bundle",
+            "version": "1.0.0",
+            "type": "module",
+            "private": true,
+            "dependencies": {
+              "@caxperts/universal.api": "latest"
+            }
+          }' > temp-package.json
+          
+          # Create a temporary tsconfig.json
+          echo '{
+            "compilerOptions": {
+              "target": "es2020",
+              "module": "esnext",
+              "moduleResolution": "node",
+              "esModuleInterop": true,
+              "declaration": false,
+              "sourceMap": false,
+              "strict": false,
+              "skipLibCheck": true
+            },
+            "include": ["temp-entry.ts"]
+          }' > tsconfig.json
+      
+      - name: Install @caxperts/universal.api
+        run: |
+          npm install --no-save @caxperts/universal.api
+      
+      - name: Create temporary entry point
+        run: |
+          echo 'import * as universal_api from "@caxperts/universal.api";
+          export { universal_api };' > temp-entry.ts
+      
+      - name: Create Rollup config
+        run: |
+          echo 'import typescript from "@rollup/plugin-typescript";
+          import resolve from "@rollup/plugin-node-resolve";
+          import commonjs from "@rollup/plugin-commonjs";
+          
+          export default {
+            input: "temp-entry.ts",
+            output: {
+              file: "universal-api.es.js",
+              format: "es",
+              name: "UniversalApi"
+            },
+            plugins: [
+              typescript(),
+              resolve(),
+              commonjs()
+            ]
+          };' > rollup.config.js
+      
+      - name: Bundle with Rollup
+        run: |
+          npx rollup -c
+      
+      - name: Verify bundle
+        run: |
+          if [ -f "universal-api.es.js" ]; then
+            echo "✅ Bundle created successfully"
+            ls -la universal-api.es.js
+          else
+            echo "❌ Bundle creation failed"
+            exit 1
+          fi
+      
+      - name: Create version and date info header
+        run: |
+          # Get current version from main README
+          VERSION=$(grep -oP "Package Version:\s*\K[^_].*" README.md || echo "Unknown")
+          DATE=$(date '+%Y-%m-%d')
+          
+          # Add version header to the bundle
+          HEADER="/**\n * @caxperts/universal.api - ES Module Bundle\n * Version: ${VERSION}\n * Bundled on: ${DATE}\n * This file was automatically generated from the TypeScript source.\n */\n\n"
+          echo -e "$HEADER$(cat universal-api.es.js)" > universal-api.es.js.tmp
+          mv universal-api.es.js.tmp universal-api.es.js
+      
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      
+      - name: Commit and push bundle
+        run: |
+          git add universal-api.es.js
+          
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update universal-api.es.js bundle"
+            git push
+            echo "Bundle committed and pushed"
+          fi
+
+permissions:
+  contents: write
