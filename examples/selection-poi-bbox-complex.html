@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="transparent" content="true">
+    <title>Bounding Box Corner Visualizer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+            background-color: rgba(33, 37, 41, 0.8);
+            color: white;
+        }
+        .card {
+            background-color: rgba(50, 55, 60, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Bounding Box Corner Visualizer</h2>
+            </div>
+            <div class="card-body">
+                <p>Select an object to visualize its bounding box corners with colored POI spheres.</p>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="enableEvents" checked>
+                    <label class="form-check-label" for="enableEvents">Enable Event Processing</label>
+                </div>
+                <div id="status" class="alert alert-info">Waiting for selection...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://matdmiller.github.io/caxperts_universal_api_llms_context/universal-api.umd.js"></script>
+    <script>
+        // Main app logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusEl = document.getElementById('status');
+            const enableEventsCheckbox = document.getElementById('enableEvents');
+            let poiGroup = []; // Keep track of created POIs
+            let poiFolder = null; // Folder to store POIs
+            
+            // Initialize Universal API
+            const app = UniversalApi.universal_api.Application.getInstance();
+            
+            // Define corner colors (consistent across selections)
+            const cornerColors = {
+                minXminYminZ: { r: 255, g: 0, b: 0, alpha: 255 },      // Red
+                maxXminYminZ: { r: 255, g: 165, b: 0, alpha: 255 },     // Orange
+                minXmaxYminZ: { r: 255, g: 255, b: 0, alpha: 255 },     // Yellow
+                maxXmaxYminZ: { r: 0, g: 255, b: 0, alpha: 255 },       // Green
+                minXminYmaxZ: { r: 0, g: 255, b: 255, alpha: 255 },     // Cyan
+                maxXminYmaxZ: { r: 0, g: 0, b: 255, alpha: 255 },       // Blue
+                minXmaxYmaxZ: { r: 128, g: 0, b: 128, alpha: 255 },     // Purple
+                maxXmaxYmaxZ: { r: 255, g: 0, b: 255, alpha: 255 }      // Magenta
+            };
+            
+            // Function to delete existing POIs
+            async function clearExistingPOIs() {
+                for (const poi of poiGroup) {
+                    try {
+                        await poi.delete();
+                    } catch (error) {
+                        console.log("Error deleting POI:", error);
+                    }
+                }
+                poiGroup = [];
+                
+                // Delete the POI folder if it exists
+                if (poiFolder) {
+                    try {
+                        await poiFolder.delete();
+                        poiFolder = null;
+                    } catch (error) {
+                        console.log("Error deleting POI folder:", error);
+                    }
+                }
+            }
+            
+            // Function to create POIs at bounding box corners
+            async function createBoundingBoxPOIs(bounds) {
+                await clearExistingPOIs();
+                
+                const min = { x: bounds.LowX, y: bounds.LowY, z: bounds.LowZ };
+                const max = { x: bounds.HighX, y: bounds.HighY, z: bounds.HighZ };
+                
+                // Calculate all 8 corners of the bounding box
+                const corners = [
+                    { name: "minXminYminZ", pos: { x: min.x, y: min.y, z: min.z }, color: cornerColors.minXminYminZ },
+                    { name: "maxXminYminZ", pos: { x: max.x, y: min.y, z: min.z }, color: cornerColors.maxXminYminZ },
+                    { name: "minXmaxYminZ", pos: { x: min.x, y: max.y, z: min.z }, color: cornerColors.minXmaxYminZ },
+                    { name: "maxXmaxYminZ", pos: { x: max.x, y: max.y, z: min.z }, color: cornerColors.maxXmaxYminZ },
+                    { name: "minXminYmaxZ", pos: { x: min.x, y: min.y, z: max.z }, color: cornerColors.minXminYmaxZ },
+                    { name: "maxXminYmaxZ", pos: { x: max.x, y: min.y, z: max.z }, color: cornerColors.maxXminYmaxZ },
+                    { name: "minXmaxYmaxZ", pos: { x: min.x, y: max.y, z: max.z }, color: cornerColors.minXmaxYmaxZ },
+                    { name: "maxXmaxYmaxZ", pos: { x: max.x, y: max.y, z: max.z }, color: cornerColors.maxXmaxYmaxZ }
+                ];
+                
+                // Get root folder for POIs
+                const rootFolder = await app.FileTree.getRootFolder();
+                
+                // Create or find AC_POIs folder
+                try {
+                    const children = await app.FileTree.getChildren(rootFolder);
+                    poiFolder = children.find(child => child.Name === "AC_POIs");
+                    
+                    if (!poiFolder) {
+                        poiFolder = await app.FileTree.createFolder(rootFolder, "AC_POIs");
+                    }
+                } catch (error) {
+                    console.log("Error finding/creating POI folder:", error);
+                    poiFolder = rootFolder; // Fallback to root if folder creation fails
+                }
+                
+                // Create a POI for each corner
+                for (const corner of corners) {
+                    try {
+                        // Create position and rotation vectors
+                        const position = { X: corner.pos.x, Y: corner.pos.y, Z: corner.pos.z };
+                        const rotation = { X: 0, Y: 0, Z: 0 };
+                        
+                        // Create coordinate attributes with added "Is POI" attribute
+                        const attributes = {
+                            "x": corner.pos.x.toString(),
+                            "y": corner.pos.y.toString(),
+                            "z": corner.pos.z.toString(),
+                            "Is POI": "true"
+                        };
+                        
+                        // Create POI
+                        const poi = await app.FileTree.createPointOfIntrest(
+                            poiFolder,
+                            corner.name,
+                            position,
+                            rotation,
+                            corner.color,
+                            0.1,  // Small sphere diameter
+                            attributes
+                        );
+                        
+                        poiGroup.push(poi);
+                    } catch (error) {
+                        console.log("Error creating POI:", error);
+                    }
+                }
+                
+                statusEl.textContent = `Created 8 POIs for bounding box corners`;
+            }
+            
+            // Set up selection change listener
+            async function setupSelectionListener() {
+                try {
+                    const events = app.Events;
+                    
+                    // Register selection changed event
+                    events.registerSelectionChangedEvent(async (data) => {
+                        try {
+                            // Check if event processing is enabled
+                            if (!enableEventsCheckbox.checked) {
+                                return;
+                            }
+                            
+                            // Handle selection events
+                            if (data.Objects.length > 0) {
+                                // Get the first selected object
+                                const selectedUid = data.Objects[0];
+                                
+                                // Check if the selected object is a POI by getting its attributes
+                                const scene = (await app.Scenes3d.get())[0];
+                                const poiCheckFilter = scene.getNewFilter();
+                                poiCheckFilter.IncludeAttributes = true;
+                                poiCheckFilter.Condition = `Uid=${selectedUid}`;
+                                
+                                const selectedObjects = await poiCheckFilter.getObjects();
+                                
+                                // If the selected object has the "Is POI" attribute set to true, ignore it
+                                if (selectedObjects.length > 0 && selectedObjects[0].Attributes) {
+                                    const isPoi = selectedObjects[0].getAttribute("Is POI");
+                                    if (isPoi === "true") {
+                                        statusEl.textContent = "Selected object is a POI - ignoring selection";
+                                        return; // Skip processing POI selections
+                                    }
+                                }
+                                
+                                statusEl.textContent = `Processing selection: ${selectedUid}`;
+                                
+                                // Get the 3D scene
+                                const filter = scene.getNewFilter();
+                                filter.IncludeBoundingBox = true;
+                                filter.Condition = `Uid=${selectedUid}`;
+                                
+                                // Get the selected object with its bounding box
+                                const objects = await filter.getObjects();
+                                
+                                if (objects.length > 0 && objects[0].Bounds) {
+                                    // Create POIs for the bounding box corners
+                                    await createBoundingBoxPOIs(objects[0].Bounds);
+                                } else {
+                                    statusEl.textContent = "No bounding box found for selected object";
+                                }
+                            } else {
+                                // Nothing selected - do not clear POIs, just update status
+                                statusEl.textContent = "Waiting for selection...";
+                            }
+                        } catch (error) {
+                            statusEl.textContent = `Error processing selection: ${error.message}`;
+                            console.error("Selection event error:", error);
+                        }
+                    });
+                    
+                    statusEl.textContent = "Ready - select an object to visualize its bounding box";
+                } catch (error) {
+                    statusEl.textContent = `Error setting up selection listener: ${error.message}`;
+                    console.error("Setup error:", error);
+                }
+            }
+            
+            // Check if API is available and start the app
+            if (app.available()) {
+                setupSelectionListener();
+            } else {
+                statusEl.className = "alert alert-danger";
+                statusEl.textContent = "Universal API is not available. This app must be run as an AppControl inside UPV.";
+            }
+        });
+    </script>
+</body>
+</html>
