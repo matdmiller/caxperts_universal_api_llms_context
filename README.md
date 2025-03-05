@@ -1,6 +1,6 @@
 # @caxperts/universal.api Context Generator
 
-[![Update NPM Package](https://github.com/YOUR_USERNAME/REPO_NAME/actions/workflows/update-npm-package.yml/badge.svg)](https://github.com/YOUR_USERNAME/REPO_NAME/actions/workflows/update-npm-package.yml)
+[![Update NPM Package](https://github.com/matdmiller/caxperts_universal_api_llms_context/actions/workflows/update-npm-package.yml/badge.svg)](https://github.com/matdmiller/caxperts_universal_api_llms_context/actions/workflows/update-npm-package.yml)
 
 This repository automatically fetches and organizes the [@caxperts/universal.api](https://www.npmjs.com/package/@caxperts/universal.api) npm package files for use as context with Large Language Models (LLMs).
 
@@ -18,7 +18,17 @@ The files are organized into three main directories:
 - **implementation/** - Contains implementation files (*.js)
 - **not_needed/** - Contains files not needed for LLM context (*.d.ts.map)
 
-Additionally, an `api_merged.md` file is generated in the root directory, containing all API reference files concatenated with XML-like tags.
+Additionally, an [`api_merged.md`](api_merged.md) file is generated in the root directory, containing all API reference files concatenated with XML-like tags.
+
+## Using with Your LLM
+
+There are two main options for providing this API as context to your LLM:
+
+1. **Simple approach**: Use the [`api_merged.md`](api_merged.md) file - a single document you can easily copy and paste into your LLM's context window.
+
+2. **Advanced approach**: If you're using an LLM IDE or application that supports multiple files as context, include:
+   - The entire [`api`](api) directory for comprehensive function documentation
+   - Optionally, the [`implementation`](implementation) directory for access to the actual code implementation when more detailed understanding is needed
 
 ## Automation
 
