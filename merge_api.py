@@ -54,7 +54,7 @@ def generate_merged_file(api_files: List[Tuple[str, Path]], output_file: Path) -
         # Add each file with XML-like tags
         for rel_path, abs_path in api_files:
             out_f.write(f"## {rel_path}\n\n")
-            out_f.write(f"<{rel_path}>\n")
+            out_f.write(f"<{rel_path}>\n```typescript\n")
             
             # Read and write the file content
             with open(abs_path, "r", encoding="utf-8") as in_f:
@@ -62,7 +62,7 @@ def generate_merged_file(api_files: List[Tuple[str, Path]], output_file: Path) -
                 out_f.write(content)
             
             # Add closing tag and separator
-            out_f.write(f"\n</{rel_path}>\n\n")
+            out_f.write(f"\n```\n</{rel_path}>\n\n")
             out_f.write("---\n\n")
     
     print(f"Generated {output_file} with {len(api_files)} API files")
