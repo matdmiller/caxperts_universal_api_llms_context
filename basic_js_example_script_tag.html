@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Universal API Example with Script Tag</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-radius: 5px;
+      overflow: auto;
+    }
+    button {
+      padding: 8px 15px;
+      background: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 10px 0;
+    }
+    button:hover {
+      background: #3367d6;
+    }
+    #output {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Universal API Example with Script Tag</h1>
+  
+  <p>This is a simple example of using the UMD bundled Universal API directly in a browser with a traditional script tag.</p>
+  
+  <button id="testApi">Test API Availability</button>
+  
+  <div id="output">
+    <p>Output will appear here...</p>
+  </div>
+  
+  <h2>Example Code:</h2>
+  <pre>
+&lt;!-- Include the UMD bundle with a regular script tag --&gt;
+&lt;script src="./universal-api.umd.js"&gt;&lt;/script&gt;
+
+&lt;script&gt;
+  // Access the API through the global UniversalApi object
+  const app = UniversalApi.universal_api.Application.getInstance();
+  
+  // Check if API is available
+  const available = app.available();
+  console.log('API Available:', available);
+  
+  // If available, we could use the API to interact with the viewer
+  if (available) {
+    // Example: Get scenes
+    app.Scenes.get().then(scenes => {
+      console.log('Available scenes:', scenes);
+    });
+  }
+&lt;/script&gt;
+  </pre>
+  
+  <!-- Include the UMD bundle -->
+  <script src="./universal-api.umd.js"></script>
+  
+  <script>
+    document.getElementById('testApi').addEventListener('click', async () => {
+      const outputDiv = document.getElementById('output');
+      
+      try {
+        // Get application instance
+        const app = UniversalApi.universal_api.Application.getInstance();
+        
+        // Check if API is available
+        const available = app.available();
+        outputDiv.innerHTML = `<p>API Available: ${available}</p>`;
+        
+        if (available) {
+          // If available, get more information
+          const scenes = await app.Scenes.get();
+          outputDiv.innerHTML += `<p>Found ${scenes.length} scenes</p>`;
+          
+          // Try to get application state
+          try {
+            const state = await app.State.get();
+            outputDiv.innerHTML += `<p>Application State: ${JSON.stringify(state)}</p>`;
+          } catch (err) {
+            outputDiv.innerHTML += `<p>Could not get application state: ${err.message}</p>`;
+          }
+        } else {
+          outputDiv.innerHTML += '<p>API is not available. This is expected when running outside the Universal Planroom Viewer environment.</p>';
+        }
+      } catch (err) {
+        outputDiv.innerHTML = `<p>Error testing API: ${err.message}</p>`;
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -70,19 +70,36 @@ jobs:
           import resolve from "@rollup/plugin-node-resolve";
           import commonjs from "@rollup/plugin-commonjs";
           
-          export default {
-            input: "temp-entry.ts",
-            output: {
-              file: "universal-api.es.js",
-              format: "es",
-              name: "UniversalApi"
+          export default [
+            // ES Module version
+            {
+              input: "temp-entry.ts",
+              output: {
+                file: "universal-api.es.js",
+                format: "es",
+                name: "UniversalApi"
+              },
+              plugins: [
+                typescript(),
+                resolve(),
+                commonjs()
+              ]
             },
-            plugins: [
-              typescript(),
-              resolve(),
-              commonjs()
-            ]
-          };' > rollup.config.js
+            // UMD version for script tags
+            {
+              input: "temp-entry.ts",
+              output: {
+                file: "universal-api.umd.js",
+                format: "umd",
+                name: "UniversalApi"
+              },
+              plugins: [
+                typescript(),
+                resolve(),
+                commonjs()
+              ]
+            }
+          ];' > rollup.config.js
       
       - name: Bundle with Rollup
         run: |
@@ -90,9 +107,9 @@ jobs:
       
       - name: Verify bundle
         run: |
-          if [ -f "universal-api.es.js" ]; then
-            echo "✅ Bundle created successfully"
-            ls -la universal-api.es.js
+          if [ -f "universal-api.es.js" ] && [ -f "universal-api.umd.js" ]; then
+            echo "✅ Bundles created successfully"
+            ls -la universal-api.*.js
           else
             echo "❌ Bundle creation failed"
             exit 1
@@ -104,10 +121,15 @@ jobs:
           VERSION=$(grep -oP "Package Version:\s*\K[^_].*" README.md || echo "Unknown")
           DATE=$(date '+%Y-%m-%d')
           
-          # Add version header to the bundle
+          # Add version header to the ES bundle
           HEADER="/**\n * @caxperts/universal.api - ES Module Bundle\n * Version: ${VERSION}\n * Bundled on: ${DATE}\n * This file was automatically generated from the TypeScript source.\n */\n\n"
           echo -e "$HEADER$(cat universal-api.es.js)" > universal-api.es.js.tmp
           mv universal-api.es.js.tmp universal-api.es.js
+          
+          # Add version header to the UMD bundle
+          HEADER="/**\n * @caxperts/universal.api - UMD Bundle\n * Version: ${VERSION}\n * Bundled on: ${DATE}\n * This file was automatically generated from the TypeScript source.\n */\n\n"
+          echo -e "$HEADER$(cat universal-api.umd.js)" > universal-api.umd.js.tmp
+          mv universal-api.umd.js.tmp universal-api.umd.js
       
       - name: Configure Git
         run: |
@@ -116,15 +138,15 @@ jobs:
       
       - name: Commit and push bundle
         run: |
-          git add universal-api.es.js
+          git add universal-api.es.js universal-api.umd.js
           
           # Only commit if there are changes
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update universal-api.es.js bundle"
+            git commit -m "Update universal-api bundles"
             git push
-            echo "Bundle committed and pushed"
+            echo "Bundles committed and pushed"
           fi
 
 permissions:
