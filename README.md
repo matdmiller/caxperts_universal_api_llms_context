@@ -6,9 +6,9 @@ This repository automatically fetches and organizes the [@caxperts/universal.api
 
 ## Current Version
 
-**Package Version:** _Will be updated automatically_
+**Package Version:** 7.2.1
 
-Last Updated: _Will be updated automatically_
+Last Updated: 2025-03-05
 
 ## Repository Structure
 

@@ -1,0 +1,11 @@
+{
+  "name": "@caxperts/universal.api",
+  "description": "CAXperts Universal API",
+  "version": "7.2.1",
+  "scripts": {},
+  "author": "CAXperts GmbH",
+  "license": "MIT",
+  "main": "bundle.js",
+  "module": "index.js",
+  "keywords": []
+}
