@@ -1,75 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Universal API Example with Script Tag</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-    }
-    pre {
-      background-color: #f5f5f5;
-      padding: 15px;
-      border-radius: 5px;
-      overflow: auto;
-    }
-    button {
-      padding: 8px 15px;
-      background: #4285f4;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 10px 0;
-    }
-    button:hover {
-      background: #3367d6;
-    }
-    #output {
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <h1>Universal API Example with Script Tag</h1>
-  
-  <p>This is a simple example of using the UMD bundled Universal API directly in a browser with a traditional script tag.</p>
-  
+## SpecStory
+
+## Adding Message Button to JS Example (3/5/2025, 1:32:23 AM)
+
+_**User**_
+
+Add a message button similar to @basic_js_example.html 
+
+---
+
+_**Assistant**_
+
+I'll update your `basic_js_example_script_tag.html` file to add a message button similar to the one in `basic_js_example.html`. Here are the changes needed:
+
+```html:basic_js_example_script_tag.html
+// ... existing code ...
   <button id="testApi">Test API Availability</button>
   
   <div id="output">
     <p>Output will appear here...</p>
   </div>
-  
-  <h2>Example Code:</h2>
-  <pre>
-&lt;!-- Include the UMD bundle with a regular script tag --&gt;
-&lt;script src="./universal-api.umd.js"&gt;&lt;/script&gt;
-
-&lt;script&gt;
-  // Access the API through the global UniversalApi object
-  const app = UniversalApi.universal_api.Application.getInstance();
-  
-  // Check if API is available
-  const available = app.available();
-  console.log('API Available:', available);
-  
-  // If available, we could use the API to interact with the viewer
-  if (available) {
-    // Example: Get scenes
-    app.Scenes.get().then(scenes => {
-      console.log('Available scenes:', scenes);
-    });
-  }
-&lt;/script&gt;
-  </pre>
-  
-  <!-- Include the UMD bundle -->
-  <script src="./universal-api.umd.js"></script>
-  
+// ... existing code ...
   <script>
     document.getElementById('testApi').addEventListener('click', async () => {
       const outputDiv = document.getElementById('output');
@@ -133,5 +83,23 @@
       }
     });
   </script>
-</body>
-</html>
+// ... existing code ...
+```
+
+I've added the same functionality from the `basic_js_example.html` file to your script tag example. This includes:
+
+1. Creating a new "Display Message" button and inserting it after the existing "Test API Availability" button
+2. Adding an event listener for the new button that:
+   - Gets the Universal API application instance
+   - Checks if the API is available
+   - If available, displays a message using `app.showMessage()`
+   - Updates the output div with the result
+
+The code uses the UMD bundle's global `UniversalApi` object instead of the ES module import, which is the main difference from the original example.
+
+---
+
+
+
+---
+
