@@ -1,0 +1,1 @@
+{"version":3,"file":"AttributeTree.d.ts","sourceRoot":"","sources":["../../src/Objects/AttributeTree.ts"],"names":[],"mappings":"AAOA,qBAAa,iBAAiB;IAIP,EAAE,EAAE,MAAM;IAAS,IAAI,EAAE,MAAM;IAAS,IAAI,EAAE,MAAM;gBAApD,EAAE,EAAE,MAAM,EAAS,IAAI,EAAE,MAAM,EAAS,IAAI,EAAE,MAAM;IAGvE;;;OAGG;WACU,OAAO;IAMpB;;;OAGG;IACG,aAAa;IAWnB;;;OAGG;IACG,WAAW;IAWX,oBAAoB;CAU7B"}
