@@ -256,6 +256,16 @@
             // Setup custom attributes
             async function setupCustomAttributes(model, columnHeaders) {
                 try {
+                    // Get model info to retrieve all available attributes
+                    const modelInfo = await model.ModelInfo.get();
+                    if (!modelInfo || modelInfo.length === 0) {
+                        throw new Error('Unable to retrieve model information');
+                    }
+                    
+                    // Get all available attributes from the model
+                    const availableAttributes = modelInfo[0].AvailableAttributes || [];
+                    updateStatus(`Model has ${availableAttributes.length} available attributes`);
+                    
                     // Get existing definitions
                     const existingDefinitions = await model.CustomAttributes.getCustomAttributeConfiguration();
                     updateStatus(`Found ${existingDefinitions.length} existing custom attribute definitions`);
@@ -273,6 +283,25 @@
                                 highestId = Math.max(highestId, sourceDef.Id);
                             }
                         }
+                    }
+                    
+                    // Remove existing custom attribute names from availableAttributes
+                    const existingCustomAttributeNames = Object.keys(existingDefinitionsByName);
+                    const filteredAvailableAttributes = availableAttributes.filter(
+                        attr => !existingCustomAttributeNames.includes(attr)
+                    );
+                    
+                    // Check for naming collisions between new column headers and model attributes
+                    const collisions = columnHeaders.filter(
+                        header => filteredAvailableAttributes.includes(header) && 
+                                 !existingDefinitionsByName[header]
+                    );
+                    
+                    if (collisions.length > 0) {
+                        const collisionList = collisions.join(', ');
+                        const errorMessage = `Error: Naming collision with existing model attributes. Please rename the following columns: ${collisionList}`;
+                        updateStatus(errorMessage);
+                        throw new Error(errorMessage);
                     }
                     
                     // Create new definitions for columns that don't exist
