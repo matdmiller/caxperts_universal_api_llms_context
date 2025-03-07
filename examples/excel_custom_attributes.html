@@ -53,6 +53,12 @@
                     <textarea class="form-control" id="excelData" rows="6" placeholder="Paste your tab-separated Excel data here..."></textarea>
                 </div>
                 
+                <div class="mb-3">
+                    <p class="form-text text-light mb-1">OPTIONAL: This filter limits the items in the model that these Custom Attributes are assigned to which can help improve performance. See the docs (<a href="https://www.caxperts.com/help/UniversalPlantViewer%20App/Custom%20attributes" target="_blank" class="text-info">https://www.caxperts.com/help/UniversalPlantViewer%20App/Custom%20attributes</a>) for more details.</p>
+                    <label for="attributeFilter" class="form-label">Filter:</label>
+                    <input type="text" class="form-control" id="attributeFilter" placeholder="Enter filter expression">
+                </div>
+                
                 <div class="d-flex gap-2 mb-3">
                     <button id="addAttributesBtn" class="btn btn-primary">Add Attributes</button>
                     <button id="clearAttributesBtn" class="btn btn-danger">Clear All Attributes</button>
@@ -88,6 +94,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Get UI elements
             const excelDataInput = document.getElementById('excelData');
+            const attributeFilterInput = document.getElementById('attributeFilter');
             const addAttributesBtn = document.getElementById('addAttributesBtn');
             const clearAttributesBtn = document.getElementById('clearAttributesBtn');
             const statusBox = document.getElementById('statusBox');
@@ -132,6 +139,7 @@
                     
                     // Disable inputs and show processing modal
                     excelDataInput.disabled = true;
+                    attributeFilterInput.disabled = true;
                     addAttributesBtn.disabled = true;
                     clearAttributesBtn.disabled = true;
                     updateStatus('Starting processing...', false);
@@ -151,6 +159,7 @@
                         updateStatus(`Error: ${validationResult.message}`);
                         processingModal.hide();
                         excelDataInput.disabled = false;
+                        attributeFilterInput.disabled = false;
                         addAttributesBtn.disabled = false;
                         clearAttributesBtn.disabled = false;
                         return;
@@ -176,16 +185,19 @@
                     }
                     const model = models[0];
                     
+                    // Get filter value
+                    const filterValue = attributeFilterInput.value;
+                    
                     // Get existing definitions and set up new ones
                     updateStatus('Setting up custom attribute definitions...');
-                    const { columnToIdMap } = await setupCustomAttributes(model, attributeColumns.map(c => c.header));
+                    const { columnToIdMap } = await setupCustomAttributes(model, attributeColumns.map(c => c.header), filterValue);
                     
                     // Calculate total number of rows to process (excluding header)
                     const totalRows = rows.length - 1;
                     updateStatus(`Processing ${totalRows} rows of data...`);
                     
                     // Process data in chunks
-                    const CHUNK_SIZE = 100;
+                    const CHUNK_SIZE = 1000;
                     let processedRows = 0;
                     let invalidRows = 0;
                     
@@ -214,6 +226,7 @@
                     setTimeout(() => {
                         processingModal.hide();
                         excelDataInput.disabled = false;
+                        attributeFilterInput.disabled = false;
                         addAttributesBtn.disabled = false;
                         clearAttributesBtn.disabled = false;
                     }, 500);
@@ -223,6 +236,7 @@
                     updateStatus(`Error: ${error.message}`);
                     processingModal.hide();
                     excelDataInput.disabled = false;
+                    attributeFilterInput.disabled = false;
                     addAttributesBtn.disabled = false;
                     clearAttributesBtn.disabled = false;
                 }
@@ -254,7 +268,7 @@
             }
             
             // Setup custom attributes
-            async function setupCustomAttributes(model, columnHeaders) {
+            async function setupCustomAttributes(model, columnHeaders, filterValue) {
                 try {
                     // Get model info to retrieve all available attributes
                     const modelInfo = await model.ModelInfo.get();
@@ -329,7 +343,7 @@
                                 SourceDefinitions: [{
                                     Id: highestId,
                                     SourceAttribute: "Uid", // This is the key for all custom attributes
-                                    Filter: "",
+                                    Filter: filterValue,
                                     DefaultValue: ""
                                 }]
                             };
