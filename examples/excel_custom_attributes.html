@@ -97,7 +97,7 @@
             
             // Initialize Universal API
             const app = UniversalApi.universal_api.Application.getInstance();
-            const { CustomAttributeDataType, UpdateModes } = UniversalApi.universal_api;
+            const { CustomAttributeDataType, UpdateModes, CombineModes } = UniversalApi.universal_api;
             
             // Add event listeners
             addAttributesBtn.addEventListener('click', processData);
@@ -415,6 +415,11 @@
                     // Build condition for retrieving objects with relevant properties
                     const uniquePropertiesArray = Array.from(uniqueProperties);
                     filter.Attributes = ['Uid', ...uniquePropertiesArray];
+                    filter.Condition = parsedRows
+                        .map(row => `${row.matchPropertyName}=${row.matchPropertyValue}`)
+                        .join('&');
+                    // console.log(filter.Condition);
+                    filter.CombineMode = CombineModes.Or;
                     
                     // Get all objects
                     const objects = await filter.getObjects();
