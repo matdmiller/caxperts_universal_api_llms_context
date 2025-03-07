@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="transparent" content="true">
+    <title>Custom Attributes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            padding: 20px;
+            background-color: rgba(33, 37, 41, 0.8);
+            color: white;
+        }
+        .card {
+            background-color: rgba(50, 55, 60, 0.8);
+            color: white;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 200px;
+        }
+        #statusBox {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Custom Attributes</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Instructions:</h5>
+                    <ol>
+                        <li>Copy data from Excel (including header row)</li>
+                        <li>Paste into the text area below</li>
+                        <li>Click "Add Attributes" to process</li>
+                    </ol>
+                    <p>Note: This is not meant for very large datasets. If you need to add a large dataset, you may need to break it up or use another method. Only add the data you need to help this run faster.</p>
+                    <div class="alert alert-info">
+                        <strong>Required Columns:</strong> Your data must include 
+                        <code>MatchModelProperty1Name</code> and <code>MatchModelProperty1Value</code> columns.
+                        All other columns will be added as custom attributes.
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="excelData" class="form-label">Paste Excel Data:</label>
+                    <textarea class="form-control" id="excelData" rows="6" placeholder="Paste your tab-separated Excel data here..."></textarea>
+                </div>
+                
+                <div class="d-flex gap-2 mb-3">
+                    <button id="addAttributesBtn" class="btn btn-primary">Add Attributes</button>
+                    <button id="clearAttributesBtn" class="btn btn-danger">Clear All Attributes</button>
+                </div>
+                
+                <div id="statusBox" class="alert alert-secondary">
+                    Ready to process data.
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Processing Modal -->
+    <div class="modal fade" id="processingModal" tabindex="-1" aria-labelledby="processingModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-body text-center p-4">
+                    <div class="spinner-border text-light mb-3" role="status">
+                        <span class="visually-hidden">Processing...</span>
+                    </div>
+                    <h5 id="processingMessage">Processing data...</h5>
+                    <div id="processingProgress" class="progress mt-3">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://matdmiller.github.io/caxperts_universal_api_llms_context/universal-api.umd.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get UI elements
+            const excelDataInput = document.getElementById('excelData');
+            const addAttributesBtn = document.getElementById('addAttributesBtn');
+            const clearAttributesBtn = document.getElementById('clearAttributesBtn');
+            const statusBox = document.getElementById('statusBox');
+            const processingModal = new bootstrap.Modal(document.getElementById('processingModal'));
+            const progressBar = document.querySelector('#processingProgress .progress-bar');
+            const processingMessage = document.getElementById('processingMessage');
+            
+            // Initialize Universal API
+            const app = UniversalApi.universal_api.Application.getInstance();
+            const { CustomAttributeDataType, UpdateModes } = UniversalApi.universal_api;
+            
+            // Add event listeners
+            addAttributesBtn.addEventListener('click', processData);
+            clearAttributesBtn.addEventListener('click', clearAttributes);
+            
+            // Function to update status
+            function updateStatus(message, append = true) {
+                if (append) {
+                    statusBox.innerHTML += `<div>${message}</div>`;
+                } else {
+                    statusBox.innerHTML = `<div>${message}</div>`;
+                }
+                statusBox.scrollTop = statusBox.scrollHeight;
+            }
+            
+            // Function to update processing progress
+            function updateProgress(processed, total) {
+                const percentage = Math.min(Math.round((processed / total) * 100), 100);
+                progressBar.style.width = `${percentage}%`;
+                processingMessage.textContent = `Processing data... ${processed} / ${total} rows`;
+            }
+            
+            // Main function to process data
+            async function processData() {
+                try {
+                    // Get input data
+                    const inputData = excelDataInput.value;
+                    if (!inputData) {
+                        alert('Please paste Excel data first.');
+                        return;
+                    }
+                    
+                    // Disable inputs and show processing modal
+                    excelDataInput.disabled = true;
+                    addAttributesBtn.disabled = true;
+                    clearAttributesBtn.disabled = true;
+                    updateStatus('Starting processing...', false);
+                    processingModal.show();
+                    progressBar.style.width = '0%';
+                    
+                    // Split input into rows and free original string
+                    const rows = inputData.split(/\r?\n/).filter(row => row !== '');
+                    
+                    // Parse headers
+                    const headers = rows[0].split('\t');
+                    
+                    // Validate headers
+                    const validationResult = validateHeaders(headers);
+                    if (!validationResult.valid) {
+                        alert(validationResult.message);
+                        updateStatus(`Error: ${validationResult.message}`);
+                        processingModal.hide();
+                        excelDataInput.disabled = false;
+                        addAttributesBtn.disabled = false;
+                        clearAttributesBtn.disabled = false;
+                        return;
+                    }
+                    
+                    // Get column indices
+                    const matchNameIndex = headers.indexOf('MatchModelProperty1Name');
+                    const matchValueIndex = headers.indexOf('MatchModelProperty1Value');
+                    
+                    // Get relevant column indices (all except the match columns)
+                    const attributeColumns = headers
+                        .map((header, index) => ({ header, index }))
+                        .filter(({ header }) => 
+                            header !== 'MatchModelProperty1Name' && 
+                            header !== 'MatchModelProperty1Value');
+                    
+                    updateStatus(`Found ${attributeColumns.length} attribute columns to add`);
+                    
+                    // Get model
+                    const models = await app.Models.get();
+                    if (!models || models.length === 0) {
+                        throw new Error('No models found');
+                    }
+                    const model = models[0];
+                    
+                    // Get existing definitions and set up new ones
+                    updateStatus('Setting up custom attribute definitions...');
+                    const { columnToIdMap } = await setupCustomAttributes(model, attributeColumns.map(c => c.header));
+                    
+                    // Calculate total number of rows to process (excluding header)
+                    const totalRows = rows.length - 1;
+                    updateStatus(`Processing ${totalRows} rows of data...`);
+                    
+                    // Process data in chunks
+                    const CHUNK_SIZE = 100;
+                    let processedRows = 0;
+                    let invalidRows = 0;
+                    
+                    // Process each chunk
+                    for (let i = 1; i < rows.length; i += CHUNK_SIZE) {
+                        const chunkEnd = Math.min(i + CHUNK_SIZE, rows.length);
+                        const chunk = rows.slice(i, chunkEnd);
+                        
+                        updateStatus(`Processing chunk ${i}-${chunkEnd-1}...`);
+                        const chunkInvalidRows = await processChunk(
+                            model, 
+                            chunk, 
+                            matchNameIndex,
+                            matchValueIndex,
+                            attributeColumns,
+                            columnToIdMap
+                        );
+                        
+                        invalidRows += chunkInvalidRows;
+                        processedRows += (chunkEnd - i);
+                        updateProgress(processedRows, totalRows);
+                    }
+                    
+                    // Processing complete
+                    updateStatus(`Processing complete. ${processedRows} rows processed, ${invalidRows} invalid rows skipped.`);
+                    setTimeout(() => {
+                        processingModal.hide();
+                        excelDataInput.disabled = false;
+                        addAttributesBtn.disabled = false;
+                        clearAttributesBtn.disabled = false;
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('Processing error:', error);
+                    updateStatus(`Error: ${error.message}`);
+                    processingModal.hide();
+                    excelDataInput.disabled = false;
+                    addAttributesBtn.disabled = false;
+                    clearAttributesBtn.disabled = false;
+                }
+            }
+            
+            // Validate headers
+            function validateHeaders(headers) {
+                // Check for required columns
+                if (!headers.includes('MatchModelProperty1Name') || !headers.includes('MatchModelProperty1Value')) {
+                    return {
+                        valid: false,
+                        message: 'Required columns "MatchModelProperty1Name" and "MatchModelProperty1Value" must be present'
+                    };
+                }
+                
+                // Check for duplicate headers
+                const uniqueHeaders = new Set();
+                for (const header of headers) {
+                    if (uniqueHeaders.has(header)) {
+                        return {
+                            valid: false,
+                            message: `Duplicate header found: "${header}"`
+                        };
+                    }
+                    uniqueHeaders.add(header);
+                }
+                
+                return { valid: true };
+            }
+            
+            // Setup custom attributes
+            async function setupCustomAttributes(model, columnHeaders) {
+                try {
+                    // Get existing definitions
+                    const existingDefinitions = await model.CustomAttributes.getCustomAttributeConfiguration();
+                    updateStatus(`Found ${existingDefinitions.length} existing custom attribute definitions`);
+                    
+                    // Create map of existing definitions by name
+                    const existingDefinitionsByName = {};
+                    let highestId = 0;
+                    
+                    for (const def of existingDefinitions) {
+                        existingDefinitionsByName[def.Name] = def;
+                        
+                        // Track highest ID
+                        if (def.SourceDefinitions && def.SourceDefinitions.length > 0) {
+                            for (const sourceDef of def.SourceDefinitions) {
+                                highestId = Math.max(highestId, sourceDef.Id);
+                            }
+                        }
+                    }
+                    
+                    // Create new definitions for columns that don't exist
+                    const newDefinitions = [];
+                    const columnToIdMap = {};
+                    
+                    for (const header of columnHeaders) {
+                        if (existingDefinitionsByName[header]) {
+                            // Use existing definition
+                            const existingDef = existingDefinitionsByName[header];
+                            if (existingDef.SourceDefinitions && existingDef.SourceDefinitions.length > 0) {
+                                columnToIdMap[header] = existingDef.SourceDefinitions[0].Id;
+                            }
+                            updateStatus(`Using existing definition for "${header}"`);
+                        } else {
+                            // Create new definition
+                            highestId++;
+                            const newDefinition = {
+                                Name: header,
+                                Mode: CustomAttributeDataType.FreeText,
+                                Parameter1: "",
+                                Parameter2: "",
+                                Parameter3: "",
+                                ReadOnly: false,
+                                SourceDefinitions: [{
+                                    Id: highestId,
+                                    SourceAttribute: "Uid", // This is the key for all custom attributes
+                                    Filter: "",
+                                    DefaultValue: ""
+                                }]
+                            };
+                            
+                            newDefinitions.push(newDefinition);
+                            columnToIdMap[header] = highestId;
+                        }
+                    }
+                    
+                    // Apply new definitions if any
+                    if (newDefinitions.length > 0) {
+                        updateStatus(`Creating ${newDefinitions.length} new custom attribute definitions...`);
+                        await model.CustomAttributes.setCustomAttributeConfiguration(
+                            newDefinitions,
+                            UpdateModes.Append
+                        );
+                    }
+                    
+                    return { columnToIdMap };
+                } catch (error) {
+                    console.error('Error setting up attributes:', error);
+                    throw new Error(`Failed to set up custom attributes: ${error.message}`);
+                }
+            }
+            
+            // Process a chunk of rows
+            async function processChunk(model, rows, matchNameIndex, matchValueIndex, attributeColumns, columnToIdMap) {
+                let invalidRows = 0;
+                
+                try {
+                    // Parse rows into data
+                    const parsedRows = [];
+                    
+                    // Keep track of unique property names for filter
+                    const uniqueProperties = new Set();
+                    
+                    // First pass: parse rows and collect unique properties
+                    for (const row of rows) {
+                        const columns = row.split('\t');
+                        
+                        // Skip invalid rows
+                        if (columns.length <= Math.max(matchNameIndex, matchValueIndex)) {
+                            invalidRows++;
+                            continue;
+                        }
+                        
+                        const matchPropertyName = columns[matchNameIndex];
+                        const matchPropertyValue = columns[matchValueIndex];
+                        
+                        // Skip rows with empty match properties
+                        if (!matchPropertyName || !matchPropertyValue) {
+                            invalidRows++;
+                            continue;
+                        }
+                        
+                        uniqueProperties.add(matchPropertyName);
+                        
+                        // Parse attribute values
+                        const attributeValues = {};
+                        for (const { header, index } of attributeColumns) {
+                            if (index < columns.length && columns[index] !== '') {
+                                attributeValues[header] = columns[index];
+                            }
+                        }
+                        
+                        parsedRows.push({
+                            matchPropertyName,
+                            matchPropertyValue,
+                            attributeValues
+                        });
+                    }
+                    
+                    // If no valid rows, skip further processing
+                    if (parsedRows.length === 0) {
+                        return invalidRows;
+                    }
+                    
+                    // Get 3D scene and set up filter
+                    const scene = (await app.Scenes3d.get())[0];
+                    const filter = scene.getNewFilter();
+                    filter.IncludeAttributes = true;
+                    
+                    // Build condition for retrieving objects with relevant properties
+                    const uniquePropertiesArray = Array.from(uniqueProperties);
+                    filter.Attributes = ['Uid', ...uniquePropertiesArray];
+                    
+                    // Get all objects
+                    const objects = await filter.getObjects();
+                    
+                    // Build lookup of objects by property name and value
+                    const objectLookup = {};
+                    
+                    for (const obj of objects) {
+                        for (const propName of uniquePropertiesArray) {
+                            const propValue = obj.getAttribute(propName);
+                            if (propValue) {
+                                const key = `${propName}:${propValue}`;
+                                if (!objectLookup[key]) {
+                                    objectLookup[key] = [];
+                                }
+                                objectLookup[key].push(obj.Uid);
+                            }
+                        }
+                    }
+                    
+                    // Process rows and create changesets
+                    const changesets = [];
+                    
+                    for (const row of parsedRows) {
+                        const key = `${row.matchPropertyName}:${row.matchPropertyValue}`;
+                        const uids = objectLookup[key] || [];
+                        
+                        if (uids.length === 0) {
+                            // No matching objects found
+                            invalidRows++;
+                            continue;
+                        }
+                        
+                        // Create changeset entries for each attribute and each UID
+                        for (const uid of uids) {
+                            for (const [header, value] of Object.entries(row.attributeValues)) {
+                                if (columnToIdMap[header]) {
+                                    changesets.push({
+                                        Id: columnToIdMap[header],
+                                        SourceValue: uid,
+                                        CustomValue: value,
+                                        User: "CustomAttributesApp",
+                                        Timestamp: new Date().toISOString().split('T').join(' ').split('.')[0],
+                                        IsSessionChange: true
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    
+                    // If no changes, skip import
+                    if (changesets.length === 0) {
+                        return invalidRows;
+                    }
+                    
+                    // Import custom attribute values
+                    await model.CustomAttributes.importCustomAttributeChangeSet(changesets, true);
+                    
+                    return invalidRows;
+                } catch (error) {
+                    console.error('Error processing chunk:', error);
+                    throw new Error(`Failed to process data chunk: ${error.message}`);
+                }
+            }
+            
+            // Clear all custom attributes
+            async function clearAttributes() {
+                try {
+                    // Confirm with user
+                    if (!confirm('Are you sure you want to clear ALL custom attributes from the model?')) {
+                        return;
+                    }
+                    
+                    // Disable buttons
+                    clearAttributesBtn.disabled = true;
+                    addAttributesBtn.disabled = true;
+                    
+                    updateStatus('Clearing all custom attributes...', false);
+                    
+                    // Get model
+                    const models = await app.Models.get();
+                    if (!models || models.length === 0) {
+                        throw new Error('No models found');
+                    }
+                    const model = models[0];
+                    
+                    // Clear attributes
+                    await model.CustomAttributes.clearCustomAttributes();
+                    
+                    updateStatus('All custom attributes cleared successfully.');
+                    
+                    // Re-enable buttons
+                    clearAttributesBtn.disabled = false;
+                    addAttributesBtn.disabled = false;
+                    
+                } catch (error) {
+                    console.error('Error clearing attributes:', error);
+                    updateStatus(`Error clearing attributes: ${error.message}`);
+                    
+                    // Re-enable buttons
+                    clearAttributesBtn.disabled = false;
+                    addAttributesBtn.disabled = false;
+                }
+            }
+            
+            // Check if API is available
+            if (!app.available()) {
+                statusBox.className = "alert alert-danger";
+                statusBox.innerHTML = "Universal API is not available. This app must be run as an AppControl inside UPV.";
+                addAttributesBtn.disabled = true;
+                clearAttributesBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
