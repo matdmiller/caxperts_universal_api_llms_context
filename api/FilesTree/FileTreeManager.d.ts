@@ -81,7 +81,7 @@ export declare class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color
+     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -89,7 +89,7 @@ export declare class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    createPointOfIntrest(parent: FileTreeFolder, name: string, position: Vector3D, rotation: Vector3D, color: Color, diameter: number, attributes?: {
+    createPointOfInterest(parent: FileTreeFolder, name: string, position: Vector3D, rotation: Vector3D, color: Color, diameter: number, attributes?: {
         [key: string]: string;
     }, links?: {
         [key: string]: string;

@@ -20,6 +20,7 @@ const FileTreeMarkup_1 = require("./FileTreeMarkup");
 const FileTreePIDSketch_1 = require("./FileTreePIDSketch");
 const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
+const FileTreeSpraying_1 = require("./FileTreeSpraying");
 /**
  * @legacy
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -160,7 +161,7 @@ class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color
+     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -168,7 +169,7 @@ class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    async createPointOfIntrest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
+    async createPointOfInterest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePoi);
         command.additionalParameters = {
             PlacePoi: {
@@ -268,6 +269,8 @@ class FileTreeManager {
                 return new FileTreePIDSketch_1.FileTreePIDSketch(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Report:
                 return new FileTreeReport_1.FileTreeReport(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.Spraying:
+                return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
             //return new FileTreeElement(element.Id, element.Name, element.Type);

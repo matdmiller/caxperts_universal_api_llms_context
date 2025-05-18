@@ -1,4 +1,4 @@
-import { AttributeConditionComparison, Bounds, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -30,6 +30,8 @@ export declare class ParameterBase {
     LoadFileDialog?: LoadFileDialogParameters;
     SaveFileDialog?: SaveFileDialogParameters;
     PdfDocument?: PdfDocumentParameter;
+    AddChangeableAttribute?: AddChangeableAttributeParameter;
+    DeleteChangeableAttribute?: DeleteChangeableAttributeParameter;
 }
 export declare class ClippingDescriptor {
     Mode: ClippingMode;
@@ -289,5 +291,24 @@ export declare class PdfDocumentParameter {
     PhysicalFileName: string;
     DisplayName: string;
     PdfType: PdfTypes;
+}
+export declare class AddChangeableAttributeParameter {
+    Uid: string;
+    Name: string;
+    Mode: CustomAttributeDataType;
+    CodeListEntriesNames: string[];
+    CodeListEntriesColors: Color[];
+    DisplayName: string;
+    Deletable: boolean;
+    Readonly: boolean;
+    Hidden: boolean;
+    InitialValue: string;
+    UnitType: ChangeableAttributeUnitType;
+    DrawingPathForPid: string;
+}
+export declare class DeleteChangeableAttributeParameter {
+    Uid: string;
+    Name: string;
+    DrawingPathForPid: string;
 }
 //# sourceMappingURL=ParameterBase.d.ts.map

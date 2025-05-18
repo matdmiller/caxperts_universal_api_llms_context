@@ -178,6 +178,11 @@ export declare class GetUiColors {
         [id: string]: string;
     };
 }
+export declare class GetUiVariables {
+    UiVariables: {
+        [id: string]: string;
+    };
+}
 export declare class GetUiThemes {
     CurrentId: string;
     UiThemes: {
@@ -209,5 +214,15 @@ export declare class GetLinkedElements {
     Links: {
         [key: string]: ElementLinks;
     };
+}
+export declare class GetPipeMeasurementResponse {
+    PipeFound: boolean;
+    PipeDiameter: number;
+}
+export declare class GetExportUpvObjectAsDgnResponse {
+    DgnBase64: string;
+}
+export declare class GetExportUpvObjectAsUpvcResponse {
+    UpvcBase64: string;
 }
 //# sourceMappingURL=GetObjects.d.ts.map

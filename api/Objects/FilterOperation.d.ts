@@ -31,7 +31,7 @@ export declare abstract class FilterOperation {
     /**
      * Should objects returned by GetObjects include ChangeableAttribute Information
      */
-    IncludeChangableAttributes: boolean;
+    IncludeChangeableAttributes: boolean;
     /**
      * Should objects returned by GetObjects include linked elements Information
      */

@@ -29,12 +29,11 @@ export declare enum UpdateModes {
     Full = 1
 }
 export declare enum CustomAttributeDataType {
-    Calculation = 0,
     CodeList = 1,
     FreeText = 2,
     Numeric = 3,
-    Unknown = 4,
-    Color = 5
+    NumericWithUnit = 4,
+    Color = 6
 }
 export declare enum FeatureTypes {
     Unknown = "Unknown",
@@ -91,6 +90,8 @@ export declare enum ApiCommands {
     GetObjectsSnapInfo = "GetObjectsSnapInfo",
     GetObjectsChangeableAttributes = "GetObjectsChangeableAttributes",
     SetAttribute = "SetAttribute",
+    AddChangeableAttribute = "AddChangeableAttribute",
+    DeleteChangeableAttribute = "DeleteChangeableAttribute",
     Select = "Select",
     ClearSelection = "ClearSelection",
     Fit = "Fit",
@@ -141,6 +142,7 @@ export declare enum ApiCommands {
     GetActivePdfTab = "GetActivePdfTab",
     OpenPdf = "OpenPdf",
     ClosePdf = "ClosePdf",
+    CreateDiameterMeasurement = "CreateDiameterMeasurement",
     TakeScreenshot = "TakeScreenshot",
     TakeAndSaveScreenShot = "TakeAndSaveScreenshot",
     GetTreeConfiguration = "GetTreeConfiguration",
@@ -168,6 +170,9 @@ export declare enum ApiCommands {
     FilesTreeSetState = "FilesTreeSetState",
     FilesTreeGetState = "FilesTreeGetState",
     FilesTreeCreateComment = "FilesTreeCreateComment",
+    ExportSketchAsUpvc = "ExportSketchAsUpvc",
+    ExportSketchAsDgn = "ExportSketchAsDgn",
+    ExportSprayingAsUpvc = "ExportSprayingAsUpvc",
     GetFilesTreeRoot = "GetFilesTreeRoot",
     FilesTreeCreateFolder = "FilesTreeCreateFolder",
     PlacePoi = "PlacePoi",
@@ -226,6 +231,7 @@ export declare enum ApiCommands {
     GetUiColors = "GetUiColors",
     GetUiThemes = "GetUiThemes",
     SetActiveUiTheme = "SetActiveUiTheme",
+    GetUiVariables = "GetUiVariables",
     SaveFileDialog = "SaveFileDialog",
     LoadFileDialog = "LoadFileDialog",
     GenericLoadFromFile = "GenericLoadFromFile"
@@ -282,13 +288,17 @@ export declare enum PidSketchToolMode {
     Rectangle = 5,
     Circle = 6,
     Valve = 7,
+    Text = 10,
     Cloud = 13,
     BreakLine = 99,
     UnBreakLine = 100,
     Copy = 101,
     Rotate = 102,
     Undo = 103,
-    Redo = 104
+    Redo = 104,
+    HideObjects = 105,
+    ShowHiddenObjects = 106,
+    UnhideObjects = 107
 }
 export declare enum ExportableOptions {
     Inherit = 0,
@@ -342,5 +352,10 @@ export declare enum PdfTypes {
     All = 0,
     Document = 1,
     Drawing = 2
+}
+export declare enum ChangeableAttributeUnitType {
+    None = 0,
+    Length = 1,
+    Angle = 2
 }
 //# sourceMappingURL=Enums.d.ts.map

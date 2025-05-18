@@ -13,6 +13,7 @@ export * from "./FileTreePointOfInterest";
 export * from "./FileTreeReport";
 export * from "./FileTreeScreenshot";
 export * from "./FileTreeSketch";
+export * from "./FileTreeSpraying";
 export * from "./FileTreeTwoDToThreeD";
 export * from "./FileTreeView";
 export * from "./FileTreeManager";

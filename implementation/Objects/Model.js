@@ -106,11 +106,18 @@ class Model {
      * @param attributes at least one is required
      * @returns
      */
-    async gGetUniqueAttributeValuesPid(attribute) {
+    async getUniqueAttributeValuesPid(attribute) {
         const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetModelAttributeValues);
         command.commandParameters.push(attribute);
         command.target = Enums_1.TargetEnum.Intelli;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.ModelAttributeValues[attribute];
+    }
+    async createDiameterMeasurement(position) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.CreateDiameterMeasurement);
+        command.commandParameters.push(position.X.toString());
+        command.commandParameters.push(position.Y.toString());
+        command.commandParameters.push(position.Z.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
     /**
      * @internal

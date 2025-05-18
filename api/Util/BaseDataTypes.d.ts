@@ -44,9 +44,13 @@ export declare class ObjectColors {
     };
 }
 export declare class Color {
+    /** Red between 0-1 */
     R: number;
+    /** Green between 0-1 */
     G: number;
+    /** Blue between 0-1 */
     B: number;
+    /** Alpha between 0-1 */
     Alpha: number;
 }
 export declare class ClippingPlane {

@@ -17,7 +17,7 @@ export declare class FileTreePIDSketch extends FileTreeElement {
      * Select a primitive for placment
      * @param symbol
      */
-    selectPrimitiveForPlacement(symbol: PidSketchToolMode): Promise<void>;
+    selectPrimitiveForPlacement(symbol: PidSketchToolMode): Promise<string[]>;
     placeSymbol(symbol: CatalogSymbol, name: string, position: Vector2D, rotation: number, attributes?: {
         [key: string]: string;
     }): Promise<GetObjects>;

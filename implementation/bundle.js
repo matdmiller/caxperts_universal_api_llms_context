@@ -184,7 +184,7 @@ class Application {
 }
 exports.Application = Application;
 
-},{"./FilesTree":20,"./Internal/APIConnector":21,"./Internal/CaxApiCommand":23,"./Objects":43,"./Objects/AuthenticationManager":25,"./Scenes":52,"./Util":59}],2:[function(require,module,exports){
+},{"./FilesTree":21,"./Internal/APIConnector":22,"./Internal/CaxApiCommand":24,"./Objects":44,"./Objects/AuthenticationManager":26,"./Scenes":53,"./Util":60}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAnimation = void 0;
@@ -364,7 +364,7 @@ class FileTreeElement {
 }
 exports.FileTreeElement = FileTreeElement;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],7:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeFolder = void 0;
@@ -399,6 +399,7 @@ const FileTreeMarkup_1 = require("./FileTreeMarkup");
 const FileTreePIDSketch_1 = require("./FileTreePIDSketch");
 const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
+const FileTreeSpraying_1 = require("./FileTreeSpraying");
 /**
  * @legacy
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -539,7 +540,7 @@ class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color
+     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -547,7 +548,7 @@ class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    async createPointOfIntrest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
+    async createPointOfInterest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePoi);
         command.additionalParameters = {
             PlacePoi: {
@@ -647,6 +648,8 @@ class FileTreeManager {
                 return new FileTreePIDSketch_1.FileTreePIDSketch(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Report:
                 return new FileTreeReport_1.FileTreeReport(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.Spraying:
+                return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
             //return new FileTreeElement(element.Id, element.Name, element.Type);
@@ -688,7 +691,7 @@ class FileTreeManager {
 }
 exports.FileTreeManager = FileTreeManager;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeFolder":7,"./FileTreeMarkup":9,"./FileTreeModel":10,"./FileTreePIDSketch":11,"./FileTreePackage":12,"./FileTreePhoto":13,"./FileTreePointOfInterest":14,"./FileTreeReport":15,"./FileTreeScreenshot":16,"./FileTreeSketch":17,"./FileTreeTwoDToThreeD":18,"./FileTreeView":19}],9:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60,"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeFolder":7,"./FileTreeMarkup":9,"./FileTreeModel":10,"./FileTreePIDSketch":11,"./FileTreePackage":12,"./FileTreePhoto":13,"./FileTreePointOfInterest":14,"./FileTreeReport":15,"./FileTreeScreenshot":16,"./FileTreeSketch":17,"./FileTreeSpraying":18,"./FileTreeTwoDToThreeD":19,"./FileTreeView":20}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeMarkup = void 0;
@@ -729,7 +732,7 @@ class FileTreeMarkup extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeMarkup = FileTreeMarkup;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeElement":6}],10:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60,"./FileTreeElement":6}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeModel = void 0;
@@ -786,7 +789,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
                 SketchColor: null
             }
         };
-        await APIConnector_1.Api.get().sendCommand(command);
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Objects;
     }
     async placeSymbol(symbol, name, position, rotation, attributes = {}) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);
@@ -821,7 +824,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePIDSketch = FileTreePIDSketch;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeElement":6}],12:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60,"./FileTreeElement":6}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePackage = void 0;
@@ -885,15 +888,99 @@ exports.FileTreeScreenshot = FileTreeScreenshot;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSketch = void 0;
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
+const Util_1 = require("../Util");
 const FileTreeElement_1 = require("./FileTreeElement");
 class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
     constructor(id, name, type) {
         super(id, name, type);
     }
+    async selectSymbolForPlacement(symbol) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.SelectSymbolForPlacement);
+        command.commandParameters.push(symbol.Path);
+        command.commandParameters.push(symbol.Variant);
+        command.target = Util_1.TargetEnum.ThreeD;
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+    async placeSymbol(symbol, name, position, rotation, attributes = {}) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);
+        command.additionalParameters = {
+            PlaceSymbol: {
+                Path: symbol.Path,
+                Variant: symbol.Variant,
+                Name: name,
+                Position: position,
+                Rotation: rotation,
+                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
+            }
+        };
+        command.target = Util_1.TargetEnum.ThreeD;
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+    async placePrimitive(type, name, position, rotation, attributes = {}, parameters = {}) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePrimitive);
+        command.additionalParameters = {
+            PlacePrimitive: {
+                Type: type,
+                Name: name,
+                Position: position,
+                Rotation: rotation,
+                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
+                Parameters: Object.keys(parameters).map(x => { return { Key: x, Value: parameters[x] }; }),
+            }
+        };
+        command.target = Util_1.TargetEnum.ThreeD;
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+    async getCatalogSymbols() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetCatalogSymbols);
+        command.target = Util_1.TargetEnum.ThreeD;
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+    async deleteSketchItem(uid) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.DeleteSketchItem);
+        command.commandParameters.push(uid);
+        command.target = Util_1.TargetEnum.ThreeD;
+        return (await APIConnector_1.Api.get().sendCommand(command));
+    }
+    async exportAsUpvcBase64() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsUpvc);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
+    }
+    async exportAsDgnBase64() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsDgn);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.DgnBase64;
+    }
 }
 exports.FileTreeSketch = FileTreeSketch;
 
-},{"./FileTreeElement":6}],18:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60,"./FileTreeElement":6}],18:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileTreeSpraying = void 0;
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
+const Util_1 = require("../Util");
+const FileTreeElement_1 = require("./FileTreeElement");
+class FileTreeSpraying extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+    async exportAsUpvcBase64() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSprayingAsUpvc);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
+    }
+}
+exports.FileTreeSpraying = FileTreeSpraying;
+
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60,"./FileTreeElement":6}],19:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeTwoDToThreeD = void 0;
@@ -905,7 +992,7 @@ class FileTreeTwoDToThreeD extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeTwoDToThreeD = FileTreeTwoDToThreeD;
 
-},{"./FileTreeElement":6}],19:[function(require,module,exports){
+},{"./FileTreeElement":6}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeView = void 0;
@@ -917,7 +1004,7 @@ class FileTreeView extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeView = FileTreeView;
 
-},{"./FileTreeElement":6}],20:[function(require,module,exports){
+},{"./FileTreeElement":6}],21:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -949,11 +1036,12 @@ __exportStar(require("./FileTreePointOfInterest"), exports);
 __exportStar(require("./FileTreeReport"), exports);
 __exportStar(require("./FileTreeScreenshot"), exports);
 __exportStar(require("./FileTreeSketch"), exports);
+__exportStar(require("./FileTreeSpraying"), exports);
 __exportStar(require("./FileTreeTwoDToThreeD"), exports);
 __exportStar(require("./FileTreeView"), exports);
 __exportStar(require("./FileTreeManager"), exports);
 
-},{"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeElement":6,"./FileTreeFolder":7,"./FileTreeManager":8,"./FileTreeMarkup":9,"./FileTreeModel":10,"./FileTreePIDSketch":11,"./FileTreePackage":12,"./FileTreePhoto":13,"./FileTreePointOfInterest":14,"./FileTreeReport":15,"./FileTreeScreenshot":16,"./FileTreeSketch":17,"./FileTreeTwoDToThreeD":18,"./FileTreeView":19}],21:[function(require,module,exports){
+},{"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeElement":6,"./FileTreeFolder":7,"./FileTreeManager":8,"./FileTreeMarkup":9,"./FileTreeModel":10,"./FileTreePIDSketch":11,"./FileTreePackage":12,"./FileTreePhoto":13,"./FileTreePointOfInterest":14,"./FileTreeReport":15,"./FileTreeScreenshot":16,"./FileTreeSketch":17,"./FileTreeSpraying":18,"./FileTreeTwoDToThreeD":19,"./FileTreeView":20}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = exports.ApiResponseContainer = void 0;
@@ -1076,7 +1164,7 @@ class Api {
 exports.Api = Api;
 Api.instance = undefined;
 
-},{"../Util":59,"./APIConnectorVuplex":22,"./CaxApiCommand":23}],22:[function(require,module,exports){
+},{"../Util":60,"./APIConnectorVuplex":23,"./CaxApiCommand":24}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiConnectorVuplex = void 0;
@@ -1131,7 +1219,7 @@ class ApiConnectorVuplex {
 }
 exports.ApiConnectorVuplex = ApiConnectorVuplex;
 
-},{"./APIConnector":21}],23:[function(require,module,exports){
+},{"./APIConnector":22}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaxApiCommand = void 0;
@@ -1151,7 +1239,7 @@ class CaxApiCommand {
 }
 exports.CaxApiCommand = CaxApiCommand;
 
-},{"../Util/Enums":56}],24:[function(require,module,exports){
+},{"../Util/Enums":57}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttributeTreeNode = void 0;
@@ -1216,7 +1304,7 @@ class AttributeTreeNode {
 }
 exports.AttributeTreeNode = AttributeTreeNode;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],25:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationContext = exports.AuthenticationManager = void 0;
@@ -1298,7 +1386,7 @@ class AuthenticationContext {
 }
 exports.AuthenticationContext = AuthenticationContext;
 
-},{"../Application":1,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],26:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Camera = void 0;
@@ -1386,7 +1474,7 @@ class Camera {
 }
 exports.Camera = Camera;
 
-},{"../Internal/APIConnector":21,"../Util":59}],27:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClashContext = void 0;
@@ -1433,7 +1521,7 @@ class ClashContext {
 }
 exports.ClashContext = ClashContext;
 
-},{"../Application":1,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],28:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Events = void 0;
@@ -1583,7 +1671,7 @@ class Events {
 }
 exports.Events = Events;
 
-},{"../Internal/APIConnector":21,"../ResponseTypes":47}],29:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../ResponseTypes":48}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileOperations = void 0;
@@ -1638,7 +1726,7 @@ class FileOperations {
 }
 exports.FileOperations = FileOperations;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],30:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation = void 0;
@@ -1670,7 +1758,7 @@ class FilterOperation {
         /**
          * Should objects returned by GetObjects include ChangeableAttribute Information
          */
-        this.IncludeChangableAttributes = false;
+        this.IncludeChangeableAttributes = false;
         /**
          * Should objects returned by GetObjects include linked elements Information
          */
@@ -1694,7 +1782,7 @@ class FilterOperation {
             command.command = Util_1.ApiCommands.GetCustomAttributeConfiguration;
             getCustomAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
-        if (this.IncludeChangableAttributes) {
+        if (this.IncludeChangeableAttributes) {
             command.command = Util_1.ApiCommands.GetObjectsChangeableAttributes;
             getChangeableAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
@@ -1703,7 +1791,7 @@ class FilterOperation {
             getLinkedElements = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
         for (const uid of (await getObjects).ResultData.Objects) {
-            const model = new ModelObject_1.ModelObject(uid);
+            const model = new ModelObject_1.ModelObject(uid, this.scene);
             let attributes;
             let links;
             if (this.IncludeAttributes) {
@@ -1715,7 +1803,7 @@ class FilterOperation {
                     }
                 }
                 const changeableAttributes = {};
-                if (this.IncludeChangableAttributes) {
+                if (this.IncludeChangeableAttributes) {
                     try {
                         const tempChangeable = (await getChangeableAttributes).ResultData.ChangeableAttributes[uid];
                         for (const key of Object.keys(tempChangeable)) {
@@ -1723,7 +1811,7 @@ class FilterOperation {
                         }
                     }
                     catch (_a) {
-                        //If no changable elements exist this causes an exeption
+                        //If no Changeable elements exist this causes an exeption
                     }
                 }
                 const objectsAttribute = (await getObjectsAttributes).ResultData.ObjectsAttributes[uid];
@@ -1815,7 +1903,7 @@ class FilterOperation {
 }
 exports.FilterOperation = FilterOperation;
 
-},{"../Internal/APIConnector":21,"../Util":59,"./ModelObject":38}],31:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60,"./ModelObject":39}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation3d = void 0;
@@ -1977,7 +2065,7 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperation3d = FilterOperation3d;
 
-},{"../Internal/APIConnector":21,"../Util":59,"./AttributeTree":24,"./ClashContext":27,"./FilterOperation":30}],32:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60,"./AttributeTree":25,"./ClashContext":28,"./FilterOperation":31}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperationPid = void 0;
@@ -2036,7 +2124,7 @@ class FilterOperationPid extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperationPid = FilterOperationPid;
 
-},{"../Internal/APIConnector":21,"../Util":59,"./FilterOperation":30}],33:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60,"./FilterOperation":31}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntelliPidDrawing = void 0;
@@ -2071,7 +2159,7 @@ class IntelliPidDrawing {
 }
 exports.IntelliPidDrawing = IntelliPidDrawing;
 
-},{"../Internal/APIConnector":21,"../Util":59}],34:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer2D = void 0;
@@ -2164,7 +2252,7 @@ class Layer2D {
 }
 exports.Layer2D = Layer2D;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],35:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer3D = void 0;
@@ -2291,7 +2379,7 @@ class Layer3D {
 }
 exports.Layer3D = Layer3D;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],36:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalStorage = void 0;
@@ -2356,7 +2444,7 @@ class LocalStorage {
 }
 exports.LocalStorage = LocalStorage;
 
-},{"../Application":1,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],37:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = exports.ModelLegacy = void 0;
@@ -2465,11 +2553,18 @@ class Model {
      * @param attributes at least one is required
      * @returns
      */
-    async gGetUniqueAttributeValuesPid(attribute) {
+    async getUniqueAttributeValuesPid(attribute) {
         const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetModelAttributeValues);
         command.commandParameters.push(attribute);
         command.target = Enums_1.TargetEnum.Intelli;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.ModelAttributeValues[attribute];
+    }
+    async createDiameterMeasurement(position) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.CreateDiameterMeasurement);
+        command.commandParameters.push(position.X.toString());
+        command.commandParameters.push(position.Y.toString());
+        command.commandParameters.push(position.Z.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
     /**
      * @internal
@@ -2484,7 +2579,7 @@ class Model {
 }
 exports.Model = Model;
 
-},{".":43,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"../Util/Enums":56,"../Util/GetSet":57}],38:[function(require,module,exports){
+},{".":44,"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60,"../Util/Enums":57,"../Util/GetSet":58}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Attribute = exports.ModelObject = void 0;
@@ -2492,7 +2587,8 @@ const APIConnector_1 = require("../Internal/APIConnector");
 const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
 const Util_1 = require("../Util");
 class ModelObject {
-    constructor(uid) {
+    constructor(uid, target) {
+        this.target = target;
         this.Uid = uid;
     }
     /**
@@ -2550,7 +2646,7 @@ class ModelObject {
         }
     }
     /**
-     * Update a Changable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
+     * Update a Changeable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
      * @param name attribute name
      * @param value new attribute value
      * @param user username of the person changing the attribute
@@ -2566,15 +2662,94 @@ class ModelObject {
             }
         }
     }
+    /**
+     * Add a changeable Attribute to a sketch element
+     * Samples:
+     * await element.createChangeableAttribute("Test-Freetest", "Test-Freetest", "Hello World");
+     * await element.createChangeableAttribute("Test-Color", "Test-Color", "ff1122", CustomAttributeDataType.Color);
+     * await element.createChangeableAttribute("Test-Meter", "Test-Meter", "1", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Length);
+     * await element.createChangeableAttribute("Test-Angle", "Test-Angle", "2", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Angle);
+     * await element.createChangeableAttribute("Test-Numeric", "Test-Numeric", "2", CustomAttributeDataType.Numeric);
+     * await element.createChangeableAttribute("Test-Codelist", "Test-Codelist", "test1", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["test1", "test2", "test3", "test4"]);
+     * await element.createChangeableAttribute("Test-CodelistColor", "Test-CodelistColor", "blue", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["red", "green", "blue", "none"], [red, green, blue]);
+     * await element.createChangeableAttribute("Test-Readonly", "Test-Readonly", "readonly", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, true, false, true);
+     * await element.createChangeableAttribute("Test-Hidden", "Test-Hidden", "hidden", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, true, true);
+     * await element.createChangeableAttribute("Test-nondeletable", "Test-nondeletable", "nondeletable", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, false, false);
+     * @param name Internal Name
+     * @param displayName  Visible name
+     * @param initialValue The intial value this is set to
+     * @param mode What type of Attribute to create. See Samples
+     * @param unitType Leave this at none except for NumericWithUnit
+     * @param readOnly User cannot edit this field
+     * @param hidden User cannot see this field
+     * @param deletable User cannot delete this value
+     * @param codelist A codelist to use for the mode codelist
+     * @param codelistColors optional colors to use for the codelist
+     */
+    async createChangeableAttribute(name, displayName, initialValue, mode = Util_1.CustomAttributeDataType.FreeText, unitType = Util_1.ChangeableAttributeUnitType.None, readOnly = false, hidden = false, deletable = true, codelist = [], codelistColors = []) {
+        let drawingPath = "";
+        if (this.target.SceneType == Util_1.SceneType.IntelliPid) {
+            drawingPath = this.getAttribute("Drawing_PATH");
+            if (drawingPath == null)
+                drawingPath = this.getAttribute("Drawing_NAME");
+        }
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.AddChangeableAttribute);
+        command.target = this.target.Id;
+        command.additionalParameters = {
+            AddChangeableAttribute: {
+                Uid: this.Uid,
+                DisplayName: displayName,
+                InitialValue: initialValue,
+                Deletable: deletable,
+                DrawingPathForPid: drawingPath,
+                Hidden: hidden,
+                Readonly: readOnly,
+                Name: name,
+                Mode: mode,
+                UnitType: unitType,
+                CodeListEntriesNames: codelist,
+                CodeListEntriesColors: codelistColors
+            }
+        };
+        await APIConnector_1.Api.get().sendCommand(command);
+        if (this.Attributes) {
+            this.Attributes.push(new Attribute(this.Uid, name, initialValue, false, null, null, this.target, true));
+        }
+    }
+    /**
+     * Remove a changeable attribute on a Sketch element
+     * @param name
+     */
+    async deleteChangeableAttribute(name) {
+        let drawingPath = "";
+        if (this.target.SceneType == Util_1.SceneType.IntelliPid) {
+            drawingPath = this.getAttribute("Drawing_PATH");
+            if (drawingPath == null)
+                drawingPath = this.getAttribute("Drawing_NAME");
+        }
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.DeleteChangeableAttribute);
+        command.target = this.target.Id;
+        command.additionalParameters = {
+            DeleteChangeableAttribute: {
+                Uid: this.Uid,
+                DrawingPathForPid: drawingPath,
+                Name: name
+            }
+        };
+        await APIConnector_1.Api.get().sendCommand(command);
+        if (this.Attributes) {
+            this.Attributes = this.Attributes.filter(x => x.Key != name);
+        }
+    }
 }
 exports.ModelObject = ModelObject;
 class Attribute {
-    constructor(uid, key, value, isCustomAttribute, customAttributeDefinition, customAttributeSourceValue, target, isChangableAttribute) {
+    constructor(uid, key, value, isCustomAttribute, customAttributeDefinition, customAttributeSourceValue, target, isChangeableAttribute) {
         this.uid = uid;
         this.Value = value;
         this.Key = key;
         this.IsCustomAttribute = isCustomAttribute;
-        this.IsChangableAttribute = isChangableAttribute;
+        this.IsChangeableAttribute = isChangeableAttribute;
         this.SetCustomAttribute = new Util_1.Set(async (value) => {
             if (customAttributeDefinition == null) {
                 throw new Error('no CustomAttribute information loaded. Specify in Filter or Attribute is no Custom Attribute');
@@ -2615,7 +2790,7 @@ class Attribute {
 }
 exports.Attribute = Attribute;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],39:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pdf = void 0;
@@ -2662,7 +2837,7 @@ class Pdf {
 }
 exports.Pdf = Pdf;
 
-},{"../Internal/APIConnector":21,"../Util":59}],40:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Printer = void 0;
@@ -2701,7 +2876,7 @@ class Printer {
 }
 exports.Printer = Printer;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],41:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectionSphereElement = void 0;
@@ -2714,21 +2889,19 @@ class ProjectionSphereElement {
     }
     /**
      * Enter the Projection
-     * @param opacity optional, is set overwrite the opacity value with the new value
-     * @param rotation optional, enter a rotation to view the projection from
+     * @param opacity optional (default=-1), is set overwrite the opacity value with the new value. If -1 is provided the last value will be used. Value between 0 (transparent) to 100 (opaque)
+     * @param rotation optional(default=-1), enter a rotation to view the projection from. If -1 is used for all axis UPV decides
+     * @param noUi optional (default=false), if true no UI will be visible
      * @returns
      */
-    async enterProjectionSphere(opacity, rotation) {
+    async enterProjectionSphere(opacity = -1, rotation = { X: -1, Y: -1, Z: -1 }, noUi = false) {
         const command = this.model.createCommand(Util_1.ApiCommands.EnterProjectionSphere);
         command.commandParameters = [this.projectionSphere.Guid];
-        if (opacity != null) {
-            command.commandParameters.push(opacity.toString());
-        }
-        if (rotation != null) {
-            command.commandParameters.push(rotation.X.toString());
-            command.commandParameters.push(rotation.Y.toString());
-            command.commandParameters.push(rotation.Z.toString());
-        }
+        command.commandParameters.push(opacity.toString());
+        command.commandParameters.push(rotation.X.toString());
+        command.commandParameters.push(rotation.Y.toString());
+        command.commandParameters.push(rotation.Z.toString());
+        command.commandParameters.push(noUi + "");
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
@@ -2742,7 +2915,7 @@ class ProjectionSphereElement {
 }
 exports.ProjectionSphereElement = ProjectionSphereElement;
 
-},{"../Internal/APIConnector":21,"../Util":59}],42:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Util":60}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settings = void 0;
@@ -2755,6 +2928,10 @@ class Settings {
         this.UiColors = new GetSet_1.Get(async () => {
             const command = this.createCommand(Enums_1.ApiCommands.GetUiColors);
             return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiColors;
+        });
+        this.UiVariables = new GetSet_1.Get(async () => {
+            const command = this.createCommand(Enums_1.ApiCommands.GetUiVariables);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiVariables;
         });
         this.CurrentUiTheme = new GetSet_1.GetSet(async () => {
             return (await this.getAvailableUiThemes()).CurrentId;
@@ -2784,7 +2961,7 @@ class Settings {
 }
 exports.Settings = Settings;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util/Enums":56,"../Util/GetSet":57}],43:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util/Enums":57,"../Util/GetSet":58}],44:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -2822,7 +2999,7 @@ __exportStar(require("./Settings"), exports);
 __exportStar(require("./FileOperations"), exports);
 __exportStar(require("./Pdf"), exports);
 
-},{"./AttributeTree":24,"./AuthenticationManager":25,"./Camera":26,"./ClashContext":27,"./Events":28,"./FileOperations":29,"./FilterOperation3D":31,"./FilterOperationPid":32,"./IntelliPidDrawing":33,"./Layer2D":34,"./Layer3D":35,"./LocalStorage":36,"./Model":37,"./ModelObject":38,"./Pdf":39,"./Printer":40,"./ProjectionSphereElement":41,"./Settings":42}],44:[function(require,module,exports){
+},{"./AttributeTree":25,"./AuthenticationManager":26,"./Camera":27,"./ClashContext":28,"./Events":29,"./FileOperations":30,"./FilterOperation3D":32,"./FilterOperationPid":33,"./IntelliPidDrawing":34,"./Layer2D":35,"./Layer3D":36,"./LocalStorage":37,"./Model":38,"./ModelObject":39,"./Pdf":40,"./Printer":41,"./ProjectionSphereElement":42,"./Settings":43}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiResponseWithType = exports.ApiResponse = void 0;
@@ -2839,7 +3016,7 @@ class ApiResponseWithType extends ApiResponse {
 }
 exports.ApiResponseWithType = ApiResponseWithType;
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StorageVariableChangedEvent = exports.AuthenticationContextChangedEvent = exports.IntelliPidSelectionChanged = exports.IntelliPidSelectionChangedEvent = exports.AnimationTimestamp = exports.AnimationTimestampChangedObject = exports.LinkClicked = exports.LifeCycleEvent = exports.SelectionChanged = exports.PointerClicked = exports.ClashComputationProgressChangedEvent = exports.CustomAttributeValueChanged = exports.AnimationTimestampChangedEvent = exports.CustomAttributeValueChangedEvent = exports.LinkClickedEvent = exports.SelectionChangedEvent = exports.PointerClickedEvent = exports.ApiEvents = void 0;
@@ -2926,11 +3103,11 @@ class StorageVariableChangedEvent {
 }
 exports.StorageVariableChangedEvent = StorageVariableChangedEvent;
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenericLoadFromFileResponse = exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
-exports.GetLinkedElements = exports.GetModelAttributeValues = void 0;
+exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
+exports.GetExportUpvObjectAsUpvcResponse = exports.GetExportUpvObjectAsDgnResponse = exports.GetPipeMeasurementResponse = exports.GetLinkedElements = exports.GetModelAttributeValues = exports.GenericLoadFromFileResponse = void 0;
 class GetObjects {
 }
 exports.GetObjects = GetObjects;
@@ -3099,6 +3276,12 @@ class GetUiColors {
     }
 }
 exports.GetUiColors = GetUiColors;
+class GetUiVariables {
+    constructor() {
+        this.UiVariables = {};
+    }
+}
+exports.GetUiVariables = GetUiVariables;
 class GetUiThemes {
     constructor() {
         this.UiThemes = {};
@@ -3120,8 +3303,17 @@ exports.GetModelAttributeValues = GetModelAttributeValues;
 class GetLinkedElements {
 }
 exports.GetLinkedElements = GetLinkedElements;
+class GetPipeMeasurementResponse {
+}
+exports.GetPipeMeasurementResponse = GetPipeMeasurementResponse;
+class GetExportUpvObjectAsDgnResponse {
+}
+exports.GetExportUpvObjectAsDgnResponse = GetExportUpvObjectAsDgnResponse;
+class GetExportUpvObjectAsUpvcResponse {
+}
+exports.GetExportUpvObjectAsUpvcResponse = GetExportUpvObjectAsUpvcResponse;
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3142,7 +3334,7 @@ __exportStar(require("./ApiResponse"), exports);
 __exportStar(require("./GetObjects"), exports);
 __exportStar(require("./Events"), exports);
 
-},{"./ApiResponse":44,"./Events":45,"./GetObjects":46}],48:[function(require,module,exports){
+},{"./ApiResponse":45,"./Events":46,"./GetObjects":47}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppControlScene = void 0;
@@ -3162,7 +3354,7 @@ class AppControlScene extends Scene_1.Scene {
 }
 exports.AppControlScene = AppControlScene;
 
-},{"./Scene":49}],49:[function(require,module,exports){
+},{"./Scene":50}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
@@ -3243,7 +3435,7 @@ class Scene {
 }
 exports.Scene = Scene;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],50:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util":60}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene3d = void 0;
@@ -3320,7 +3512,7 @@ class Scene3d extends Scene_1.Scene {
 }
 exports.Scene3d = Scene3d;
 
-},{"../Internal/APIConnector":21,"../Objects":43,"../Util":59,"./Scene":49}],51:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Objects":44,"../Util":60,"./Scene":50}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScenePid = void 0;
@@ -3344,7 +3536,7 @@ class ScenePid extends Scene_1.Scene {
 }
 exports.ScenePid = ScenePid;
 
-},{"../Objects":43,"./Scene":49}],52:[function(require,module,exports){
+},{"../Objects":44,"./Scene":50}],53:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3366,7 +3558,7 @@ __exportStar(require("./Scene3d"), exports);
 __exportStar(require("./ScenePid"), exports);
 __exportStar(require("./AppControlScene"), exports);
 
-},{"./AppControlScene":48,"./Scene":49,"./Scene3d":50,"./ScenePid":51}],53:[function(require,module,exports){
+},{"./AppControlScene":49,"./Scene":50,"./Scene3d":51,"./ScenePid":52}],54:[function(require,module,exports){
 "use strict";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3406,7 +3598,7 @@ class Theme {
 }
 exports.Theme = Theme;
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
@@ -3561,7 +3753,7 @@ class PdfDocument {
 }
 exports.PdfDocument = PdfDocument;
 
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomAttributes = exports.CustomAttributeLegacy = void 0;
@@ -3660,10 +3852,10 @@ class CustomAttributes {
 }
 exports.CustomAttributes = CustomAttributes;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util/Enums":56}],56:[function(require,module,exports){
+},{"../Internal/APIConnector":22,"../Internal/CaxApiCommand":24,"../Util/Enums":57}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 /**
  * @deprecated
  * Old UPV Target codes
@@ -3700,12 +3892,13 @@ var UpdateModes;
 })(UpdateModes = exports.UpdateModes || (exports.UpdateModes = {}));
 var CustomAttributeDataType;
 (function (CustomAttributeDataType) {
-    CustomAttributeDataType[CustomAttributeDataType["Calculation"] = 0] = "Calculation";
+    //Calculation = 0,
     CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
     CustomAttributeDataType[CustomAttributeDataType["FreeText"] = 2] = "FreeText";
     CustomAttributeDataType[CustomAttributeDataType["Numeric"] = 3] = "Numeric";
-    CustomAttributeDataType[CustomAttributeDataType["Unknown"] = 4] = "Unknown";
-    CustomAttributeDataType[CustomAttributeDataType["Color"] = 5] = "Color";
+    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
+    //Unknown = 5,
+    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
 })(CustomAttributeDataType = exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
 var FeatureTypes;
 (function (FeatureTypes) {
@@ -3767,6 +3960,8 @@ var ApiCommands;
     ApiCommands["GetObjectsSnapInfo"] = "GetObjectsSnapInfo";
     ApiCommands["GetObjectsChangeableAttributes"] = "GetObjectsChangeableAttributes";
     ApiCommands["SetAttribute"] = "SetAttribute";
+    ApiCommands["AddChangeableAttribute"] = "AddChangeableAttribute";
+    ApiCommands["DeleteChangeableAttribute"] = "DeleteChangeableAttribute";
     ApiCommands["Select"] = "Select";
     ApiCommands["ClearSelection"] = "ClearSelection";
     ApiCommands["Fit"] = "Fit";
@@ -3820,6 +4015,7 @@ var ApiCommands;
     ApiCommands["GetActivePdfTab"] = "GetActivePdfTab";
     ApiCommands["OpenPdf"] = "OpenPdf";
     ApiCommands["ClosePdf"] = "ClosePdf";
+    ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
     //Scene
     ApiCommands["TakeScreenshot"] = "TakeScreenshot";
     ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
@@ -3849,6 +4045,9 @@ var ApiCommands;
     ApiCommands["FilesTreeSetState"] = "FilesTreeSetState";
     ApiCommands["FilesTreeGetState"] = "FilesTreeGetState";
     ApiCommands["FilesTreeCreateComment"] = "FilesTreeCreateComment";
+    ApiCommands["ExportSketchAsUpvc"] = "ExportSketchAsUpvc";
+    ApiCommands["ExportSketchAsDgn"] = "ExportSketchAsDgn";
+    ApiCommands["ExportSprayingAsUpvc"] = "ExportSprayingAsUpvc";
     //Folder
     ApiCommands["GetFilesTreeRoot"] = "GetFilesTreeRoot";
     ApiCommands["FilesTreeCreateFolder"] = "FilesTreeCreateFolder";
@@ -3920,6 +4119,7 @@ var ApiCommands;
     ApiCommands["GetUiColors"] = "GetUiColors";
     ApiCommands["GetUiThemes"] = "GetUiThemes";
     ApiCommands["SetActiveUiTheme"] = "SetActiveUiTheme";
+    ApiCommands["GetUiVariables"] = "GetUiVariables";
     // Fileoperations
     ApiCommands["SaveFileDialog"] = "SaveFileDialog";
     ApiCommands["LoadFileDialog"] = "LoadFileDialog";
@@ -4003,7 +4203,7 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["Valve"] = 7] = "Valve";
     //CustomSymbol = 8,
     //IntelliPidLayer = 9,
-    //Text = 10,
+    PidSketchToolMode[PidSketchToolMode["Text"] = 10] = "Text";
     //Copied = 11,
     //Legend = 12,
     PidSketchToolMode[PidSketchToolMode["Cloud"] = 13] = "Cloud";
@@ -4015,6 +4215,9 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["Rotate"] = 102] = "Rotate";
     PidSketchToolMode[PidSketchToolMode["Undo"] = 103] = "Undo";
     PidSketchToolMode[PidSketchToolMode["Redo"] = 104] = "Redo";
+    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
+    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
+    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
 })(PidSketchToolMode = exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
 var ExportableOptions;
 (function (ExportableOptions) {
@@ -4076,8 +4279,14 @@ var PdfTypes;
     PdfTypes[PdfTypes["Document"] = 1] = "Document";
     PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
 })(PdfTypes = exports.PdfTypes || (exports.PdfTypes = {}));
+var ChangeableAttributeUnitType;
+(function (ChangeableAttributeUnitType) {
+    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
+    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
+    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
+})(ChangeableAttributeUnitType = exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {}));
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetSet = exports.Set = exports.Get = void 0;
@@ -4131,10 +4340,10 @@ class GetSet {
 }
 exports.GetSet = GetSet;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
+exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
 const _1 = require(".");
 class ParameterBase {
 }
@@ -4305,8 +4514,14 @@ exports.LoadFileDialogParameters = LoadFileDialogParameters;
 class PdfDocumentParameter {
 }
 exports.PdfDocumentParameter = PdfDocumentParameter;
+class AddChangeableAttributeParameter {
+}
+exports.AddChangeableAttributeParameter = AddChangeableAttributeParameter;
+class DeleteChangeableAttributeParameter {
+}
+exports.DeleteChangeableAttributeParameter = DeleteChangeableAttributeParameter;
 
-},{".":59}],59:[function(require,module,exports){
+},{".":60}],60:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4329,7 +4544,7 @@ __exportStar(require("./GetSet"), exports);
 __exportStar(require("./Enums"), exports);
 __exportStar(require("./CustomAttributes"), exports);
 
-},{"./BaseDataTypes":54,"./CustomAttributes":55,"./Enums":56,"./GetSet":57,"./ParameterBase":58}],60:[function(require,module,exports){
+},{"./BaseDataTypes":55,"./CustomAttributes":56,"./Enums":57,"./GetSet":58,"./ParameterBase":59}],61:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4354,5 +4569,5 @@ __exportStar(require("./Util"), exports);
 __exportStar(require("./ResponseTypes"), exports);
 __exportStar(require("./Objects"), exports);
 
-},{"./Application":1,"./FilesTree":20,"./Objects":43,"./ResponseTypes":47,"./Scenes":52,"./Theme":53,"./Util":59}]},{},[60])(60)
+},{"./Application":1,"./FilesTree":21,"./Objects":44,"./ResponseTypes":48,"./Scenes":53,"./Theme":54,"./Util":60}]},{},[61])(61)
 });

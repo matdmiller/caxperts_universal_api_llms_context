@@ -11,6 +11,10 @@ class Settings {
             const command = this.createCommand(Enums_1.ApiCommands.GetUiColors);
             return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiColors;
         });
+        this.UiVariables = new GetSet_1.Get(async () => {
+            const command = this.createCommand(Enums_1.ApiCommands.GetUiVariables);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiVariables;
+        });
         this.CurrentUiTheme = new GetSet_1.GetSet(async () => {
             return (await this.getAvailableUiThemes()).CurrentId;
         }, async (theme) => {

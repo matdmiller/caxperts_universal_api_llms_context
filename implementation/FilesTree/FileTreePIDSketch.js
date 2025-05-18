@@ -42,7 +42,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
                 SketchColor: null
             }
         };
-        await APIConnector_1.Api.get().sendCommand(command);
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Objects;
     }
     async placeSymbol(symbol, name, position, rotation, attributes = {}) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);

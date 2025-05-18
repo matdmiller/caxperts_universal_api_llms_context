@@ -9,6 +9,13 @@ export declare class Settings {
         [key: string]: string;
     }>;
     /**
+     * Return the current Ui Variables
+     * This includes colors as well as non color attributes(roundness etc)
+     */
+    UiVariables: Get<{
+        [key: string]: string;
+    }>;
+    /**
      * Set or get the Ui theme via the uid of the theme
      */
     CurrentUiTheme: GetSet<string>;
