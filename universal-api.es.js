@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - ES Module Bundle
  * Version: ** 7.2.1
- * Bundled on: 2025-05-11
+ * Bundled on: 2025-05-18
  * This file was automatically generated from the TypeScript source.
  */
 
@@ -202,7 +202,7 @@ function requireParameterBase () {
 	if (hasRequiredParameterBase) return ParameterBase;
 	hasRequiredParameterBase = 1;
 	Object.defineProperty(ParameterBase, "__esModule", { value: true });
-	ParameterBase.PdfDocumentParameter = ParameterBase.LoadFileDialogParameters = ParameterBase.SaveFileDialogParameters = ParameterBase.AttributeKeyValue = ParameterBase.PlacePrimitiveParameter = ParameterBase.PlaceSymbolParameter = ParameterBase.AddPidToPdfPrinterParameter = ParameterBase.GetClashesParameter = ParameterBase.FilesTreeCreateCommentParameter = ParameterBase.GetFilesTreeContentParameter = ParameterBase.FilesTreeSetStateParameter = ParameterBase.SetPidSketchToolParameter = ParameterBase.OpenAuthenticationContextParameter = ParameterBase.SetMarkupToolParameter = ParameterBase.PackageCondition = ParameterBase.Package = ParameterBase.PackageFilterParameter = ParameterBase.ApiMetadata = ParameterBase.ApiSerializationContainer = ParameterBase.FilesTreeImportContainerParameter = ParameterBase.ProcessFileParameter = ParameterBase.ExportCustomAttributesParameter = ParameterBase.SetCustomAttributeConfigParameter = ParameterBase.ImportCustomAttributeChangeSetParameter = ParameterBase.LoadCustomAttributeDataFileParameter = ParameterBase.LoadCustomAttributeConfigurationFileParameter = ParameterBase.AttributePoi = ParameterBase.Link = ParameterBase.PoIWithCommentParameter = ParameterBase.PlacePoiParameter = ParameterBase.PlaceObjParameter = ParameterBase.PlacePlyParameter = ParameterBase.PlaceArcParameter = ParameterBase.PlaceTextParameter = ParameterBase.DrawLineParameter = ParameterBase.IntelliClippingDescriptor = ParameterBase.VolumeClippingDescriptor = ParameterBase.ClippingDescriptor = ParameterBase.ParameterBase = void 0;
+	ParameterBase.DeleteChangeableAttributeParameter = ParameterBase.AddChangeableAttributeParameter = ParameterBase.PdfDocumentParameter = ParameterBase.LoadFileDialogParameters = ParameterBase.SaveFileDialogParameters = ParameterBase.AttributeKeyValue = ParameterBase.PlacePrimitiveParameter = ParameterBase.PlaceSymbolParameter = ParameterBase.AddPidToPdfPrinterParameter = ParameterBase.GetClashesParameter = ParameterBase.FilesTreeCreateCommentParameter = ParameterBase.GetFilesTreeContentParameter = ParameterBase.FilesTreeSetStateParameter = ParameterBase.SetPidSketchToolParameter = ParameterBase.OpenAuthenticationContextParameter = ParameterBase.SetMarkupToolParameter = ParameterBase.PackageCondition = ParameterBase.Package = ParameterBase.PackageFilterParameter = ParameterBase.ApiMetadata = ParameterBase.ApiSerializationContainer = ParameterBase.FilesTreeImportContainerParameter = ParameterBase.ProcessFileParameter = ParameterBase.ExportCustomAttributesParameter = ParameterBase.SetCustomAttributeConfigParameter = ParameterBase.ImportCustomAttributeChangeSetParameter = ParameterBase.LoadCustomAttributeDataFileParameter = ParameterBase.LoadCustomAttributeConfigurationFileParameter = ParameterBase.AttributePoi = ParameterBase.Link = ParameterBase.PoIWithCommentParameter = ParameterBase.PlacePoiParameter = ParameterBase.PlaceObjParameter = ParameterBase.PlacePlyParameter = ParameterBase.PlaceArcParameter = ParameterBase.PlaceTextParameter = ParameterBase.DrawLineParameter = ParameterBase.IntelliClippingDescriptor = ParameterBase.VolumeClippingDescriptor = ParameterBase.ClippingDescriptor = ParameterBase.ParameterBase = void 0;
 	const _1 = requireUtil();
 	let ParameterBase$1 = class ParameterBase {
 	};
@@ -373,6 +373,12 @@ function requireParameterBase () {
 	class PdfDocumentParameter {
 	}
 	ParameterBase.PdfDocumentParameter = PdfDocumentParameter;
+	class AddChangeableAttributeParameter {
+	}
+	ParameterBase.AddChangeableAttributeParameter = AddChangeableAttributeParameter;
+	class DeleteChangeableAttributeParameter {
+	}
+	ParameterBase.DeleteChangeableAttributeParameter = DeleteChangeableAttributeParameter;
 	return ParameterBase;
 }
 
@@ -446,7 +452,7 @@ function requireEnums () {
 	hasRequiredEnums = 1;
 	(function (exports) {
 		Object.defineProperty(exports, "__esModule", { value: true });
-		exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+		exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 		(function (TargetEnum) {
 		    TargetEnum["Undefined"] = "0";
 		    TargetEnum["ThreeD"] = "1";
@@ -468,12 +474,13 @@ function requireEnums () {
 		    UpdateModes[UpdateModes["Full"] = 1] = "Full";
 		})(exports.UpdateModes || (exports.UpdateModes = {}));
 		(function (CustomAttributeDataType) {
-		    CustomAttributeDataType[CustomAttributeDataType["Calculation"] = 0] = "Calculation";
+		    //Calculation = 0,
 		    CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
 		    CustomAttributeDataType[CustomAttributeDataType["FreeText"] = 2] = "FreeText";
 		    CustomAttributeDataType[CustomAttributeDataType["Numeric"] = 3] = "Numeric";
-		    CustomAttributeDataType[CustomAttributeDataType["Unknown"] = 4] = "Unknown";
-		    CustomAttributeDataType[CustomAttributeDataType["Color"] = 5] = "Color";
+		    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
+		    //Unknown = 5,
+		    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
 		})(exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
 		(function (FeatureTypes) {
 		    FeatureTypes["Unknown"] = "Unknown";
@@ -529,6 +536,8 @@ function requireEnums () {
 		    ApiCommands["GetObjectsSnapInfo"] = "GetObjectsSnapInfo";
 		    ApiCommands["GetObjectsChangeableAttributes"] = "GetObjectsChangeableAttributes";
 		    ApiCommands["SetAttribute"] = "SetAttribute";
+		    ApiCommands["AddChangeableAttribute"] = "AddChangeableAttribute";
+		    ApiCommands["DeleteChangeableAttribute"] = "DeleteChangeableAttribute";
 		    ApiCommands["Select"] = "Select";
 		    ApiCommands["ClearSelection"] = "ClearSelection";
 		    ApiCommands["Fit"] = "Fit";
@@ -582,6 +591,7 @@ function requireEnums () {
 		    ApiCommands["GetActivePdfTab"] = "GetActivePdfTab";
 		    ApiCommands["OpenPdf"] = "OpenPdf";
 		    ApiCommands["ClosePdf"] = "ClosePdf";
+		    ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
 		    //Scene
 		    ApiCommands["TakeScreenshot"] = "TakeScreenshot";
 		    ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
@@ -611,6 +621,9 @@ function requireEnums () {
 		    ApiCommands["FilesTreeSetState"] = "FilesTreeSetState";
 		    ApiCommands["FilesTreeGetState"] = "FilesTreeGetState";
 		    ApiCommands["FilesTreeCreateComment"] = "FilesTreeCreateComment";
+		    ApiCommands["ExportSketchAsUpvc"] = "ExportSketchAsUpvc";
+		    ApiCommands["ExportSketchAsDgn"] = "ExportSketchAsDgn";
+		    ApiCommands["ExportSprayingAsUpvc"] = "ExportSprayingAsUpvc";
 		    //Folder
 		    ApiCommands["GetFilesTreeRoot"] = "GetFilesTreeRoot";
 		    ApiCommands["FilesTreeCreateFolder"] = "FilesTreeCreateFolder";
@@ -682,6 +695,7 @@ function requireEnums () {
 		    ApiCommands["GetUiColors"] = "GetUiColors";
 		    ApiCommands["GetUiThemes"] = "GetUiThemes";
 		    ApiCommands["SetActiveUiTheme"] = "SetActiveUiTheme";
+		    ApiCommands["GetUiVariables"] = "GetUiVariables";
 		    // Fileoperations
 		    ApiCommands["SaveFileDialog"] = "SaveFileDialog";
 		    ApiCommands["LoadFileDialog"] = "LoadFileDialog";
@@ -757,7 +771,7 @@ function requireEnums () {
 		    PidSketchToolMode[PidSketchToolMode["Valve"] = 7] = "Valve";
 		    //CustomSymbol = 8,
 		    //IntelliPidLayer = 9,
-		    //Text = 10,
+		    PidSketchToolMode[PidSketchToolMode["Text"] = 10] = "Text";
 		    //Copied = 11,
 		    //Legend = 12,
 		    PidSketchToolMode[PidSketchToolMode["Cloud"] = 13] = "Cloud";
@@ -769,6 +783,9 @@ function requireEnums () {
 		    PidSketchToolMode[PidSketchToolMode["Rotate"] = 102] = "Rotate";
 		    PidSketchToolMode[PidSketchToolMode["Undo"] = 103] = "Undo";
 		    PidSketchToolMode[PidSketchToolMode["Redo"] = 104] = "Redo";
+		    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
+		    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
+		    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
 		})(exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
 		(function (ExportableOptions) {
 		    ExportableOptions[ExportableOptions["Inherit"] = 0] = "Inherit";
@@ -822,7 +839,12 @@ function requireEnums () {
 		    PdfTypes[PdfTypes["All"] = 0] = "All";
 		    PdfTypes[PdfTypes["Document"] = 1] = "Document";
 		    PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
-		})(exports.PdfTypes || (exports.PdfTypes = {})); 
+		})(exports.PdfTypes || (exports.PdfTypes = {}));
+		(function (ChangeableAttributeUnitType) {
+		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
+		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
+		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
+		})(exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {})); 
 	} (Enums));
 	return Enums;
 }
@@ -1624,11 +1646,18 @@ function requireModel () {
 	     * @param attributes at least one is required
 	     * @returns
 	     */
-	    async gGetUniqueAttributeValuesPid(attribute) {
+	    async getUniqueAttributeValuesPid(attribute) {
 	        const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetModelAttributeValues);
 	        command.commandParameters.push(attribute);
 	        command.target = Enums_1.TargetEnum.Intelli;
 	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.ModelAttributeValues[attribute];
+	    }
+	    async createDiameterMeasurement(position) {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.CreateDiameterMeasurement);
+	        command.commandParameters.push(position.X.toString());
+	        command.commandParameters.push(position.Y.toString());
+	        command.commandParameters.push(position.Z.toString());
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
 	    }
 	    /**
 	     * @internal
@@ -1723,8 +1752,8 @@ function requireGetObjects () {
 	if (hasRequiredGetObjects) return GetObjects;
 	hasRequiredGetObjects = 1;
 	Object.defineProperty(GetObjects, "__esModule", { value: true });
-	GetObjects.GenericLoadFromFileResponse = GetObjects.SaveFileApiReturnType = GetObjects.LoadFileApiReturnType = GetObjects.GetUiThemes = GetObjects.GetUiColors = GetObjects.GetStorageVariablesList = GetObjects.GetStorageVariable = GetObjects.GetPdfPrinterResult = GetObjects.GetPdfPrinter = GetObjects.ClashCandidate = GetObjects.Clash = GetObjects.GetClashCandidates = GetObjects.GetClashes = GetObjects.GetChangeableAttributesResponse = GetObjects.FilesTreeGetStateResponse = GetObjects.GetFilesTreeContent = GetObjects.GetCatalogSymbols = GetObjects.OpenAuthenticationContextResult = GetObjects.GetWfsRemoteContent = GetObjects.FilesTreeContainerObject = GetObjects.GetFilesTreeContainerObject = GetObjects.GetLanguage = GetObjects.GetProjectionSpheres = GetObjects.GetTreeStructure = GetObjects.GetTreeNodesOfFolder = GetObjects.GetTreeFolderSiblings = GetObjects.GetTreeFolderChildren = GetObjects.GetTreeRootNode = GetObjects.GetPdfInfo = GetObjects.GetIntellipidDrawings = GetObjects.ExportCustomAttributesResult = GetObjects.GetRawSvgPidObjects = GetObjects.GetCustomAttributesConfiguration = GetObjects.LifeCycleState = GetObjects.GetLifeCycleState = GetObjects.GetVisibleAspects = GetObjects.GetTreeConfiguration = GetObjects.GetFilesTreeObjects = GetObjects.GetFilesTreeObject = GetObjects.TakeScreenshotResult = GetObjects.GetProjectInfo = GetObjects.GetCameraView = GetObjects.GetObjectsSnapInfo = GetObjects.GetClippingInfoResult = GetObjects.GetModelInfo = GetObjects.GetObjectsColors = GetObjects.GetObjectsBoundingBox = GetObjects.GetObjectsAttributes = GetObjects.GetSelectedObjects = GetObjects.GetObjects = void 0;
-	GetObjects.GetLinkedElements = GetObjects.GetModelAttributeValues = void 0;
+	GetObjects.SaveFileApiReturnType = GetObjects.LoadFileApiReturnType = GetObjects.GetUiThemes = GetObjects.GetUiVariables = GetObjects.GetUiColors = GetObjects.GetStorageVariablesList = GetObjects.GetStorageVariable = GetObjects.GetPdfPrinterResult = GetObjects.GetPdfPrinter = GetObjects.ClashCandidate = GetObjects.Clash = GetObjects.GetClashCandidates = GetObjects.GetClashes = GetObjects.GetChangeableAttributesResponse = GetObjects.FilesTreeGetStateResponse = GetObjects.GetFilesTreeContent = GetObjects.GetCatalogSymbols = GetObjects.OpenAuthenticationContextResult = GetObjects.GetWfsRemoteContent = GetObjects.FilesTreeContainerObject = GetObjects.GetFilesTreeContainerObject = GetObjects.GetLanguage = GetObjects.GetProjectionSpheres = GetObjects.GetTreeStructure = GetObjects.GetTreeNodesOfFolder = GetObjects.GetTreeFolderSiblings = GetObjects.GetTreeFolderChildren = GetObjects.GetTreeRootNode = GetObjects.GetPdfInfo = GetObjects.GetIntellipidDrawings = GetObjects.ExportCustomAttributesResult = GetObjects.GetRawSvgPidObjects = GetObjects.GetCustomAttributesConfiguration = GetObjects.LifeCycleState = GetObjects.GetLifeCycleState = GetObjects.GetVisibleAspects = GetObjects.GetTreeConfiguration = GetObjects.GetFilesTreeObjects = GetObjects.GetFilesTreeObject = GetObjects.TakeScreenshotResult = GetObjects.GetProjectInfo = GetObjects.GetCameraView = GetObjects.GetObjectsSnapInfo = GetObjects.GetClippingInfoResult = GetObjects.GetModelInfo = GetObjects.GetObjectsColors = GetObjects.GetObjectsBoundingBox = GetObjects.GetObjectsAttributes = GetObjects.GetSelectedObjects = GetObjects.GetObjects = void 0;
+	GetObjects.GetExportUpvObjectAsUpvcResponse = GetObjects.GetExportUpvObjectAsDgnResponse = GetObjects.GetPipeMeasurementResponse = GetObjects.GetLinkedElements = GetObjects.GetModelAttributeValues = GetObjects.GenericLoadFromFileResponse = void 0;
 	let GetObjects$1 = class GetObjects {
 	};
 	GetObjects.GetObjects = GetObjects$1;
@@ -1893,6 +1922,12 @@ function requireGetObjects () {
 	    }
 	}
 	GetObjects.GetUiColors = GetUiColors;
+	class GetUiVariables {
+	    constructor() {
+	        this.UiVariables = {};
+	    }
+	}
+	GetObjects.GetUiVariables = GetUiVariables;
 	class GetUiThemes {
 	    constructor() {
 	        this.UiThemes = {};
@@ -1914,6 +1949,15 @@ function requireGetObjects () {
 	class GetLinkedElements {
 	}
 	GetObjects.GetLinkedElements = GetLinkedElements;
+	class GetPipeMeasurementResponse {
+	}
+	GetObjects.GetPipeMeasurementResponse = GetPipeMeasurementResponse;
+	class GetExportUpvObjectAsDgnResponse {
+	}
+	GetObjects.GetExportUpvObjectAsDgnResponse = GetExportUpvObjectAsDgnResponse;
+	class GetExportUpvObjectAsUpvcResponse {
+	}
+	GetObjects.GetExportUpvObjectAsUpvcResponse = GetExportUpvObjectAsUpvcResponse;
 	return GetObjects;
 }
 
@@ -2210,21 +2254,19 @@ function requireProjectionSphereElement () {
 	    }
 	    /**
 	     * Enter the Projection
-	     * @param opacity optional, is set overwrite the opacity value with the new value
-	     * @param rotation optional, enter a rotation to view the projection from
+	     * @param opacity optional (default=-1), is set overwrite the opacity value with the new value. If -1 is provided the last value will be used. Value between 0 (transparent) to 100 (opaque)
+	     * @param rotation optional(default=-1), enter a rotation to view the projection from. If -1 is used for all axis UPV decides
+	     * @param noUi optional (default=false), if true no UI will be visible
 	     * @returns
 	     */
-	    async enterProjectionSphere(opacity, rotation) {
+	    async enterProjectionSphere(opacity = -1, rotation = { X: -1, Y: -1, Z: -1 }, noUi = false) {
 	        const command = this.model.createCommand(Util_1.ApiCommands.EnterProjectionSphere);
 	        command.commandParameters = [this.projectionSphere.Guid];
-	        if (opacity != null) {
-	            command.commandParameters.push(opacity.toString());
-	        }
-	        if (rotation != null) {
-	            command.commandParameters.push(rotation.X.toString());
-	            command.commandParameters.push(rotation.Y.toString());
-	            command.commandParameters.push(rotation.Z.toString());
-	        }
+	        command.commandParameters.push(opacity.toString());
+	        command.commandParameters.push(rotation.X.toString());
+	        command.commandParameters.push(rotation.Y.toString());
+	        command.commandParameters.push(rotation.Z.toString());
+	        command.commandParameters.push(noUi + "");
 	        return await APIConnector_1.Api.get().sendCommand(command);
 	    }
 	    /**
@@ -2383,7 +2425,8 @@ function requireModelObject () {
 	const CaxApiCommand_1 = requireCaxApiCommand();
 	const Util_1 = requireUtil();
 	let ModelObject$1 = class ModelObject {
-	    constructor(uid) {
+	    constructor(uid, target) {
+	        this.target = target;
 	        this.Uid = uid;
 	    }
 	    /**
@@ -2441,7 +2484,7 @@ function requireModelObject () {
 	        }
 	    }
 	    /**
-	     * Update a Changable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
+	     * Update a Changeable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
 	     * @param name attribute name
 	     * @param value new attribute value
 	     * @param user username of the person changing the attribute
@@ -2457,15 +2500,94 @@ function requireModelObject () {
 	            }
 	        }
 	    }
+	    /**
+	     * Add a changeable Attribute to a sketch element
+	     * Samples:
+	     * await element.createChangeableAttribute("Test-Freetest", "Test-Freetest", "Hello World");
+	     * await element.createChangeableAttribute("Test-Color", "Test-Color", "ff1122", CustomAttributeDataType.Color);
+	     * await element.createChangeableAttribute("Test-Meter", "Test-Meter", "1", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Length);
+	     * await element.createChangeableAttribute("Test-Angle", "Test-Angle", "2", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Angle);
+	     * await element.createChangeableAttribute("Test-Numeric", "Test-Numeric", "2", CustomAttributeDataType.Numeric);
+	     * await element.createChangeableAttribute("Test-Codelist", "Test-Codelist", "test1", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["test1", "test2", "test3", "test4"]);
+	     * await element.createChangeableAttribute("Test-CodelistColor", "Test-CodelistColor", "blue", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["red", "green", "blue", "none"], [red, green, blue]);
+	     * await element.createChangeableAttribute("Test-Readonly", "Test-Readonly", "readonly", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, true, false, true);
+	     * await element.createChangeableAttribute("Test-Hidden", "Test-Hidden", "hidden", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, true, true);
+	     * await element.createChangeableAttribute("Test-nondeletable", "Test-nondeletable", "nondeletable", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, false, false);
+	     * @param name Internal Name
+	     * @param displayName  Visible name
+	     * @param initialValue The intial value this is set to
+	     * @param mode What type of Attribute to create. See Samples
+	     * @param unitType Leave this at none except for NumericWithUnit
+	     * @param readOnly User cannot edit this field
+	     * @param hidden User cannot see this field
+	     * @param deletable User cannot delete this value
+	     * @param codelist A codelist to use for the mode codelist
+	     * @param codelistColors optional colors to use for the codelist
+	     */
+	    async createChangeableAttribute(name, displayName, initialValue, mode = Util_1.CustomAttributeDataType.FreeText, unitType = Util_1.ChangeableAttributeUnitType.None, readOnly = false, hidden = false, deletable = true, codelist = [], codelistColors = []) {
+	        let drawingPath = "";
+	        if (this.target.SceneType == Util_1.SceneType.IntelliPid) {
+	            drawingPath = this.getAttribute("Drawing_PATH");
+	            if (drawingPath == null)
+	                drawingPath = this.getAttribute("Drawing_NAME");
+	        }
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.AddChangeableAttribute);
+	        command.target = this.target.Id;
+	        command.additionalParameters = {
+	            AddChangeableAttribute: {
+	                Uid: this.Uid,
+	                DisplayName: displayName,
+	                InitialValue: initialValue,
+	                Deletable: deletable,
+	                DrawingPathForPid: drawingPath,
+	                Hidden: hidden,
+	                Readonly: readOnly,
+	                Name: name,
+	                Mode: mode,
+	                UnitType: unitType,
+	                CodeListEntriesNames: codelist,
+	                CodeListEntriesColors: codelistColors
+	            }
+	        };
+	        await APIConnector_1.Api.get().sendCommand(command);
+	        if (this.Attributes) {
+	            this.Attributes.push(new Attribute(this.Uid, name, initialValue, false, null, null, this.target, true));
+	        }
+	    }
+	    /**
+	     * Remove a changeable attribute on a Sketch element
+	     * @param name
+	     */
+	    async deleteChangeableAttribute(name) {
+	        let drawingPath = "";
+	        if (this.target.SceneType == Util_1.SceneType.IntelliPid) {
+	            drawingPath = this.getAttribute("Drawing_PATH");
+	            if (drawingPath == null)
+	                drawingPath = this.getAttribute("Drawing_NAME");
+	        }
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.DeleteChangeableAttribute);
+	        command.target = this.target.Id;
+	        command.additionalParameters = {
+	            DeleteChangeableAttribute: {
+	                Uid: this.Uid,
+	                DrawingPathForPid: drawingPath,
+	                Name: name
+	            }
+	        };
+	        await APIConnector_1.Api.get().sendCommand(command);
+	        if (this.Attributes) {
+	            this.Attributes = this.Attributes.filter(x => x.Key != name);
+	        }
+	    }
 	};
 	ModelObject.ModelObject = ModelObject$1;
 	class Attribute {
-	    constructor(uid, key, value, isCustomAttribute, customAttributeDefinition, customAttributeSourceValue, target, isChangableAttribute) {
+	    constructor(uid, key, value, isCustomAttribute, customAttributeDefinition, customAttributeSourceValue, target, isChangeableAttribute) {
 	        this.uid = uid;
 	        this.Value = value;
 	        this.Key = key;
 	        this.IsCustomAttribute = isCustomAttribute;
-	        this.IsChangableAttribute = isChangableAttribute;
+	        this.IsChangeableAttribute = isChangeableAttribute;
 	        this.SetCustomAttribute = new Util_1.Set(async (value) => {
 	            if (customAttributeDefinition == null) {
 	                throw new Error('no CustomAttribute information loaded. Specify in Filter or Attribute is no Custom Attribute');
@@ -2543,7 +2665,7 @@ function requireFilterOperation () {
 	        /**
 	         * Should objects returned by GetObjects include ChangeableAttribute Information
 	         */
-	        this.IncludeChangableAttributes = false;
+	        this.IncludeChangeableAttributes = false;
 	        /**
 	         * Should objects returned by GetObjects include linked elements Information
 	         */
@@ -2567,7 +2689,7 @@ function requireFilterOperation () {
 	            command.command = Util_1.ApiCommands.GetCustomAttributeConfiguration;
 	            getCustomAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
 	        }
-	        if (this.IncludeChangableAttributes) {
+	        if (this.IncludeChangeableAttributes) {
 	            command.command = Util_1.ApiCommands.GetObjectsChangeableAttributes;
 	            getChangeableAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
 	        }
@@ -2576,7 +2698,7 @@ function requireFilterOperation () {
 	            getLinkedElements = APIConnector_1.Api.get().sendCommandWithReturnType(command);
 	        }
 	        for (const uid of (await getObjects).ResultData.Objects) {
-	            const model = new ModelObject_1.ModelObject(uid);
+	            const model = new ModelObject_1.ModelObject(uid, this.scene);
 	            let attributes;
 	            let links;
 	            if (this.IncludeAttributes) {
@@ -2588,7 +2710,7 @@ function requireFilterOperation () {
 	                    }
 	                }
 	                const changeableAttributes = {};
-	                if (this.IncludeChangableAttributes) {
+	                if (this.IncludeChangeableAttributes) {
 	                    try {
 	                        const tempChangeable = (await getChangeableAttributes).ResultData.ChangeableAttributes[uid];
 	                        for (const key of Object.keys(tempChangeable)) {
@@ -2596,7 +2718,7 @@ function requireFilterOperation () {
 	                        }
 	                    }
 	                    catch (_a) {
-	                        //If no changable elements exist this causes an exeption
+	                        //If no Changeable elements exist this causes an exeption
 	                    }
 	                }
 	                const objectsAttribute = (await getObjectsAttributes).ResultData.ObjectsAttributes[uid];
@@ -3147,6 +3269,10 @@ function requireSettings () {
 	        this.UiColors = new GetSet_1.Get(async () => {
 	            const command = this.createCommand(Enums_1.ApiCommands.GetUiColors);
 	            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiColors;
+	        });
+	        this.UiVariables = new GetSet_1.Get(async () => {
+	            const command = this.createCommand(Enums_1.ApiCommands.GetUiVariables);
+	            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiVariables;
 	        });
 	        this.CurrentUiTheme = new GetSet_1.GetSet(async () => {
 	            return (await this.getAvailableUiThemes()).CurrentId;
@@ -3991,7 +4117,7 @@ function requireFileTreePIDSketch () {
 	                SketchColor: null
 	            }
 	        };
-	        await APIConnector_1.Api.get().sendCommand(command);
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Objects;
 	    }
 	    async placeSymbol(symbol, name, position, rotation, attributes = {}) {
 	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);
@@ -4094,14 +4220,105 @@ function requireFileTreeSketch () {
 	hasRequiredFileTreeSketch = 1;
 	Object.defineProperty(FileTreeSketch, "__esModule", { value: true });
 	FileTreeSketch.FileTreeSketch = void 0;
+	const APIConnector_1 = requireAPIConnector();
+	const CaxApiCommand_1 = requireCaxApiCommand();
+	const Util_1 = requireUtil();
 	const FileTreeElement_1 = requireFileTreeElement();
 	let FileTreeSketch$1 = class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
 	    constructor(id, name, type) {
 	        super(id, name, type);
 	    }
+	    async selectSymbolForPlacement(symbol) {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.SelectSymbolForPlacement);
+	        command.commandParameters.push(symbol.Path);
+	        command.commandParameters.push(symbol.Variant);
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+	    }
+	    async placeSymbol(symbol, name, position, rotation, attributes = {}) {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);
+	        command.additionalParameters = {
+	            PlaceSymbol: {
+	                Path: symbol.Path,
+	                Variant: symbol.Variant,
+	                Name: name,
+	                Position: position,
+	                Rotation: rotation,
+	                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
+	            }
+	        };
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+	    }
+	    async placePrimitive(type, name, position, rotation, attributes = {}, parameters = {}) {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePrimitive);
+	        command.additionalParameters = {
+	            PlacePrimitive: {
+	                Type: type,
+	                Name: name,
+	                Position: position,
+	                Rotation: rotation,
+	                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
+	                Parameters: Object.keys(parameters).map(x => { return { Key: x, Value: parameters[x] }; }),
+	            }
+	        };
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+	    }
+	    async getCatalogSymbols() {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetCatalogSymbols);
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+	    }
+	    async deleteSketchItem(uid) {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.DeleteSketchItem);
+	        command.commandParameters.push(uid);
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        return (await APIConnector_1.Api.get().sendCommand(command));
+	    }
+	    async exportAsUpvcBase64() {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsUpvc);
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        command.commandParameters.push(this.Id.toString());
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
+	    }
+	    async exportAsDgnBase64() {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsDgn);
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        command.commandParameters.push(this.Id.toString());
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.DgnBase64;
+	    }
 	};
 	FileTreeSketch.FileTreeSketch = FileTreeSketch$1;
 	return FileTreeSketch;
+}
+
+var FileTreeSpraying = {};
+
+var hasRequiredFileTreeSpraying;
+
+function requireFileTreeSpraying () {
+	if (hasRequiredFileTreeSpraying) return FileTreeSpraying;
+	hasRequiredFileTreeSpraying = 1;
+	Object.defineProperty(FileTreeSpraying, "__esModule", { value: true });
+	FileTreeSpraying.FileTreeSpraying = void 0;
+	const APIConnector_1 = requireAPIConnector();
+	const CaxApiCommand_1 = requireCaxApiCommand();
+	const Util_1 = requireUtil();
+	const FileTreeElement_1 = requireFileTreeElement();
+	let FileTreeSpraying$1 = class FileTreeSpraying extends FileTreeElement_1.FileTreeElement {
+	    constructor(id, name, type) {
+	        super(id, name, type);
+	    }
+	    async exportAsUpvcBase64() {
+	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSprayingAsUpvc);
+	        command.target = Util_1.TargetEnum.ThreeD;
+	        command.commandParameters.push(this.Id.toString());
+	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
+	    }
+	};
+	FileTreeSpraying.FileTreeSpraying = FileTreeSpraying$1;
+	return FileTreeSpraying;
 }
 
 var FileTreeTwoDToThreeD = {};
@@ -4170,6 +4387,7 @@ function requireFileTreeManager () {
 	const FileTreePIDSketch_1 = requireFileTreePIDSketch();
 	const FileTreeReport_1 = requireFileTreeReport();
 	const FileTreeCommentSVG_1 = requireFileTreeCommentSVG();
+	const FileTreeSpraying_1 = requireFileTreeSpraying();
 	/**
 	 * @legacy
 	 * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -4310,7 +4528,7 @@ function requireFileTreeManager () {
 	     * @param name
 	     * @param position
 	     * @param rotation
-	     * @param color
+	     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
 	     * @param diameter size of the poi in meters
 	     * @param attributes define attributes on the poi
 	     * @param links define links on the poi
@@ -4318,7 +4536,7 @@ function requireFileTreeManager () {
 	     * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
 	     * @returns
 	     */
-	    async createPointOfIntrest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
+	    async createPointOfInterest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
 	        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePoi);
 	        command.additionalParameters = {
 	            PlacePoi: {
@@ -4418,6 +4636,8 @@ function requireFileTreeManager () {
 	                return new FileTreePIDSketch_1.FileTreePIDSketch(element.Id, element.Name, element.Type);
 	            case Util_1.FeatureTypes.Report:
 	                return new FileTreeReport_1.FileTreeReport(element.Id, element.Name, element.Type);
+	            case Util_1.FeatureTypes.Spraying:
+	                return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
 	            default:
 	                console.log("Could not resolve " + element.Type);
 	            //return new FileTreeElement(element.Id, element.Name, element.Type);
@@ -4497,6 +4717,7 @@ function requireFilesTree () {
 		__exportStar(requireFileTreeReport(), exports);
 		__exportStar(requireFileTreeScreenshot(), exports);
 		__exportStar(requireFileTreeSketch(), exports);
+		__exportStar(requireFileTreeSpraying(), exports);
 		__exportStar(requireFileTreeTwoDToThreeD(), exports);
 		__exportStar(requireFileTreeView(), exports);
 		__exportStar(requireFileTreeManager(), exports); 
