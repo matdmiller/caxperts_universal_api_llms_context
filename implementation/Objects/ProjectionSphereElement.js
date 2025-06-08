@@ -10,19 +10,21 @@ class ProjectionSphereElement {
     }
     /**
      * Enter the Projection
-     * @param opacity optional (default=-1), is set overwrite the opacity value with the new value. If -1 is provided the last value will be used. Value between 0 (transparent) to 100 (opaque)
-     * @param rotation optional(default=-1), enter a rotation to view the projection from. If -1 is used for all axis UPV decides
-     * @param noUi optional (default=false), if true no UI will be visible
+     * @param opacity optional, is set overwrite the opacity value with the new value
+     * @param rotation optional, enter a rotation to view the projection from
      * @returns
      */
-    async enterProjectionSphere(opacity = -1, rotation = { X: -1, Y: -1, Z: -1 }, noUi = false) {
+    async enterProjectionSphere(opacity, rotation) {
         const command = this.model.createCommand(Util_1.ApiCommands.EnterProjectionSphere);
         command.commandParameters = [this.projectionSphere.Guid];
-        command.commandParameters.push(opacity.toString());
-        command.commandParameters.push(rotation.X.toString());
-        command.commandParameters.push(rotation.Y.toString());
-        command.commandParameters.push(rotation.Z.toString());
-        command.commandParameters.push(noUi + "");
+        if (opacity != null) {
+            command.commandParameters.push(opacity.toString());
+        }
+        if (rotation != null) {
+            command.commandParameters.push(rotation.X.toString());
+            command.commandParameters.push(rotation.Y.toString());
+            command.commandParameters.push(rotation.Z.toString());
+        }
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**

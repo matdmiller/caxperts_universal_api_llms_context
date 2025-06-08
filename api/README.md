@@ -1,5 +1,5 @@
 # Changelog
 
-### Added Features
-- **FileTreePIDSketch**
-    Added new functions to place and remove symbols
+### Fixes
+- **Scene**
+    Fixed takeScreenshot return type and added defaults

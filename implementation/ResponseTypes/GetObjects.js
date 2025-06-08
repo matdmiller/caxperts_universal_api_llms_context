@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
-exports.GetExportUpvObjectAsUpvcResponse = exports.GetExportUpvObjectAsDgnResponse = exports.GetPipeMeasurementResponse = exports.GetLinkedElements = exports.GetModelAttributeValues = exports.GenericLoadFromFileResponse = void 0;
+exports.GenericLoadFromFileResponse = exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
+exports.GetLinkedElements = exports.GetModelAttributeValues = void 0;
 class GetObjects {
 }
 exports.GetObjects = GetObjects;
@@ -170,12 +170,6 @@ class GetUiColors {
     }
 }
 exports.GetUiColors = GetUiColors;
-class GetUiVariables {
-    constructor() {
-        this.UiVariables = {};
-    }
-}
-exports.GetUiVariables = GetUiVariables;
 class GetUiThemes {
     constructor() {
         this.UiThemes = {};
@@ -197,12 +191,3 @@ exports.GetModelAttributeValues = GetModelAttributeValues;
 class GetLinkedElements {
 }
 exports.GetLinkedElements = GetLinkedElements;
-class GetPipeMeasurementResponse {
-}
-exports.GetPipeMeasurementResponse = GetPipeMeasurementResponse;
-class GetExportUpvObjectAsDgnResponse {
-}
-exports.GetExportUpvObjectAsDgnResponse = GetExportUpvObjectAsDgnResponse;
-class GetExportUpvObjectAsUpvcResponse {
-}
-exports.GetExportUpvObjectAsUpvcResponse = GetExportUpvObjectAsUpvcResponse;

@@ -29,7 +29,6 @@ __exportStar(require("./FileTreePointOfInterest"), exports);
 __exportStar(require("./FileTreeReport"), exports);
 __exportStar(require("./FileTreeScreenshot"), exports);
 __exportStar(require("./FileTreeSketch"), exports);
-__exportStar(require("./FileTreeSpraying"), exports);
 __exportStar(require("./FileTreeTwoDToThreeD"), exports);
 __exportStar(require("./FileTreeView"), exports);
 __exportStar(require("./FileTreeManager"), exports);

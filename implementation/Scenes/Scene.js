@@ -44,18 +44,18 @@ class Scene {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * Takes a screenshot and returns the base64
+     * Takes a screenshot and returns the base64. By default saves as png
      * @param width Width of the output picture
      * @param height Height of the output picture
-     * @param fieldOfView Field of View
-     * @param hideUi Draw UI in picture
-     * @param enableAntiAliasing Use AntiAliasing
-     * @param enableTransparentBackground Draws the brackground transparent (only SHows the model)
-     * @param modelInBestQuality Take the screenshot of the model in the best quality
-     * @param format jpg or png
+     * @param fieldOfView Field of View (default 90)
+     * @param hideUi Draw UI in picture (default false)
+     * @param enableAntiAliasing Use AntiAliasing (default true)
+     * @param enableTransparentBackground Draws the brackground transparent (only Shows the model, only works in png) (default false)
+     * @param modelInBestQuality Take the screenshot of the model in the best quality (default false)
+     * @param format jpg or png (default png)
      * @returns
      */
-    async takeScreenshot(width, height, fieldOfView, hideUi, enableAntiAliasing, enableTransparentBackground, modelInBestQuality, format) {
+    async takeScreenshot(width, height, fieldOfView = 90, hideUi = true, enableAntiAliasing = true, enableTransparentBackground = false, modelInBestQuality = false, format = "png") {
         const command = this.createCommand(Util_1.ApiCommands.TakeScreenshot);
         command.commandParameters.push(width.toString());
         command.commandParameters.push(height.toString());

@@ -44,13 +44,9 @@ export declare class ObjectColors {
     };
 }
 export declare class Color {
-    /** Red between 0-1 */
     R: number;
-    /** Green between 0-1 */
     G: number;
-    /** Blue between 0-1 */
     B: number;
-    /** Alpha between 0-1 */
     Alpha: number;
 }
 export declare class ClippingPlane {
@@ -84,7 +80,8 @@ export declare class SnapCircle {
     Normal: Vector3D;
 }
 export declare class TakeScreenshot {
-    ImageData: number[];
+    /** base64 encoded string */
+    ImageData: string;
 }
 export declare class FilesTreeObject {
     Name: string;

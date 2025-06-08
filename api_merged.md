@@ -390,7 +390,7 @@ export declare class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
+     * @param color
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -398,7 +398,7 @@ export declare class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    createPointOfInterest(parent: FileTreeFolder, name: string, position: Vector3D, rotation: Vector3D, color: Color, diameter: number, attributes?: {
+    createPointOfIntrest(parent: FileTreeFolder, name: string, position: Vector3D, rotation: Vector3D, color: Color, diameter: number, attributes?: {
         [key: string]: string;
     }, links?: {
         [key: string]: string;
@@ -512,7 +512,7 @@ export declare class FileTreePIDSketch extends FileTreeElement {
      * Select a primitive for placment
      * @param symbol
      */
-    selectPrimitiveForPlacement(symbol: PidSketchToolMode): Promise<string[]>;
+    selectPrimitiveForPlacement(symbol: PidSketchToolMode): Promise<void>;
     placeSymbol(symbol: CatalogSymbol, name: string, position: Vector2D, rotation: number, attributes?: {
         [key: string]: string;
     }): Promise<GetObjects>;
@@ -624,28 +624,10 @@ export declare class FileTreeSketch extends FileTreeElement {
     }): Promise<GetObjects>;
     getCatalogSymbols(): Promise<GetCatalogSymbols>;
     deleteSketchItem(uid: string): Promise<import("../ResponseTypes").ApiResponse>;
-    exportAsUpvcBase64(): Promise<string>;
-    exportAsDgnBase64(): Promise<string>;
 }
 //# sourceMappingURL=FileTreeSketch.d.ts.map
 ```
 </FilesTree/FileTreeSketch.d.ts>
-
----
-
-## FilesTree/FileTreeSpraying.d.ts
-
-<FilesTree/FileTreeSpraying.d.ts>
-```typescript
-import { FeatureTypes } from "../Util";
-import { FileTreeElement } from "./FileTreeElement";
-export declare class FileTreeSpraying extends FileTreeElement {
-    constructor(id: number, name: string, type: FeatureTypes);
-    exportAsUpvcBase64(): Promise<string>;
-}
-//# sourceMappingURL=FileTreeSpraying.d.ts.map
-```
-</FilesTree/FileTreeSpraying.d.ts>
 
 ---
 
@@ -698,7 +680,6 @@ export * from "./FileTreePointOfInterest";
 export * from "./FileTreeReport";
 export * from "./FileTreeScreenshot";
 export * from "./FileTreeSketch";
-export * from "./FileTreeSpraying";
 export * from "./FileTreeTwoDToThreeD";
 export * from "./FileTreeView";
 export * from "./FileTreeManager";
@@ -1136,7 +1117,7 @@ export declare abstract class FilterOperation {
     /**
      * Should objects returned by GetObjects include ChangeableAttribute Information
      */
-    IncludeChangeableAttributes: boolean;
+    IncludeChangableAttributes: boolean;
     /**
      * Should objects returned by GetObjects include linked elements Information
      */
@@ -1502,9 +1483,8 @@ export declare class LocalStorage {
 ```typescript
 import { IntelliPidDrawing, Pdf, ProjectionSphereElement } from ".";
 import { ApiResponse } from "../ResponseTypes";
-import { GetPipeMeasurementResponse } from "../ResponseTypes/GetObjects";
 import { Scene } from "../Scenes/Scene";
-import { ModelInfo, ProjectInfo, Vector3D } from "../Util/BaseDataTypes";
+import { ModelInfo, ProjectInfo } from "../Util/BaseDataTypes";
 import { ApiCommands } from "../Util/Enums";
 import { CustomAttributes } from "../Util";
 import { Get } from "../Util/GetSet";
@@ -1578,8 +1558,7 @@ export declare class Model {
      * @param attributes at least one is required
      * @returns
      */
-    getUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
-    createDiameterMeasurement(position: Vector3D): Promise<GetPipeMeasurementResponse>;
+    gGetUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
     /**
      * @internal
      * @param apiCommands
@@ -1598,10 +1577,9 @@ export declare class Model {
 <Objects/ModelObject.d.ts>
 ```typescript
 import { Scene } from "../Scenes";
-import { BoundsInfo, Set, ObjectColors, SnapInfo, Definition, ElementLinks, CustomAttributeDataType, ChangeableAttributeUnitType, Color } from "../Util";
+import { BoundsInfo, Set, ObjectColors, SnapInfo, Definition, ElementLinks } from "../Util";
 export declare class ModelObject {
-    private target;
-    constructor(uid: string, target: Scene);
+    constructor(uid: string);
     /**
      * @internal
      */
@@ -1629,43 +1607,13 @@ export declare class ModelObject {
      */
     setCustomAttribute(name: string, value: string, user: string): Promise<void>;
     /**
-     * Update a Changeable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
+     * Update a Changable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
      * @param name attribute name
      * @param value new attribute value
      * @param user username of the person changing the attribute
      * @returns
      */
     setAttribute(name: string, value: string): Promise<void>;
-    /**
-     * Add a changeable Attribute to a sketch element
-     * Samples:
-     * await element.createChangeableAttribute("Test-Freetest", "Test-Freetest", "Hello World");
-     * await element.createChangeableAttribute("Test-Color", "Test-Color", "ff1122", CustomAttributeDataType.Color);
-     * await element.createChangeableAttribute("Test-Meter", "Test-Meter", "1", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Length);
-     * await element.createChangeableAttribute("Test-Angle", "Test-Angle", "2", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Angle);
-     * await element.createChangeableAttribute("Test-Numeric", "Test-Numeric", "2", CustomAttributeDataType.Numeric);
-     * await element.createChangeableAttribute("Test-Codelist", "Test-Codelist", "test1", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["test1", "test2", "test3", "test4"]);
-     * await element.createChangeableAttribute("Test-CodelistColor", "Test-CodelistColor", "blue", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["red", "green", "blue", "none"], [red, green, blue]);
-     * await element.createChangeableAttribute("Test-Readonly", "Test-Readonly", "readonly", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, true, false, true);
-     * await element.createChangeableAttribute("Test-Hidden", "Test-Hidden", "hidden", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, true, true);
-     * await element.createChangeableAttribute("Test-nondeletable", "Test-nondeletable", "nondeletable", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, false, false);
-     * @param name Internal Name
-     * @param displayName  Visible name
-     * @param initialValue The intial value this is set to
-     * @param mode What type of Attribute to create. See Samples
-     * @param unitType Leave this at none except for NumericWithUnit
-     * @param readOnly User cannot edit this field
-     * @param hidden User cannot see this field
-     * @param deletable User cannot delete this value
-     * @param codelist A codelist to use for the mode codelist
-     * @param codelistColors optional colors to use for the codelist
-     */
-    createChangeableAttribute(name: string, displayName: string, initialValue: string, mode?: CustomAttributeDataType, unitType?: ChangeableAttributeUnitType, readOnly?: boolean, hidden?: boolean, deletable?: boolean, codelist?: string[], codelistColors?: Color[]): Promise<void>;
-    /**
-     * Remove a changeable attribute on a Sketch element
-     * @param name
-     */
-    deleteChangeableAttribute(name: string): Promise<void>;
     /**
      * Uid of the object
      */
@@ -1712,7 +1660,7 @@ export declare class Attribute {
     /**
      * Is this a chanable Attribute
      */
-    IsChangeableAttribute: boolean;
+    IsChangableAttribute: boolean;
     /**
      * Update the Custom Attribute. First parameter is the new value. second is the username of the person updating
      */
@@ -1721,10 +1669,10 @@ export declare class Attribute {
         user: string;
     }>;
     /**
-     * Update a Changeable Attribute. This does not work with custom Attributes
+     * Update a Changable Attribute. This does not work with custom Attributes
      */
     SetAttribute: Set<string>;
-    constructor(uid: string, key: string, value: string, isCustomAttribute: boolean, customAttributeDefinition: Definition, customAttributeSourceValue: string, target: Scene, isChangeableAttribute: boolean);
+    constructor(uid: string, key: string, value: string, isCustomAttribute: boolean, customAttributeDefinition: Definition, customAttributeSourceValue: string, target: Scene, isChangableAttribute: boolean);
 }
 //# sourceMappingURL=ModelObject.d.ts.map
 ```
@@ -1802,12 +1750,11 @@ export declare class ProjectionSphereElement {
     constructor(projectionSphere: ProjectionSphere, model: Model);
     /**
      * Enter the Projection
-     * @param opacity optional (default=-1), is set overwrite the opacity value with the new value. If -1 is provided the last value will be used. Value between 0 (transparent) to 100 (opaque)
-     * @param rotation optional(default=-1), enter a rotation to view the projection from. If -1 is used for all axis UPV decides
-     * @param noUi optional (default=false), if true no UI will be visible
+     * @param opacity optional, is set overwrite the opacity value with the new value
+     * @param rotation optional, enter a rotation to view the projection from
      * @returns
      */
-    enterProjectionSphere(opacity?: number, rotation?: Vector3D, noUi?: boolean): Promise<import("..").ApiResponse>;
+    enterProjectionSphere(opacity?: number, rotation?: Vector3D): Promise<import("..").ApiResponse>;
     /**
      * Leave the current Projection
      * @returns
@@ -1832,13 +1779,6 @@ export declare class Settings {
      * Return the current Ui Colors
      */
     UiColors: Get<{
-        [key: string]: string;
-    }>;
-    /**
-     * Return the current Ui Variables
-     * This includes colors as well as non color attributes(roundness etc)
-     */
-    UiVariables: Get<{
         [key: string]: string;
     }>;
     /**
@@ -2213,11 +2153,6 @@ export declare class GetUiColors {
         [id: string]: string;
     };
 }
-export declare class GetUiVariables {
-    UiVariables: {
-        [id: string]: string;
-    };
-}
 export declare class GetUiThemes {
     CurrentId: string;
     UiThemes: {
@@ -2249,16 +2184,6 @@ export declare class GetLinkedElements {
     Links: {
         [key: string]: ElementLinks;
     };
-}
-export declare class GetPipeMeasurementResponse {
-    PipeFound: boolean;
-    PipeDiameter: number;
-}
-export declare class GetExportUpvObjectAsDgnResponse {
-    DgnBase64: string;
-}
-export declare class GetExportUpvObjectAsUpvcResponse {
-    UpvcBase64: string;
 }
 //# sourceMappingURL=GetObjects.d.ts.map
 ```
@@ -2335,18 +2260,18 @@ export declare abstract class Scene {
      */
     clearLinks(): Promise<import("../ResponseTypes").ApiResponse>;
     /**
-     * Takes a screenshot and returns the base64
+     * Takes a screenshot and returns the base64. By default saves as png
      * @param width Width of the output picture
      * @param height Height of the output picture
-     * @param fieldOfView Field of View
-     * @param hideUi Draw UI in picture
-     * @param enableAntiAliasing Use AntiAliasing
-     * @param enableTransparentBackground Draws the brackground transparent (only SHows the model)
-     * @param modelInBestQuality Take the screenshot of the model in the best quality
-     * @param format jpg or png
+     * @param fieldOfView Field of View (default 90)
+     * @param hideUi Draw UI in picture (default false)
+     * @param enableAntiAliasing Use AntiAliasing (default true)
+     * @param enableTransparentBackground Draws the brackground transparent (only Shows the model, only works in png) (default false)
+     * @param modelInBestQuality Take the screenshot of the model in the best quality (default false)
+     * @param format jpg or png (default png)
      * @returns
      */
-    takeScreenshot(width: number, height: number, fieldOfView: number, hideUi: boolean, enableAntiAliasing: boolean, enableTransparentBackground: boolean, modelInBestQuality: boolean, format: string): Promise<import("../Util").TakeScreenshot>;
+    takeScreenshot(width: number, height: number, fieldOfView?: number, hideUi?: boolean, enableAntiAliasing?: boolean, enableTransparentBackground?: boolean, modelInBestQuality?: boolean, format?: string): Promise<import("../Util").TakeScreenshot>;
     /**
      * @internal
      */
@@ -2517,13 +2442,9 @@ export declare class ObjectColors {
     };
 }
 export declare class Color {
-    /** Red between 0-1 */
     R: number;
-    /** Green between 0-1 */
     G: number;
-    /** Blue between 0-1 */
     B: number;
-    /** Alpha between 0-1 */
     Alpha: number;
 }
 export declare class ClippingPlane {
@@ -2557,7 +2478,8 @@ export declare class SnapCircle {
     Normal: Vector3D;
 }
 export declare class TakeScreenshot {
-    ImageData: number[];
+    /** base64 encoded string */
+    ImageData: string;
 }
 export declare class FilesTreeObject {
     Name: string;
@@ -2765,11 +2687,12 @@ export declare enum UpdateModes {
     Full = 1
 }
 export declare enum CustomAttributeDataType {
+    Calculation = 0,
     CodeList = 1,
     FreeText = 2,
     Numeric = 3,
-    NumericWithUnit = 4,
-    Color = 6
+    Unknown = 4,
+    Color = 5
 }
 export declare enum FeatureTypes {
     Unknown = "Unknown",
@@ -2826,8 +2749,6 @@ export declare enum ApiCommands {
     GetObjectsSnapInfo = "GetObjectsSnapInfo",
     GetObjectsChangeableAttributes = "GetObjectsChangeableAttributes",
     SetAttribute = "SetAttribute",
-    AddChangeableAttribute = "AddChangeableAttribute",
-    DeleteChangeableAttribute = "DeleteChangeableAttribute",
     Select = "Select",
     ClearSelection = "ClearSelection",
     Fit = "Fit",
@@ -2878,7 +2799,6 @@ export declare enum ApiCommands {
     GetActivePdfTab = "GetActivePdfTab",
     OpenPdf = "OpenPdf",
     ClosePdf = "ClosePdf",
-    CreateDiameterMeasurement = "CreateDiameterMeasurement",
     TakeScreenshot = "TakeScreenshot",
     TakeAndSaveScreenShot = "TakeAndSaveScreenshot",
     GetTreeConfiguration = "GetTreeConfiguration",
@@ -2906,9 +2826,6 @@ export declare enum ApiCommands {
     FilesTreeSetState = "FilesTreeSetState",
     FilesTreeGetState = "FilesTreeGetState",
     FilesTreeCreateComment = "FilesTreeCreateComment",
-    ExportSketchAsUpvc = "ExportSketchAsUpvc",
-    ExportSketchAsDgn = "ExportSketchAsDgn",
-    ExportSprayingAsUpvc = "ExportSprayingAsUpvc",
     GetFilesTreeRoot = "GetFilesTreeRoot",
     FilesTreeCreateFolder = "FilesTreeCreateFolder",
     PlacePoi = "PlacePoi",
@@ -2967,7 +2884,6 @@ export declare enum ApiCommands {
     GetUiColors = "GetUiColors",
     GetUiThemes = "GetUiThemes",
     SetActiveUiTheme = "SetActiveUiTheme",
-    GetUiVariables = "GetUiVariables",
     SaveFileDialog = "SaveFileDialog",
     LoadFileDialog = "LoadFileDialog",
     GenericLoadFromFile = "GenericLoadFromFile"
@@ -3024,17 +2940,13 @@ export declare enum PidSketchToolMode {
     Rectangle = 5,
     Circle = 6,
     Valve = 7,
-    Text = 10,
     Cloud = 13,
     BreakLine = 99,
     UnBreakLine = 100,
     Copy = 101,
     Rotate = 102,
     Undo = 103,
-    Redo = 104,
-    HideObjects = 105,
-    ShowHiddenObjects = 106,
-    UnhideObjects = 107
+    Redo = 104
 }
 export declare enum ExportableOptions {
     Inherit = 0,
@@ -3088,11 +3000,6 @@ export declare enum PdfTypes {
     All = 0,
     Document = 1,
     Drawing = 2
-}
-export declare enum ChangeableAttributeUnitType {
-    None = 0,
-    Length = 1,
-    Angle = 2
 }
 //# sourceMappingURL=Enums.d.ts.map
 ```
@@ -3149,7 +3056,7 @@ export declare class GetSet<T> {
 
 <Util/ParameterBase.d.ts>
 ```typescript
-import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode } from ".";
+import { AttributeConditionComparison, Bounds, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -3181,8 +3088,6 @@ export declare class ParameterBase {
     LoadFileDialog?: LoadFileDialogParameters;
     SaveFileDialog?: SaveFileDialogParameters;
     PdfDocument?: PdfDocumentParameter;
-    AddChangeableAttribute?: AddChangeableAttributeParameter;
-    DeleteChangeableAttribute?: DeleteChangeableAttributeParameter;
 }
 export declare class ClippingDescriptor {
     Mode: ClippingMode;
@@ -3442,25 +3347,6 @@ export declare class PdfDocumentParameter {
     PhysicalFileName: string;
     DisplayName: string;
     PdfType: PdfTypes;
-}
-export declare class AddChangeableAttributeParameter {
-    Uid: string;
-    Name: string;
-    Mode: CustomAttributeDataType;
-    CodeListEntriesNames: string[];
-    CodeListEntriesColors: Color[];
-    DisplayName: string;
-    Deletable: boolean;
-    Readonly: boolean;
-    Hidden: boolean;
-    InitialValue: string;
-    UnitType: ChangeableAttributeUnitType;
-    DrawingPathForPid: string;
-}
-export declare class DeleteChangeableAttributeParameter {
-    Uid: string;
-    Name: string;
-    DrawingPathForPid: string;
 }
 //# sourceMappingURL=ParameterBase.d.ts.map
 ```

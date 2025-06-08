@@ -14,7 +14,5 @@ export declare class FileTreeSketch extends FileTreeElement {
     }): Promise<GetObjects>;
     getCatalogSymbols(): Promise<GetCatalogSymbols>;
     deleteSketchItem(uid: string): Promise<import("../ResponseTypes").ApiResponse>;
-    exportAsUpvcBase64(): Promise<string>;
-    exportAsDgnBase64(): Promise<string>;
 }
 //# sourceMappingURL=FileTreeSketch.d.ts.map

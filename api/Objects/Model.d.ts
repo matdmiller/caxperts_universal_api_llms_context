@@ -1,8 +1,7 @@
 import { IntelliPidDrawing, Pdf, ProjectionSphereElement } from ".";
 import { ApiResponse } from "../ResponseTypes";
-import { GetPipeMeasurementResponse } from "../ResponseTypes/GetObjects";
 import { Scene } from "../Scenes/Scene";
-import { ModelInfo, ProjectInfo, Vector3D } from "../Util/BaseDataTypes";
+import { ModelInfo, ProjectInfo } from "../Util/BaseDataTypes";
 import { ApiCommands } from "../Util/Enums";
 import { CustomAttributes } from "../Util";
 import { Get } from "../Util/GetSet";
@@ -76,8 +75,7 @@ export declare class Model {
      * @param attributes at least one is required
      * @returns
      */
-    getUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
-    createDiameterMeasurement(position: Vector3D): Promise<GetPipeMeasurementResponse>;
+    gGetUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
     /**
      * @internal
      * @param apiCommands

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 /**
  * @deprecated
  * Old UPV Target codes
@@ -37,13 +37,12 @@ var UpdateModes;
 })(UpdateModes = exports.UpdateModes || (exports.UpdateModes = {}));
 var CustomAttributeDataType;
 (function (CustomAttributeDataType) {
-    //Calculation = 0,
+    CustomAttributeDataType[CustomAttributeDataType["Calculation"] = 0] = "Calculation";
     CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
     CustomAttributeDataType[CustomAttributeDataType["FreeText"] = 2] = "FreeText";
     CustomAttributeDataType[CustomAttributeDataType["Numeric"] = 3] = "Numeric";
-    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
-    //Unknown = 5,
-    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
+    CustomAttributeDataType[CustomAttributeDataType["Unknown"] = 4] = "Unknown";
+    CustomAttributeDataType[CustomAttributeDataType["Color"] = 5] = "Color";
 })(CustomAttributeDataType = exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
 var FeatureTypes;
 (function (FeatureTypes) {
@@ -105,8 +104,6 @@ var ApiCommands;
     ApiCommands["GetObjectsSnapInfo"] = "GetObjectsSnapInfo";
     ApiCommands["GetObjectsChangeableAttributes"] = "GetObjectsChangeableAttributes";
     ApiCommands["SetAttribute"] = "SetAttribute";
-    ApiCommands["AddChangeableAttribute"] = "AddChangeableAttribute";
-    ApiCommands["DeleteChangeableAttribute"] = "DeleteChangeableAttribute";
     ApiCommands["Select"] = "Select";
     ApiCommands["ClearSelection"] = "ClearSelection";
     ApiCommands["Fit"] = "Fit";
@@ -160,7 +157,6 @@ var ApiCommands;
     ApiCommands["GetActivePdfTab"] = "GetActivePdfTab";
     ApiCommands["OpenPdf"] = "OpenPdf";
     ApiCommands["ClosePdf"] = "ClosePdf";
-    ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
     //Scene
     ApiCommands["TakeScreenshot"] = "TakeScreenshot";
     ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
@@ -190,9 +186,6 @@ var ApiCommands;
     ApiCommands["FilesTreeSetState"] = "FilesTreeSetState";
     ApiCommands["FilesTreeGetState"] = "FilesTreeGetState";
     ApiCommands["FilesTreeCreateComment"] = "FilesTreeCreateComment";
-    ApiCommands["ExportSketchAsUpvc"] = "ExportSketchAsUpvc";
-    ApiCommands["ExportSketchAsDgn"] = "ExportSketchAsDgn";
-    ApiCommands["ExportSprayingAsUpvc"] = "ExportSprayingAsUpvc";
     //Folder
     ApiCommands["GetFilesTreeRoot"] = "GetFilesTreeRoot";
     ApiCommands["FilesTreeCreateFolder"] = "FilesTreeCreateFolder";
@@ -264,7 +257,6 @@ var ApiCommands;
     ApiCommands["GetUiColors"] = "GetUiColors";
     ApiCommands["GetUiThemes"] = "GetUiThemes";
     ApiCommands["SetActiveUiTheme"] = "SetActiveUiTheme";
-    ApiCommands["GetUiVariables"] = "GetUiVariables";
     // Fileoperations
     ApiCommands["SaveFileDialog"] = "SaveFileDialog";
     ApiCommands["LoadFileDialog"] = "LoadFileDialog";
@@ -348,7 +340,7 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["Valve"] = 7] = "Valve";
     //CustomSymbol = 8,
     //IntelliPidLayer = 9,
-    PidSketchToolMode[PidSketchToolMode["Text"] = 10] = "Text";
+    //Text = 10,
     //Copied = 11,
     //Legend = 12,
     PidSketchToolMode[PidSketchToolMode["Cloud"] = 13] = "Cloud";
@@ -360,9 +352,6 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["Rotate"] = 102] = "Rotate";
     PidSketchToolMode[PidSketchToolMode["Undo"] = 103] = "Undo";
     PidSketchToolMode[PidSketchToolMode["Redo"] = 104] = "Redo";
-    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
-    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
-    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
 })(PidSketchToolMode = exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
 var ExportableOptions;
 (function (ExportableOptions) {
@@ -424,9 +413,3 @@ var PdfTypes;
     PdfTypes[PdfTypes["Document"] = 1] = "Document";
     PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
 })(PdfTypes = exports.PdfTypes || (exports.PdfTypes = {}));
-var ChangeableAttributeUnitType;
-(function (ChangeableAttributeUnitType) {
-    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
-    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
-    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
-})(ChangeableAttributeUnitType = exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {}));

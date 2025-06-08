@@ -57,17 +57,5 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommand(command));
     }
-    async exportAsUpvcBase64() {
-        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsUpvc);
-        command.target = Util_1.TargetEnum.ThreeD;
-        command.commandParameters.push(this.Id.toString());
-        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
-    }
-    async exportAsDgnBase64() {
-        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsDgn);
-        command.target = Util_1.TargetEnum.ThreeD;
-        command.commandParameters.push(this.Id.toString());
-        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.DgnBase64;
-    }
 }
 exports.FileTreeSketch = FileTreeSketch;

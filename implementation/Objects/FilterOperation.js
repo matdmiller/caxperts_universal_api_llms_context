@@ -29,7 +29,7 @@ class FilterOperation {
         /**
          * Should objects returned by GetObjects include ChangeableAttribute Information
          */
-        this.IncludeChangeableAttributes = false;
+        this.IncludeChangableAttributes = false;
         /**
          * Should objects returned by GetObjects include linked elements Information
          */
@@ -53,7 +53,7 @@ class FilterOperation {
             command.command = Util_1.ApiCommands.GetCustomAttributeConfiguration;
             getCustomAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
-        if (this.IncludeChangeableAttributes) {
+        if (this.IncludeChangableAttributes) {
             command.command = Util_1.ApiCommands.GetObjectsChangeableAttributes;
             getChangeableAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
@@ -62,7 +62,7 @@ class FilterOperation {
             getLinkedElements = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
         for (const uid of (await getObjects).ResultData.Objects) {
-            const model = new ModelObject_1.ModelObject(uid, this.scene);
+            const model = new ModelObject_1.ModelObject(uid);
             let attributes;
             let links;
             if (this.IncludeAttributes) {
@@ -74,7 +74,7 @@ class FilterOperation {
                     }
                 }
                 const changeableAttributes = {};
-                if (this.IncludeChangeableAttributes) {
+                if (this.IncludeChangableAttributes) {
                     try {
                         const tempChangeable = (await getChangeableAttributes).ResultData.ChangeableAttributes[uid];
                         for (const key of Object.keys(tempChangeable)) {
@@ -82,7 +82,7 @@ class FilterOperation {
                         }
                     }
                     catch (_a) {
-                        //If no Changeable elements exist this causes an exeption
+                        //If no changable elements exist this causes an exeption
                     }
                 }
                 const objectsAttribute = (await getObjectsAttributes).ResultData.ObjectsAttributes[uid];
