@@ -163,17 +163,40 @@
             // State
             let availableAttributes = new Set();
             let selectedAttributes = new Set();
+            let isLoading = false;
             
             // Initialize Universal API
             const app = UniversalApi.universal_api.Application.getInstance();
 
             // Utility functions
-            const showLoading = () => loadingOverlay.classList.remove('d-none');
-            const hideLoading = () => loadingOverlay.classList.add('d-none');
+            const showLoading = () => {
+                isLoading = true;
+                loadingOverlay.classList.remove('d-none');
+            };
+            const hideLoading = () => {
+                isLoading = false;
+                loadingOverlay.classList.add('d-none');
+            };
             
             const setStatus = (message, type = 'info') => {
                 statusEl.className = `alert alert-${type}`;
                 statusEl.textContent = message;
+            };
+            
+            // HTML escape function to prevent XSS and HTML breaking
+            const escapeHtml = (text) => {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+            
+            // TSV escape function for proper formatting
+            const escapeTsvValue = (value) => {
+                if (value == null || value === undefined) return "";
+                const stringValue = String(value);
+                // Replace tabs, newlines, and carriage returns with spaces
+                // Also handle quotes by doubling them (Excel/TSV standard)
+                return stringValue.replace(/[\t\n\r]/g, " ").replace(/"/g, '""');
             };
 
             // Storage functions
@@ -213,10 +236,11 @@
                 attributeList.innerHTML = sortedAttributes.map(attr => {
                     const isChecked = selectedAttributes.has(attr);
                     const checkboxId = `attr_${attr.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                    const escapedAttr = escapeHtml(attr);
                     return `
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="${attr}" id="${checkboxId}" ${isChecked ? 'checked' : ''}>
-                            <label class="form-check-label" for="${checkboxId}">${attr}</label>
+                            <input class="form-check-input" type="checkbox" value="${escapedAttr}" id="${checkboxId}" ${isChecked ? 'checked' : ''}>
+                            <label class="form-check-label" for="${checkboxId}">${escapedAttr}</label>
                         </div>
                     `;
                 }).join('');
@@ -224,13 +248,17 @@
                 // Add event listeners to checkboxes
                 attributeList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                     checkbox.addEventListener('change', function() {
-                        if (this.checked) {
-                            selectedAttributes.add(this.value);
-                        } else {
-                            selectedAttributes.delete(this.value);
+                        // Get the original attribute name (not escaped)
+                        const originalAttr = [...availableAttributes].find(attr => escapeHtml(attr) === this.value);
+                        if (originalAttr) {
+                            if (this.checked) {
+                                selectedAttributes.add(originalAttr);
+                            } else {
+                                selectedAttributes.delete(originalAttr);
+                            }
+                            saveSelections();
+                            updateSelectedCount();
                         }
-                        saveSelections();
-                        updateSelectedCount();
                     });
                 });
                 
@@ -239,11 +267,18 @@
 
             // Main functions
             async function updateAvailableAttributes() {
+                if (isLoading) return; // Prevent concurrent operations
+                
                 try {
                     showLoading();
                     setStatus("Analyzing selected objects...");
                     
-                    const scene = (await app.Scenes3d.get())[0];
+                    const scenes = await app.Scenes3d.get();
+                    if (!scenes || scenes.length === 0) {
+                        throw new Error("No 3D scene available");
+                    }
+                    
+                    const scene = scenes[0];
                     const filter = scene.getNewFilter();
                     filter.IncludeAttributes = true;
                     const selectedObjects = await filter.getSelectedObjects();
@@ -276,12 +311,19 @@
             }
 
             async function extractAttributeData() {
+                if (isLoading) return; // Prevent concurrent operations
+                
                 try {
                     showLoading();
                     setStatus("Processing...");
                     outputArea.value = "";
                     
-                    const scene = (await app.Scenes3d.get())[0];
+                    const scenes = await app.Scenes3d.get();
+                    if (!scenes || scenes.length === 0) {
+                        throw new Error("No 3D scene available");
+                    }
+                    
+                    const scene = scenes[0];
                     const filter = scene.getNewFilter();
                     filter.IncludeAttributes = true;
                     const selectedObjects = await filter.getSelectedObjects();
@@ -309,10 +351,10 @@
                     let tsvData = "Uid\t" + attributesToExport.join("\t") + "\n";
                     
                     selectedObjects.forEach(obj => {
-                        let row = obj.Uid;
+                        let row = obj.Uid || "";
                         attributesToExport.forEach(attr => {
                             const value = obj.Attributes && obj.Attributes[attr] ? obj.Attributes[attr] : "";
-                            const escapedValue = String(value).replace(/[\t\n\r]/g, " ");
+                            const escapedValue = escapeTsvValue(value);
                             row += "\t" + escapedValue;
                         });
                         tsvData += row + "\n";
@@ -330,17 +372,27 @@
             }
 
             function copyToClipboard() {
-                outputArea.select();
-                outputArea.setSelectionRange(0, 99999);
+                if (!outputArea.value.trim()) {
+                    setStatus("No data to copy. Please extract data first.", 'warning');
+                    return;
+                }
                 
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(outputArea.value)
-                        .then(() => {
-                            setStatus("Copied to clipboard!");
-                            setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
-                        })
-                        .catch(() => fallbackCopy());
-                } else {
+                try {
+                    outputArea.select();
+                    outputArea.setSelectionRange(0, 99999);
+                    
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(outputArea.value)
+                            .then(() => {
+                                setStatus("Copied to clipboard!");
+                                setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
+                            })
+                            .catch(() => fallbackCopy());
+                    } else {
+                        fallbackCopy();
+                    }
+                } catch (error) {
+                    console.error("Copy error:", error);
                     fallbackCopy();
                 }
             }
