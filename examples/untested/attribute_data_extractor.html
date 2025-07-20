@@ -19,9 +19,10 @@
     - "Select All" and "Select None" buttons for quick selection
     - Attributes displayed in alphabetical order
     - Each attribute has a checkbox next to it
+    - Manual "Update Attributes" button to refresh available attributes
     
     Dynamic Attribute Management:
-    - List of attributes updated based on selected objects
+    - List of attributes updated manually via button click
     - Attributes that don't exist on selected objects are hidden but state preserved
     - Only show attributes that exist on currently selected objects
     
@@ -49,12 +50,11 @@
             background-color: rgba(50, 55, 60, 0.8);
         }
         #outputArea {
-            background-color: rgba(0, 0, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.2);
             color: white;
             font-family: monospace;
             height: 300px;
             resize: vertical;
-            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         .loading-overlay {
             position: fixed;
@@ -83,9 +83,6 @@
         .settings-header:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        .text-muted {
-            color: rgba(255, 255, 255, 0.6) !important;
-        }
     </style>
 </head>
 <body>
@@ -108,11 +105,12 @@
                     <div class="collapse show" id="attributeSettings">
                         <div class="mt-3">
                             <div class="d-flex gap-2 mb-3">
-                                <button id="selectAllBtn" class="btn btn-outline-primary btn-sm">Select All</button>
-                                <button id="selectNoneBtn" class="btn btn-outline-secondary btn-sm">Select None</button>
+                                <button id="updateAttributesBtn" class="btn btn-primary btn-sm">Update Attributes</button>
+                                <button id="selectAllBtn" class="btn btn-outline-light btn-sm">Select All</button>
+                                <button id="selectNoneBtn" class="btn btn-outline-light btn-sm">Select None</button>
                             </div>
                             <div class="attribute-list" id="attributeList">
-                                <div class="text-muted">Select objects in UPV to see available attributes</div>
+                                <div class="text-muted">Click "Update Attributes" to see available attributes from selected objects</div>
                             </div>
                         </div>
                     </div>
@@ -128,7 +126,7 @@
                     </div>
                     <textarea id="outputArea" class="form-control" readonly></textarea>
                 </div>
-                <div id="status" class="alert alert-info">Ready - select objects in UPV and click Extract</div>
+                <div id="status" class="alert alert-info">Ready - select objects in UPV and click "Update Attributes"</div>
             </div>
         </div>
     </div>
@@ -166,6 +164,7 @@
                     status: document.getElementById('status'),
                     loadingOverlay: document.getElementById('loadingOverlay'),
                     attributeList: document.getElementById('attributeList'),
+                    updateAttributesBtn: document.getElementById('updateAttributesBtn'),
                     selectAllBtn: document.getElementById('selectAllBtn'),
                     selectNoneBtn: document.getElementById('selectNoneBtn'),
                     selectedCount: document.getElementById('selectedCount'),
@@ -211,7 +210,7 @@
             
             updateAttributeList() {
                 if (this.availableAttributes.size === 0) {
-                    this.elements.attributeList.innerHTML = '<div class="text-muted">Select objects in UPV to see available attributes</div>';
+                    this.elements.attributeList.innerHTML = '<div class="text-muted">Click "Update Attributes" to see available attributes from selected objects</div>';
                     this.updateSelectedCount();
                     return;
                 }
@@ -225,7 +224,7 @@
                     return `
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="${escapedAttr}" id="${checkboxId}" ${isChecked ? 'checked' : ''}>
-                            <label class="form-check-label" for="${checkboxId}">${escapedAttr}</label>
+                            <label class="form-check-label text-white" for="${checkboxId}">${escapedAttr}</label>
                         </div>
                     `;
                 }).join('');
@@ -403,6 +402,7 @@
             setupEventListeners() {
                 this.elements.extractButton.addEventListener('click', () => this.extractAttributeData());
                 this.elements.copyButton.addEventListener('click', () => this.copyToClipboard());
+                this.elements.updateAttributesBtn.addEventListener('click', () => this.updateAvailableAttributes());
                 this.elements.selectAllBtn.addEventListener('click', () => this.selectAllAttributes());
                 this.elements.selectNoneBtn.addEventListener('click', () => this.selectNoAttributes());
                 
@@ -414,24 +414,13 @@
                 attributeSettings.addEventListener('hidden.bs.collapse', () => {
                     this.elements.settingsChevron.textContent = '▶';
                 });
-                
-                // Register selection change events with debouncing
-                if (this.app.available()) {
-                    let selectionTimeout;
-                    this.app.Events.registerSelectionChangedEvent(() => {
-                        clearTimeout(selectionTimeout);
-                        selectionTimeout = setTimeout(() => this.updateAvailableAttributes(), 500);
-                    });
-                }
             }
             
             checkApiAvailability() {
-                if (this.app.available()) {
-                    this.updateAvailableAttributes();
-                } else {
+                if (!this.app.available()) {
                     this.setStatus("Universal API is not available. This app must be run as an AppControl inside UPV.", 'danger');
-                    [this.elements.extractButton, this.elements.copyButton, this.elements.selectAllBtn, this.elements.selectNoneBtn]
-                        .forEach(btn => btn.disabled = true);
+                    [this.elements.extractButton, this.elements.copyButton, this.elements.updateAttributesBtn, 
+                     this.elements.selectAllBtn, this.elements.selectNoneBtn].forEach(btn => btn.disabled = true);
                 }
             }
         }
