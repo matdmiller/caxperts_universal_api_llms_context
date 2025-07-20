@@ -5,6 +5,7 @@
 - When writing python make sure it is pythonic.
 
 ## Requirements
+- ALWAYS include the design and implementation requirements and specifications in the top of each example as comments in the html files. If the user designing the example app gives you new or updated instructions or requirements make sure to capture them in the requirements sections at the top of each example html file.
 - Use bootstrap for styling unless otherwise specified.
 - Unless specified otherwise, create new apps as single html files like this: selection-text-bbox-complex.html
 
