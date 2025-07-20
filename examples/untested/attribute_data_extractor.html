@@ -47,16 +47,6 @@
         }
         .card {
             background-color: rgba(50, 55, 60, 0.8);
-            color: white;
-        }
-        .card-header {
-            color: white;
-        }
-        .card-body {
-            color: white;
-        }
-        .card-body p {
-            color: white;
         }
         #outputArea {
             background-color: rgba(0, 0, 0, 0.3);
@@ -85,50 +75,16 @@
             border-radius: 5px;
             padding: 15px;
             background-color: rgba(0, 0, 0, 0.2);
-            color: white;
         }
         .settings-header {
             cursor: pointer;
             user-select: none;
-            color: white;
         }
         .settings-header:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        .settings-header h5 {
-            color: white;
-        }
-        .form-check {
-            margin-bottom: 8px;
-        }
-        .form-check-label {
-            color: white;
-        }
         .text-muted {
             color: rgba(255, 255, 255, 0.6) !important;
-        }
-        .alert {
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .alert-info {
-            background-color: rgba(13, 110, 253, 0.2);
-            color: #b3d7ff;
-            border-color: rgba(13, 110, 253, 0.3);
-        }
-        .alert-success {
-            background-color: rgba(25, 135, 84, 0.2);
-            color: #a3cfbb;
-            border-color: rgba(25, 135, 84, 0.3);
-        }
-        .alert-warning {
-            background-color: rgba(255, 193, 7, 0.2);
-            color: #fff3cd;
-            border-color: rgba(255, 193, 7, 0.3);
-        }
-        .alert-danger {
-            background-color: rgba(220, 53, 69, 0.2);
-            color: #f8d7da;
-            border-color: rgba(220, 53, 69, 0.3);
         }
     </style>
 </head>
@@ -188,99 +144,84 @@
     <script src="https://matdmiller.github.io/caxperts_universal_api_llms_context/universal-api.umd.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const extractButton = document.getElementById('extractButton');
-            const copyButton = document.getElementById('copyButton');
-            const outputArea = document.getElementById('outputArea');
-            const statusEl = document.getElementById('status');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            const attributeList = document.getElementById('attributeList');
-            const selectAllBtn = document.getElementById('selectAllBtn');
-            const selectNoneBtn = document.getElementById('selectNoneBtn');
-            const selectedCount = document.getElementById('selectedCount');
-            const settingsChevron = document.getElementById('settingsChevron');
+        class AttributeExtractor {
+            constructor() {
+                this.STORAGE_KEY = 'attributeExportSettings';
+                this.MAX_OBJECTS = 1000;
+                this.availableAttributes = new Set();
+                this.selectedAttributes = new Set();
+                this.app = UniversalApi.universal_api.Application.getInstance();
+                
+                this.initElements();
+                this.loadSavedSelections();
+                this.setupEventListeners();
+                this.checkApiAvailability();
+            }
             
-            // Constants
-            const STORAGE_KEY = 'attributeExportSettings';
-            const MAX_OBJECTS = 1000;
+            initElements() {
+                this.elements = {
+                    extractButton: document.getElementById('extractButton'),
+                    copyButton: document.getElementById('copyButton'),
+                    outputArea: document.getElementById('outputArea'),
+                    status: document.getElementById('status'),
+                    loadingOverlay: document.getElementById('loadingOverlay'),
+                    attributeList: document.getElementById('attributeList'),
+                    selectAllBtn: document.getElementById('selectAllBtn'),
+                    selectNoneBtn: document.getElementById('selectNoneBtn'),
+                    selectedCount: document.getElementById('selectedCount'),
+                    settingsChevron: document.getElementById('settingsChevron')
+                };
+            }
             
-            // State
-            let availableAttributes = new Set();
-            let selectedAttributes = new Set();
-            let isLoading = false;
+            setStatus(message, type = 'info') {
+                this.elements.status.className = `alert alert-${type}`;
+                this.elements.status.textContent = message;
+            }
             
-            // Initialize Universal API
-            const app = UniversalApi.universal_api.Application.getInstance();
-
-            // Utility functions
-            const showLoading = () => {
-                isLoading = true;
-                loadingOverlay.classList.remove('d-none');
-            };
-            const hideLoading = () => {
-                isLoading = false;
-                loadingOverlay.classList.add('d-none');
-            };
+            showLoading() {
+                this.elements.loadingOverlay.classList.remove('d-none');
+            }
             
-            const setStatus = (message, type = 'info') => {
-                statusEl.className = `alert alert-${type}`;
-                statusEl.textContent = message;
-            };
+            hideLoading() {
+                this.elements.loadingOverlay.classList.add('d-none');
+            }
             
-            // HTML escape function to prevent XSS and HTML breaking
-            const escapeHtml = (text) => {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            };
-            
-            // TSV escape function for proper formatting
-            const escapeTsvValue = (value) => {
-                if (value == null || value === undefined) return "";
-                const stringValue = String(value);
-                // Replace tabs, newlines, and carriage returns with spaces
-                return stringValue.replace(/[\t\n\r]/g, " ").replace(/"/g, '""');
-            };
-
-            // Storage functions
-            function loadSavedSelections() {
+            loadSavedSelections() {
                 try {
-                    const saved = localStorage.getItem(STORAGE_KEY);
-                    if (saved) selectedAttributes = new Set(JSON.parse(saved));
+                    const saved = localStorage.getItem(this.STORAGE_KEY);
+                    if (saved) this.selectedAttributes = new Set(JSON.parse(saved));
                 } catch (error) {
                     console.warn('Failed to load saved selections:', error);
                 }
             }
-
-            function saveSelections() {
+            
+            saveSelections() {
                 try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify([...selectedAttributes]));
+                    localStorage.setItem(this.STORAGE_KEY, JSON.stringify([...this.selectedAttributes]));
                 } catch (error) {
                     console.warn('Failed to save selections:', error);
                 }
             }
-
-            // UI update functions
-            function updateSelectedCount() {
-                const visibleSelected = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).length;
-                const total = availableAttributes.size;
-                selectedCount.textContent = `(${visibleSelected} of ${total} selected)`;
+            
+            updateSelectedCount() {
+                const visibleSelected = [...this.selectedAttributes].filter(attr => this.availableAttributes.has(attr)).length;
+                const total = this.availableAttributes.size;
+                this.elements.selectedCount.textContent = `(${visibleSelected} of ${total} selected)`;
             }
-
-            function updateAttributeList() {
-                if (availableAttributes.size === 0) {
-                    attributeList.innerHTML = '<div class="text-muted">Select objects in UPV to see available attributes</div>';
-                    updateSelectedCount();
+            
+            updateAttributeList() {
+                if (this.availableAttributes.size === 0) {
+                    this.elements.attributeList.innerHTML = '<div class="text-muted">Select objects in UPV to see available attributes</div>';
+                    this.updateSelectedCount();
                     return;
                 }
 
-                const sortedAttributes = [...availableAttributes].sort();
+                const sortedAttributes = [...this.availableAttributes].sort();
                 
-                attributeList.innerHTML = sortedAttributes.map(attr => {
-                    const isChecked = selectedAttributes.has(attr);
+                this.elements.attributeList.innerHTML = sortedAttributes.map(attr => {
+                    const isChecked = this.selectedAttributes.has(attr);
                     const checkboxId = `attr_${attr.replace(/[^a-zA-Z0-9]/g, '_')}`;
-                    const escapedAttr = escapeHtml(attr);
+                    const escapedAttr = this.escapeHtml(attr);
                     return `
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="${escapedAttr}" id="${checkboxId}" ${isChecked ? 'checked' : ''}>
@@ -290,90 +231,76 @@
                 }).join('');
                 
                 // Add event listeners to checkboxes
-                attributeList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                    checkbox.addEventListener('change', function() {
-                        const attrName = this.value;
-                        if (this.checked) {
-                            selectedAttributes.add(attrName);
+                this.elements.attributeList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        const attrName = checkbox.value;
+                        if (checkbox.checked) {
+                            this.selectedAttributes.add(attrName);
                         } else {
-                            selectedAttributes.delete(attrName);
+                            this.selectedAttributes.delete(attrName);
                         }
-                        saveSelections();
-                        updateSelectedCount();
+                        this.saveSelections();
+                        this.updateSelectedCount();
                     });
                 });
                 
-                updateSelectedCount();
+                this.updateSelectedCount();
             }
-
-            // Main functions
-            async function updateAvailableAttributes() {
-                if (isLoading) return;
-                
+            
+            async updateAvailableAttributes() {
                 try {
-                    showLoading();
-                    setStatus("Analyzing selected objects...");
+                    this.showLoading();
+                    this.setStatus("Analyzing selected objects...");
                     
-                    const scenes = await app.Scenes3d.get();
-                    if (!scenes || scenes.length === 0) {
-                        throw new Error("No 3D scene available");
-                    }
+                    const scene = (await this.app.Scenes3d.get())[0];
+                    if (!scene) throw new Error("No 3D scene available");
                     
-                    const scene = scenes[0];
                     const filter = scene.getNewFilter();
                     filter.IncludeAttributes = true;
                     const selectedObjects = await filter.getSelectedObjects();
                     
                     if (selectedObjects.length === 0) {
-                        availableAttributes = new Set();
-                        updateAttributeList();
-                        setStatus("No objects selected. Please select objects in UPV.");
+                        this.availableAttributes = new Set();
+                        this.updateAttributeList();
+                        this.setStatus("No objects selected. Please select objects in UPV.");
                         return;
                     }
                     
-                    // Extract unique attribute names from the Attributes array
+                    // Extract unique attribute names
                     const attributeSet = new Set();
                     selectedObjects.forEach(obj => {
                         if (obj.Attributes && Array.isArray(obj.Attributes)) {
                             obj.Attributes.forEach(attr => {
-                                if (attr && attr.Key) {
-                                    attributeSet.add(attr.Key);
-                                }
+                                if (attr && attr.Key) attributeSet.add(attr.Key);
                             });
                         }
                     });
                     
-                    availableAttributes = attributeSet;
-                    updateAttributeList();
-                    setStatus(`Found ${selectedObjects.length} selected objects with ${availableAttributes.size} unique attributes`);
+                    this.availableAttributes = attributeSet;
+                    this.updateAttributeList();
+                    this.setStatus(`Found ${selectedObjects.length} selected objects with ${this.availableAttributes.size} unique attributes`);
                     
                 } catch (error) {
-                    setStatus(`Error: ${error.message}`, 'danger');
+                    this.setStatus(`Error: ${error.message}`, 'danger');
                     console.error("Analysis error:", error);
                 } finally {
-                    hideLoading();
+                    this.hideLoading();
                 }
             }
-
-            async function extractAttributeData() {
-                if (isLoading) return;
-                
+            
+            async extractAttributeData() {
                 try {
-                    showLoading();
-                    setStatus("Processing...");
-                    outputArea.value = "";
+                    this.showLoading();
+                    this.setStatus("Processing...");
+                    this.elements.outputArea.value = "";
                     
-                    const scenes = await app.Scenes3d.get();
-                    if (!scenes || scenes.length === 0) {
-                        throw new Error("No 3D scene available");
-                    }
+                    const scene = (await this.app.Scenes3d.get())[0];
+                    if (!scene) throw new Error("No 3D scene available");
                     
-                    const scene = scenes[0];
                     const filter = scene.getNewFilter();
                     filter.IncludeAttributes = true;
                     
-                    // If user has selected specific attributes, only request those for better performance
-                    const attributesToExport = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).sort();
+                    const attributesToExport = [...this.selectedAttributes].filter(attr => this.availableAttributes.has(attr)).sort();
                     if (attributesToExport.length > 0) {
                         filter.Attributes = attributesToExport;
                     }
@@ -381,29 +308,24 @@
                     const selectedObjects = await filter.getSelectedObjects();
                     
                     if (selectedObjects.length === 0) {
-                        setStatus("No objects selected. Please select objects in UPV.");
+                        this.setStatus("No objects selected. Please select objects in UPV.");
                         return;
                     }
                     
-                    // Check object count limit
-                    if (selectedObjects.length > MAX_OBJECTS) {
-                        setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select fewer than ${MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
+                    if (selectedObjects.length > this.MAX_OBJECTS) {
+                        this.setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select fewer than ${this.MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
                         return;
                     }
                     
                     if (attributesToExport.length === 0) {
-                        setStatus("No attributes selected for export. Please select attributes in the settings section.", 'warning');
+                        this.setStatus("No attributes selected for export. Please select attributes in the settings section.", 'warning');
                         return;
                     }
                     
-                    // Create TSV header
+                    // Create TSV data
                     let tsvData = "Uid\t" + attributesToExport.join("\t") + "\n";
                     
-                    // Process each selected object
                     selectedObjects.forEach(obj => {
-                        let row = obj.Uid || "";
-                        
-                        // Create a map of attribute Key->Value for this object
                         const attributeMap = {};
                         if (obj.Attributes && Array.isArray(obj.Attributes)) {
                             obj.Attributes.forEach(attr => {
@@ -413,114 +335,109 @@
                             });
                         }
                         
-                        // Add each selected attribute value to the row
+                        let row = obj.Uid || "";
                         attributesToExport.forEach(attrKey => {
                             const value = attributeMap[attrKey] || "";
-                            const escapedValue = escapeTsvValue(value);
+                            const escapedValue = this.escapeTsvValue(value);
                             row += "\t" + escapedValue;
                         });
                         tsvData += row + "\n";
                     });
                     
-                    outputArea.value = tsvData;
-                    setStatus(`Data extracted for ${selectedObjects.length} objects with ${attributesToExport.length} attributes`, 'success');
+                    this.elements.outputArea.value = tsvData;
+                    this.setStatus(`Data extracted for ${selectedObjects.length} objects with ${attributesToExport.length} attributes`, 'success');
                     
                 } catch (error) {
-                    setStatus(`Error: ${error.message}`, 'danger');
+                    this.setStatus(`Error: ${error.message}`, 'danger');
                     console.error("Extraction error:", error);
                 } finally {
-                    hideLoading();
+                    this.hideLoading();
                 }
             }
-
-            function copyToClipboard() {
-                if (!outputArea.value.trim()) {
-                    setStatus("No data to copy. Please extract data first.", 'warning');
+            
+            async copyToClipboard() {
+                if (!this.elements.outputArea.value.trim()) {
+                    this.setStatus("No data to copy. Please extract data first.", 'warning');
                     return;
                 }
                 
                 try {
-                    outputArea.select();
-                    outputArea.setSelectionRange(0, 99999);
-                    
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        navigator.clipboard.writeText(outputArea.value)
-                            .then(() => {
-                                setStatus("Copied to clipboard!", 'success');
-                                setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
-                            })
-                            .catch(() => fallbackCopy());
-                    } else {
-                        fallbackCopy();
-                    }
+                    await navigator.clipboard.writeText(this.elements.outputArea.value);
+                    this.setStatus("Copied to clipboard!", 'success');
+                    setTimeout(() => this.setStatus("Ready - select objects in UPV and click Extract"), 2000);
                 } catch (error) {
-                    console.error("Copy error:", error);
-                    fallbackCopy();
-                }
-            }
-            
-            function fallbackCopy() {
-                try {
+                    // Fallback for older browsers
+                    this.elements.outputArea.select();
                     const successful = document.execCommand('copy');
-                    setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'success' : 'warning');
+                    this.setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'success' : 'warning');
                     if (successful) {
-                        setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
+                        setTimeout(() => this.setStatus("Ready - select objects in UPV and click Extract"), 2000);
                     }
-                } catch (err) {
-                    setStatus("Copy failed, please select and copy manually", 'warning');
                 }
             }
-
-            // Event handlers
-            const selectAllAttributes = () => {
-                availableAttributes.forEach(attr => selectedAttributes.add(attr));
-                saveSelections();
-                updateAttributeList();
-            };
-
-            const selectNoAttributes = () => {
-                availableAttributes.forEach(attr => selectedAttributes.delete(attr));
-                saveSelections();
-                updateAttributeList();
-            };
-
-            // Collapse chevron handler
-            document.getElementById('attributeSettings').addEventListener('shown.bs.collapse', () => {
-                settingsChevron.textContent = '▼';
-            });
             
-            document.getElementById('attributeSettings').addEventListener('hidden.bs.collapse', () => {
-                settingsChevron.textContent = '▶';
-            });
-
-            // Event listeners
-            extractButton.addEventListener('click', extractAttributeData);
-            copyButton.addEventListener('click', copyToClipboard);
-            selectAllBtn.addEventListener('click', selectAllAttributes);
-            selectNoneBtn.addEventListener('click', selectNoAttributes);
+            selectAllAttributes() {
+                this.availableAttributes.forEach(attr => this.selectedAttributes.add(attr));
+                this.saveSelections();
+                this.updateAttributeList();
+            }
             
-            // Selection change handler (debounced)
-            let selectionTimeout;
-            const debouncedUpdateAttributes = () => {
-                clearTimeout(selectionTimeout);
-                selectionTimeout = setTimeout(updateAvailableAttributes, 500);
-            };
+            selectNoAttributes() {
+                this.availableAttributes.forEach(attr => this.selectedAttributes.delete(attr));
+                this.saveSelections();
+                this.updateAttributeList();
+            }
             
-            // Initialize
-            if (app.available()) {
-                try {
-                    app.Events.onSelectionChange.add(debouncedUpdateAttributes);
-                } catch (error) {
-                    console.log("Selection change events not available, manual refresh will be required");
-                }
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+            
+            escapeTsvValue(value) {
+                if (value == null || value === undefined) return "";
+                const stringValue = String(value);
+                return stringValue.replace(/[\t\n\r]/g, " ").replace(/"/g, '""');
+            }
+            
+            setupEventListeners() {
+                this.elements.extractButton.addEventListener('click', () => this.extractAttributeData());
+                this.elements.copyButton.addEventListener('click', () => this.copyToClipboard());
+                this.elements.selectAllBtn.addEventListener('click', () => this.selectAllAttributes());
+                this.elements.selectNoneBtn.addEventListener('click', () => this.selectNoAttributes());
                 
-                loadSavedSelections();
-                updateAvailableAttributes();
-            } else {
-                setStatus("Universal API is not available. This app must be run as an AppControl inside UPV.", 'danger');
-                [extractButton, copyButton, selectAllBtn, selectNoneBtn].forEach(btn => btn.disabled = true);
+                // Collapse chevron handler
+                const attributeSettings = document.getElementById('attributeSettings');
+                attributeSettings.addEventListener('shown.bs.collapse', () => {
+                    this.elements.settingsChevron.textContent = '▼';
+                });
+                attributeSettings.addEventListener('hidden.bs.collapse', () => {
+                    this.elements.settingsChevron.textContent = '▶';
+                });
+                
+                // Register selection change events with debouncing
+                if (this.app.available()) {
+                    let selectionTimeout;
+                    this.app.Events.registerSelectionChangedEvent(() => {
+                        clearTimeout(selectionTimeout);
+                        selectionTimeout = setTimeout(() => this.updateAvailableAttributes(), 500);
+                    });
+                }
             }
-        });
+            
+            checkApiAvailability() {
+                if (this.app.available()) {
+                    this.updateAvailableAttributes();
+                } else {
+                    this.setStatus("Universal API is not available. This app must be run as an AppControl inside UPV.", 'danger');
+                    [this.elements.extractButton, this.elements.copyButton, this.elements.selectAllBtn, this.elements.selectNoneBtn]
+                        .forEach(btn => btn.disabled = true);
+                }
+            }
+        }
+        
+        // Initialize the app when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => new AttributeExtractor());
     </script>
 </body>
 </html>
