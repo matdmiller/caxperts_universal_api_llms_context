@@ -195,7 +195,6 @@
                 if (value == null || value === undefined) return "";
                 const stringValue = String(value);
                 // Replace tabs, newlines, and carriage returns with spaces
-                // Also handle quotes by doubling them (Excel/TSV standard)
                 return stringValue.replace(/[\t\n\r]/g, " ").replace(/"/g, '""');
             };
 
@@ -248,17 +247,14 @@
                 // Add event listeners to checkboxes
                 attributeList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                     checkbox.addEventListener('change', function() {
-                        // Get the original attribute name (not escaped)
-                        const originalAttr = [...availableAttributes].find(attr => escapeHtml(attr) === this.value);
-                        if (originalAttr) {
-                            if (this.checked) {
-                                selectedAttributes.add(originalAttr);
-                            } else {
-                                selectedAttributes.delete(originalAttr);
-                            }
-                            saveSelections();
-                            updateSelectedCount();
+                        const attrName = this.value;
+                        if (this.checked) {
+                            selectedAttributes.add(attrName);
+                        } else {
+                            selectedAttributes.delete(attrName);
                         }
+                        saveSelections();
+                        updateSelectedCount();
                     });
                 });
                 
@@ -267,7 +263,7 @@
 
             // Main functions
             async function updateAvailableAttributes() {
-                if (isLoading) return; // Prevent concurrent operations
+                if (isLoading) return;
                 
                 try {
                     showLoading();
@@ -290,11 +286,15 @@
                         return;
                     }
                     
-                    // Extract unique attribute names
+                    // Extract unique attribute names from the Attributes array
                     const attributeSet = new Set();
                     selectedObjects.forEach(obj => {
-                        if (obj.Attributes) {
-                            Object.keys(obj.Attributes).forEach(attr => attributeSet.add(attr));
+                        if (obj.Attributes && Array.isArray(obj.Attributes)) {
+                            obj.Attributes.forEach(attr => {
+                                if (attr && attr.Key) {
+                                    attributeSet.add(attr.Key);
+                                }
+                            });
                         }
                     });
                     
@@ -311,7 +311,7 @@
             }
 
             async function extractAttributeData() {
-                if (isLoading) return; // Prevent concurrent operations
+                if (isLoading) return;
                 
                 try {
                     showLoading();
@@ -326,6 +326,13 @@
                     const scene = scenes[0];
                     const filter = scene.getNewFilter();
                     filter.IncludeAttributes = true;
+                    
+                    // If user has selected specific attributes, only request those for better performance
+                    const attributesToExport = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).sort();
+                    if (attributesToExport.length > 0) {
+                        filter.Attributes = attributesToExport;
+                    }
+                    
                     const selectedObjects = await filter.getSelectedObjects();
                     
                     if (selectedObjects.length === 0) {
@@ -335,25 +342,35 @@
                     
                     // Check object count limit
                     if (selectedObjects.length > MAX_OBJECTS) {
-                        setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select less than ${MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
+                        setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select fewer than ${MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
                         return;
                     }
-                    
-                    // Get selected attributes for export
-                    const attributesToExport = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).sort();
                     
                     if (attributesToExport.length === 0) {
                         setStatus("No attributes selected for export. Please select attributes in the settings section.", 'warning');
                         return;
                     }
                     
-                    // Create TSV data
+                    // Create TSV header
                     let tsvData = "Uid\t" + attributesToExport.join("\t") + "\n";
                     
+                    // Process each selected object
                     selectedObjects.forEach(obj => {
                         let row = obj.Uid || "";
-                        attributesToExport.forEach(attr => {
-                            const value = obj.Attributes && obj.Attributes[attr] ? obj.Attributes[attr] : "";
+                        
+                        // Create a map of attribute Key->Value for this object
+                        const attributeMap = {};
+                        if (obj.Attributes && Array.isArray(obj.Attributes)) {
+                            obj.Attributes.forEach(attr => {
+                                if (attr && attr.Key && attr.Value !== undefined) {
+                                    attributeMap[attr.Key] = attr.Value;
+                                }
+                            });
+                        }
+                        
+                        // Add each selected attribute value to the row
+                        attributesToExport.forEach(attrKey => {
+                            const value = attributeMap[attrKey] || "";
                             const escapedValue = escapeTsvValue(value);
                             row += "\t" + escapedValue;
                         });
@@ -384,7 +401,7 @@
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(outputArea.value)
                             .then(() => {
-                                setStatus("Copied to clipboard!");
+                                setStatus("Copied to clipboard!", 'success');
                                 setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
                             })
                             .catch(() => fallbackCopy());
@@ -400,7 +417,7 @@
             function fallbackCopy() {
                 try {
                     const successful = document.execCommand('copy');
-                    setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'info' : 'warning');
+                    setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'success' : 'warning');
                     if (successful) {
                         setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
                     }
@@ -449,7 +466,7 @@
                 try {
                     app.Events.onSelectionChange.add(debouncedUpdateAttributes);
                 } catch (error) {
-                    console.log("Selection change events not available");
+                    console.log("Selection change events not available, manual refresh will be required");
                 }
                 
                 loadSavedSelections();
