@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="transparent" content="true">
+    <title>Attribute Data Extractor</title>
+    <!-- 
+    DESIGN AND IMPLEMENTATION REQUIREMENTS:
+    
+    Core Functionality:
+    - Export attributes instead of bounding box coordinates for selected objects in TSV format
+    - Show error if more than 1000 objects selected, suggest UPV report functionality instead
+    - Prevent application crashes from large object selections
+    
+    Attribute Selection Interface:
+    - Collapsible "Attribute Selection Settings" section
+    - User can select which attributes to export via checkboxes
+    - "Select All" and "Select None" buttons for quick selection
+    - Attributes displayed in alphabetical order
+    - Each attribute has a checkbox next to it
+    
+    Dynamic Attribute Management:
+    - List of attributes updated based on selected objects
+    - Attributes that don't exist on selected objects are hidden but state preserved
+    - Only show attributes that exist on currently selected objects
+    
+    Browser Storage:
+    - Store selected attributes in browser cache (localStorage) 
+    - Key: 'attributeExportSettings'
+    - User doesn't have to manually reset selections each time
+    
+    Styling and UX:
+    - Match style of other apps in examples folder
+    - Bootstrap-based responsive design
+    - Loading overlay for long operations
+    - Clear status messages and error handling
+    - TSV output format for easy import into spreadsheets
+    -->
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            padding: 20px;
+            background-color: rgba(33, 37, 41, 0.8);
+            color: white;
+        }
+        .card {
+            background-color: rgba(50, 55, 60, 0.8);
+        }
+        #outputArea {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-family: monospace;
+            height: 300px;
+            resize: vertical;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .attribute-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        .settings-header {
+            cursor: pointer;
+            user-select: none;
+        }
+        .settings-header:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .form-check {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Attribute Data Extractor</h2>
+            </div>
+            <div class="card-body">
+                <p>Export attribute data for selected objects in UPV in TSV format.</p>
+                
+                <!-- Attribute Settings Section -->
+                <div class="mb-4">
+                    <div class="settings-header p-2 rounded" data-bs-toggle="collapse" data-bs-target="#attributeSettings">
+                        <h5 class="mb-0">
+                            <span id="settingsChevron">▼</span> Attribute Selection Settings
+                            <small class="text-muted ms-2" id="selectedCount">(0 selected)</small>
+                        </h5>
+                    </div>
+                    <div class="collapse show" id="attributeSettings">
+                        <div class="mt-3">
+                            <div class="d-flex gap-2 mb-3">
+                                <button id="selectAllBtn" class="btn btn-outline-primary btn-sm">Select All</button>
+                                <button id="selectNoneBtn" class="btn btn-outline-secondary btn-sm">Select None</button>
+                            </div>
+                            <div class="attribute-list" id="attributeList">
+                                <div class="text-muted">Select objects in UPV to see available attributes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <button id="extractButton" class="btn btn-primary">Extract Attribute Data</button>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <label for="outputArea" class="form-label">Output (TSV format)</label>
+                        <button id="copyButton" class="btn btn-secondary btn-sm">Copy to Clipboard</button>
+                    </div>
+                    <textarea id="outputArea" class="form-control" readonly></textarea>
+                </div>
+                <div id="status" class="alert alert-info">Ready - select objects in UPV and click Extract</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay d-none">
+        <div class="spinner-border text-light" role="status" style="width: 3rem; height: 3rem;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://matdmiller.github.io/caxperts_universal_api_llms_context/universal-api.umd.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const extractButton = document.getElementById('extractButton');
+            const copyButton = document.getElementById('copyButton');
+            const outputArea = document.getElementById('outputArea');
+            const statusEl = document.getElementById('status');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const attributeList = document.getElementById('attributeList');
+            const selectAllBtn = document.getElementById('selectAllBtn');
+            const selectNoneBtn = document.getElementById('selectNoneBtn');
+            const selectedCount = document.getElementById('selectedCount');
+            const settingsChevron = document.getElementById('settingsChevron');
+            
+            // Constants
+            const STORAGE_KEY = 'attributeExportSettings';
+            const MAX_OBJECTS = 1000;
+            
+            // State
+            let availableAttributes = new Set();
+            let selectedAttributes = new Set();
+            let isLoading = false;
+            
+            // Initialize Universal API
+            const app = UniversalApi.universal_api.Application.getInstance();
+
+            // Utility functions
+            const showLoading = () => {
+                isLoading = true;
+                loadingOverlay.classList.remove('d-none');
+            };
+            const hideLoading = () => {
+                isLoading = false;
+                loadingOverlay.classList.add('d-none');
+            };
+            
+            const setStatus = (message, type = 'info') => {
+                statusEl.className = `alert alert-${type}`;
+                statusEl.textContent = message;
+            };
+            
+            // HTML escape function to prevent XSS and HTML breaking
+            const escapeHtml = (text) => {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+            
+            // TSV escape function for proper formatting
+            const escapeTsvValue = (value) => {
+                if (value == null || value === undefined) return "";
+                const stringValue = String(value);
+                // Replace tabs, newlines, and carriage returns with spaces
+                // Also handle quotes by doubling them (Excel/TSV standard)
+                return stringValue.replace(/[\t\n\r]/g, " ").replace(/"/g, '""');
+            };
+
+            // Storage functions
+            function loadSavedSelections() {
+                try {
+                    const saved = localStorage.getItem(STORAGE_KEY);
+                    if (saved) selectedAttributes = new Set(JSON.parse(saved));
+                } catch (error) {
+                    console.warn('Failed to load saved selections:', error);
+                }
+            }
+
+            function saveSelections() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([...selectedAttributes]));
+                } catch (error) {
+                    console.warn('Failed to save selections:', error);
+                }
+            }
+
+            // UI update functions
+            function updateSelectedCount() {
+                const visibleSelected = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).length;
+                const total = availableAttributes.size;
+                selectedCount.textContent = `(${visibleSelected} of ${total} selected)`;
+            }
+
+            function updateAttributeList() {
+                if (availableAttributes.size === 0) {
+                    attributeList.innerHTML = '<div class="text-muted">Select objects in UPV to see available attributes</div>';
+                    updateSelectedCount();
+                    return;
+                }
+
+                const sortedAttributes = [...availableAttributes].sort();
+                
+                attributeList.innerHTML = sortedAttributes.map(attr => {
+                    const isChecked = selectedAttributes.has(attr);
+                    const checkboxId = `attr_${attr.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                    const escapedAttr = escapeHtml(attr);
+                    return `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="${escapedAttr}" id="${checkboxId}" ${isChecked ? 'checked' : ''}>
+                            <label class="form-check-label" for="${checkboxId}">${escapedAttr}</label>
+                        </div>
+                    `;
+                }).join('');
+                
+                // Add event listeners to checkboxes
+                attributeList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', function() {
+                        // Get the original attribute name (not escaped)
+                        const originalAttr = [...availableAttributes].find(attr => escapeHtml(attr) === this.value);
+                        if (originalAttr) {
+                            if (this.checked) {
+                                selectedAttributes.add(originalAttr);
+                            } else {
+                                selectedAttributes.delete(originalAttr);
+                            }
+                            saveSelections();
+                            updateSelectedCount();
+                        }
+                    });
+                });
+                
+                updateSelectedCount();
+            }
+
+            // Main functions
+            async function updateAvailableAttributes() {
+                if (isLoading) return; // Prevent concurrent operations
+                
+                try {
+                    showLoading();
+                    setStatus("Analyzing selected objects...");
+                    
+                    const scenes = await app.Scenes3d.get();
+                    if (!scenes || scenes.length === 0) {
+                        throw new Error("No 3D scene available");
+                    }
+                    
+                    const scene = scenes[0];
+                    const filter = scene.getNewFilter();
+                    filter.IncludeAttributes = true;
+                    const selectedObjects = await filter.getSelectedObjects();
+                    
+                    if (selectedObjects.length === 0) {
+                        availableAttributes = new Set();
+                        updateAttributeList();
+                        setStatus("No objects selected. Please select objects in UPV.");
+                        return;
+                    }
+                    
+                    // Extract unique attribute names
+                    const attributeSet = new Set();
+                    selectedObjects.forEach(obj => {
+                        if (obj.Attributes) {
+                            Object.keys(obj.Attributes).forEach(attr => attributeSet.add(attr));
+                        }
+                    });
+                    
+                    availableAttributes = attributeSet;
+                    updateAttributeList();
+                    setStatus(`Found ${selectedObjects.length} selected objects with ${availableAttributes.size} unique attributes`);
+                    
+                } catch (error) {
+                    setStatus(`Error: ${error.message}`, 'danger');
+                    console.error("Analysis error:", error);
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            async function extractAttributeData() {
+                if (isLoading) return; // Prevent concurrent operations
+                
+                try {
+                    showLoading();
+                    setStatus("Processing...");
+                    outputArea.value = "";
+                    
+                    const scenes = await app.Scenes3d.get();
+                    if (!scenes || scenes.length === 0) {
+                        throw new Error("No 3D scene available");
+                    }
+                    
+                    const scene = scenes[0];
+                    const filter = scene.getNewFilter();
+                    filter.IncludeAttributes = true;
+                    const selectedObjects = await filter.getSelectedObjects();
+                    
+                    if (selectedObjects.length === 0) {
+                        setStatus("No objects selected. Please select objects in UPV.");
+                        return;
+                    }
+                    
+                    // Check object count limit
+                    if (selectedObjects.length > MAX_OBJECTS) {
+                        setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select less than ${MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
+                        return;
+                    }
+                    
+                    // Get selected attributes for export
+                    const attributesToExport = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).sort();
+                    
+                    if (attributesToExport.length === 0) {
+                        setStatus("No attributes selected for export. Please select attributes in the settings section.", 'warning');
+                        return;
+                    }
+                    
+                    // Create TSV data
+                    let tsvData = "Uid\t" + attributesToExport.join("\t") + "\n";
+                    
+                    selectedObjects.forEach(obj => {
+                        let row = obj.Uid || "";
+                        attributesToExport.forEach(attr => {
+                            const value = obj.Attributes && obj.Attributes[attr] ? obj.Attributes[attr] : "";
+                            const escapedValue = escapeTsvValue(value);
+                            row += "\t" + escapedValue;
+                        });
+                        tsvData += row + "\n";
+                    });
+                    
+                    outputArea.value = tsvData;
+                    setStatus(`Data extracted for ${selectedObjects.length} objects with ${attributesToExport.length} attributes`, 'success');
+                    
+                } catch (error) {
+                    setStatus(`Error: ${error.message}`, 'danger');
+                    console.error("Extraction error:", error);
+                } finally {
+                    hideLoading();
+                }
+            }
+
+            function copyToClipboard() {
+                if (!outputArea.value.trim()) {
+                    setStatus("No data to copy. Please extract data first.", 'warning');
+                    return;
+                }
+                
+                try {
+                    outputArea.select();
+                    outputArea.setSelectionRange(0, 99999);
+                    
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(outputArea.value)
+                            .then(() => {
+                                setStatus("Copied to clipboard!");
+                                setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
+                            })
+                            .catch(() => fallbackCopy());
+                    } else {
+                        fallbackCopy();
+                    }
+                } catch (error) {
+                    console.error("Copy error:", error);
+                    fallbackCopy();
+                }
+            }
+            
+            function fallbackCopy() {
+                try {
+                    const successful = document.execCommand('copy');
+                    setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'info' : 'warning');
+                    if (successful) {
+                        setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
+                    }
+                } catch (err) {
+                    setStatus("Copy failed, please select and copy manually", 'warning');
+                }
+            }
+
+            // Event handlers
+            const selectAllAttributes = () => {
+                availableAttributes.forEach(attr => selectedAttributes.add(attr));
+                saveSelections();
+                updateAttributeList();
+            };
+
+            const selectNoAttributes = () => {
+                availableAttributes.forEach(attr => selectedAttributes.delete(attr));
+                saveSelections();
+                updateAttributeList();
+            };
+
+            // Collapse chevron handler
+            document.getElementById('attributeSettings').addEventListener('shown.bs.collapse', () => {
+                settingsChevron.textContent = '▼';
+            });
+            
+            document.getElementById('attributeSettings').addEventListener('hidden.bs.collapse', () => {
+                settingsChevron.textContent = '▶';
+            });
+
+            // Event listeners
+            extractButton.addEventListener('click', extractAttributeData);
+            copyButton.addEventListener('click', copyToClipboard);
+            selectAllBtn.addEventListener('click', selectAllAttributes);
+            selectNoneBtn.addEventListener('click', selectNoAttributes);
+            
+            // Selection change handler (debounced)
+            let selectionTimeout;
+            const debouncedUpdateAttributes = () => {
+                clearTimeout(selectionTimeout);
+                selectionTimeout = setTimeout(updateAvailableAttributes, 500);
+            };
+            
+            // Initialize
+            if (app.available()) {
+                try {
+                    app.Events.onSelectionChange.add(debouncedUpdateAttributes);
+                } catch (error) {
+                    console.log("Selection change events not available");
+                }
+                
+                loadSavedSelections();
+                updateAvailableAttributes();
+            } else {
+                setStatus("Universal API is not available. This app must be run as an AppControl inside UPV.", 'danger');
+                [extractButton, copyButton, selectAllBtn, selectNoneBtn].forEach(btn => btn.disabled = true);
+            }
+        });
+    </script>
+</body>
+</html>
