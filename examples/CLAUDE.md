@@ -1,5 +1,7 @@
 # Instructions for Claude when creating examples in this repo
 
+<b>CRITICAL INSTRUCTIONS: NEVER MODIFY ANY FILES OUTSIDE OF THE `examples` FOLDER. You may only do this if explicitly asked to by the user. You must be absolutely sure you have been directed to modify files outside of the `examples` folder. DO NOT DO THIS UNLESS ASKED, EVER!!!</b>
+
 ## Coding Rules
 - Always write elegant, concise, readable code.
 - When writing python make sure it is pythonic.
@@ -8,6 +10,7 @@
 - ALWAYS include the design and implementation requirements and specifications in the top of each example as comments in the html files. If the user designing the example app gives you new or updated instructions or requirements make sure to capture them in the requirements sections at the top of each example html file.
 - Use bootstrap for styling unless otherwise specified.
 - Unless specified otherwise, create new apps as single html files like this: selection-text-bbox-complex.html
+- When you create a new example app you must always put it in the `examples/untested/` folder unless explicitly instructed otherwise. 
 
 ### Bootstrap Instructions
 <Bootstrap_Requirements>
