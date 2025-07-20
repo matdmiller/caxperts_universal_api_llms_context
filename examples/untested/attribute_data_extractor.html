@@ -38,7 +38,7 @@
     - TSV output format for easy import into spreadsheets
     -->
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             padding: 20px;
@@ -139,7 +139,7 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://matdmiller.github.io/caxperts_universal_api_llms_context/universal-api.umd.js"></script>
     
     <script>
@@ -195,7 +195,6 @@
                 if (value == null || value === undefined) return "";
                 const stringValue = String(value);
                 // Replace tabs, newlines, and carriage returns with spaces
-                // Also handle quotes by doubling them (Excel/TSV standard)
                 return stringValue.replace(/[\t\n\r]/g, " ").replace(/"/g, '""');
             };
 
@@ -248,17 +247,14 @@
                 // Add event listeners to checkboxes
                 attributeList.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                     checkbox.addEventListener('change', function() {
-                        // Get the original attribute name (not escaped)
-                        const originalAttr = [...availableAttributes].find(attr => escapeHtml(attr) === this.value);
-                        if (originalAttr) {
-                            if (this.checked) {
-                                selectedAttributes.add(originalAttr);
-                            } else {
-                                selectedAttributes.delete(originalAttr);
-                            }
-                            saveSelections();
-                            updateSelectedCount();
+                        const attrName = this.value;
+                        if (this.checked) {
+                            selectedAttributes.add(attrName);
+                        } else {
+                            selectedAttributes.delete(attrName);
                         }
+                        saveSelections();
+                        updateSelectedCount();
                     });
                 });
                 
@@ -267,7 +263,7 @@
 
             // Main functions
             async function updateAvailableAttributes() {
-                if (isLoading) return; // Prevent concurrent operations
+                if (isLoading) return;
                 
                 try {
                     showLoading();
@@ -295,7 +291,7 @@
                     selectedObjects.forEach(obj => {
                         if (obj.Attributes && Array.isArray(obj.Attributes)) {
                             obj.Attributes.forEach(attr => {
-                                if (attr.Key) {
+                                if (attr && attr.Key) {
                                     attributeSet.add(attr.Key);
                                 }
                             });
@@ -315,7 +311,7 @@
             }
 
             async function extractAttributeData() {
-                if (isLoading) return; // Prevent concurrent operations
+                if (isLoading) return;
                 
                 try {
                     showLoading();
@@ -330,6 +326,13 @@
                     const scene = scenes[0];
                     const filter = scene.getNewFilter();
                     filter.IncludeAttributes = true;
+                    
+                    // If user has selected specific attributes, only request those for better performance
+                    const attributesToExport = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).sort();
+                    if (attributesToExport.length > 0) {
+                        filter.Attributes = attributesToExport;
+                    }
+                    
                     const selectedObjects = await filter.getSelectedObjects();
                     
                     if (selectedObjects.length === 0) {
@@ -339,21 +342,19 @@
                     
                     // Check object count limit
                     if (selectedObjects.length > MAX_OBJECTS) {
-                        setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select less than ${MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
+                        setStatus(`Error: Too many objects selected (${selectedObjects.length}). Please select fewer than ${MAX_OBJECTS} objects or use the UPV report functionality instead.`, 'warning');
                         return;
                     }
-                    
-                    // Get selected attributes for export
-                    const attributesToExport = [...selectedAttributes].filter(attr => availableAttributes.has(attr)).sort();
                     
                     if (attributesToExport.length === 0) {
                         setStatus("No attributes selected for export. Please select attributes in the settings section.", 'warning');
                         return;
                     }
                     
-                    // Create TSV data
+                    // Create TSV header
                     let tsvData = "Uid\t" + attributesToExport.join("\t") + "\n";
                     
+                    // Process each selected object
                     selectedObjects.forEach(obj => {
                         let row = obj.Uid || "";
                         
@@ -361,7 +362,7 @@
                         const attributeMap = {};
                         if (obj.Attributes && Array.isArray(obj.Attributes)) {
                             obj.Attributes.forEach(attr => {
-                                if (attr.Key && attr.Value !== undefined) {
+                                if (attr && attr.Key && attr.Value !== undefined) {
                                     attributeMap[attr.Key] = attr.Value;
                                 }
                             });
@@ -400,7 +401,7 @@
                     if (navigator.clipboard && navigator.clipboard.writeText) {
                         navigator.clipboard.writeText(outputArea.value)
                             .then(() => {
-                                setStatus("Copied to clipboard!");
+                                setStatus("Copied to clipboard!", 'success');
                                 setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
                             })
                             .catch(() => fallbackCopy());
@@ -416,7 +417,7 @@
             function fallbackCopy() {
                 try {
                     const successful = document.execCommand('copy');
-                    setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'info' : 'warning');
+                    setStatus(successful ? "Copied to clipboard!" : "Copy failed, please select and copy manually", successful ? 'success' : 'warning');
                     if (successful) {
                         setTimeout(() => setStatus("Ready - select objects in UPV and click Extract"), 2000);
                     }
@@ -465,7 +466,7 @@
                 try {
                     app.Events.onSelectionChange.add(debouncedUpdateAttributes);
                 } catch (error) {
-                    console.log("Selection change events not available");
+                    console.log("Selection change events not available, manual refresh will be required");
                 }
                 
                 loadSavedSelections();
