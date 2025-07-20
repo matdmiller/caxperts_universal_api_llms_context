@@ -1,4 +1,5 @@
 # Instructions for Claude when creating examples in this repo
+> These instructions specifically ONLY apply when creating examples.
 
 <b>CRITICAL INSTRUCTIONS: NEVER MODIFY ANY FILES OUTSIDE OF THE `examples` FOLDER. You may only do this if explicitly asked to by the user. You must be absolutely sure you have been directed to modify files outside of the `examples` folder. DO NOT DO THIS UNLESS ASKED, EVER!!!</b>
 
