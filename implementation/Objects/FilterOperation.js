@@ -12,6 +12,9 @@ class FilterOperation {
         this.scene = scene;
         /**
          * The Condition used in the filter. By default this contains a match all condition (Uid=*)
+         * Note: To create an OR condition where only some sub conditions need to match set the CombineMode to CombineModes.And. The connection between the two should always be '&'
+         * Example: Uid=123...&Uid=456...   With CombineModes.Or this is evaluated as only one needs to match when it is CombineModes.And its evaluated as all need to match. The & in this case is only the separator for the conditions
+         * Any Attribute can be used inside the Condition
          */
         this.Condition = "Uid=*";
         /**
@@ -29,7 +32,7 @@ class FilterOperation {
         /**
          * Should objects returned by GetObjects include ChangeableAttribute Information
          */
-        this.IncludeChangableAttributes = false;
+        this.IncludeChangeableAttributes = false;
         /**
          * Should objects returned by GetObjects include linked elements Information
          */
@@ -53,7 +56,7 @@ class FilterOperation {
             command.command = Util_1.ApiCommands.GetCustomAttributeConfiguration;
             getCustomAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
-        if (this.IncludeChangableAttributes) {
+        if (this.IncludeChangeableAttributes) {
             command.command = Util_1.ApiCommands.GetObjectsChangeableAttributes;
             getChangeableAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
@@ -62,7 +65,7 @@ class FilterOperation {
             getLinkedElements = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
         for (const uid of (await getObjects).ResultData.Objects) {
-            const model = new ModelObject_1.ModelObject(uid);
+            const model = new ModelObject_1.ModelObject(uid, this.scene);
             let attributes;
             let links;
             if (this.IncludeAttributes) {
@@ -74,7 +77,7 @@ class FilterOperation {
                     }
                 }
                 const changeableAttributes = {};
-                if (this.IncludeChangableAttributes) {
+                if (this.IncludeChangeableAttributes) {
                     try {
                         const tempChangeable = (await getChangeableAttributes).ResultData.ChangeableAttributes[uid];
                         for (const key of Object.keys(tempChangeable)) {
@@ -82,7 +85,7 @@ class FilterOperation {
                         }
                     }
                     catch (_a) {
-                        //If no changable elements exist this causes an exeption
+                        //If no Changeable elements exist this causes an exeption
                     }
                 }
                 const objectsAttribute = (await getObjectsAttributes).ResultData.ObjectsAttributes[uid];

@@ -7,36 +7,35 @@ import { FileTreeFolder } from "./FileTreeFolder";
 import { FileTreeComment } from "./FileTreeComment";
 import { FileTreePIDSketch } from "./FileTreePIDSketch";
 import { FileTreeCommentSVG } from "./FileTreeCommentSVG";
+import { FileTreeDrawing } from "./FIleTreeDrawing";
 /**
- * @legacy
+ * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
  * */
 export declare class FileTreeManagerLegacy {
     private manager;
     constructor(manager: FileTreeManager);
     /**
-         * might be removed in future from wrapper
-         * @legacy
-         * @param path
-         * @returns
-         */
+     *
+     * @deprecated might be removed in future from wrapper
+     * @param path
+     * @returns
+     */
     loadSketch(path: string, viewName?: string): Promise<import("../ResponseTypes").ApiResponse>;
     /**
-     * might be removed in future from wrapper
-     * @legacy
+     * @deprecated might be removed in future from wrapper
      * @param path
      * @returns
      */
     loadPackageFile(path: string, replace?: boolean): Promise<import("../ResponseTypes").ApiResponse>;
     /**
-     * might be removed in future from wrapper
-     * @legacy
+     * @deprecated might be removed in future from wrapper
      * @param path
      * @returns
      */
     exportPackageFile(path: string): Promise<import("../ResponseTypes").ApiResponse>;
     /**
-     * @legacy might be removed in future from wrapper and replaced with a new function
+     * @deprecated might be removed in future from wrapper and replaced with a new function
      */
     loadFile(path: string): Promise<import("../ResponseTypes").ApiResponse>;
 }
@@ -81,7 +80,7 @@ export declare class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color
+     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -89,7 +88,7 @@ export declare class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    createPointOfIntrest(parent: FileTreeFolder, name: string, position: Vector3D, rotation: Vector3D, color: Color, diameter: number, attributes?: {
+    createPointOfInterest(parent: FileTreeFolder, name: string, position: Vector3D, rotation: Vector3D, color: Color, diameter: number, attributes?: {
         [key: string]: string;
     }, links?: {
         [key: string]: string;
@@ -109,12 +108,26 @@ export declare class FileTreeManager {
      */
     createMarkup(parent: FileTreeFolder, name: string): Promise<FileTreeElement>;
     /**
-    * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
-    * @param name
-    * @param parent
-    * @returns
-    */
-    createComment(parent: FileTreeFolder | FileTreeSketch | FileTreePIDSketch | FileTreePointOfInterest, name: string, uid?: string, offset?: number): Promise<FileTreeComment | FileTreeCommentSVG>;
+     * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
+     * @param parent
+     * @param name
+     * @param uid if nothing provided, the selected element is used
+     * @param offset the offset of the comment from the object
+     * @param commentPosition Position if the comment. If not provided it will use the offset
+     * @param leaderLineEndPosition Position of the leader line end position. If not provided this is the center of the object
+     * @returns
+     */
+    createComment(parent: FileTreeFolder | FileTreeSketch | FileTreePIDSketch | FileTreePointOfInterest, name: string, uid?: string, offset?: number, commentPosition?: Vector3D, leaderLineEndPosition?: Vector3D): Promise<FileTreeComment | FileTreeCommentSVG>;
+    /**
+     * Can be used to create a drawing in the filestree
+     * @param parent
+     * @param name
+     * @param templateName available templates can be retrieved via the DrawingTemplates on the Model
+     * @param useColors
+     * @param useSelectedObjectsOnly
+     * @returns
+     */
+    createDrawing(parent: FileTreeFolder, name: string, templateName: string, useColors: boolean, useSelectedObjectsOnly: boolean): Promise<FileTreeDrawing>;
     private resolveElement;
     /**
      * Load UPVF file from a base64 string into UPV

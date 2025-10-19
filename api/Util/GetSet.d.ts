@@ -12,7 +12,7 @@ export declare class Set<T> {
     constructor(setFunction: (value: T) => Promise<void>);
     /**
      * Sets the Value asynchronous
-     * @param value
+     * @param value - The value to set
      * @returns
      */
     set(value: T): Promise<void>;
@@ -28,7 +28,7 @@ export declare class GetSet<T> {
     get(): Promise<T>;
     /**
      * Sets the Value asynchronous
-     * @param value
+     * @param value - The value to set
      * @returns
      */
     set(value: T): Promise<void>;

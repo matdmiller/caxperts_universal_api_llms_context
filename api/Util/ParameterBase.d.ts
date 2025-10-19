@@ -1,4 +1,4 @@
-import { AttributeConditionComparison, Bounds, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -30,6 +30,14 @@ export declare class ParameterBase {
     LoadFileDialog?: LoadFileDialogParameters;
     SaveFileDialog?: SaveFileDialogParameters;
     PdfDocument?: PdfDocumentParameter;
+    AddChangeableAttribute?: AddChangeableAttributeParameter;
+    DeleteChangeableAttribute?: DeleteChangeableAttributeParameter;
+    FilesTreeCreateDrawing?: FilesTreeCreateDrawingParameter;
+    GenerateAnimationKeyframe?: AnimationKeyframeParameters;
+    SetAnimationStart?: SetAnimationStartParameters;
+    GetWindowLayout?: GetWindowLayoutParameter;
+    SetWindowLayout?: SetWindowLayoutParameter;
+    SetAnimationCurrentTime?: SetAnimationCurrentTimeParameters;
 }
 export declare class ClippingDescriptor {
     Mode: ClippingMode;
@@ -222,6 +230,14 @@ export declare class FilesTreeCreateCommentParameter {
      * how far away from the element should the comment be placed
      */
     Offset?: number;
+    /**
+     * Overwrite the position of the comment
+     */
+    CommentPosition?: Vector3D;
+    /**
+     * Overwrite the position of the comment leader line end position. Normally center of object
+     */
+    LeaderLineEndPosition?: Vector3D;
 }
 export declare class GetClashesParameter {
     /**
@@ -289,5 +305,52 @@ export declare class PdfDocumentParameter {
     PhysicalFileName: string;
     DisplayName: string;
     PdfType: PdfTypes;
+}
+export declare class AddChangeableAttributeParameter {
+    Uid: string;
+    Name: string;
+    Mode: CustomAttributeDataType;
+    CodeListEntriesNames: string[];
+    CodeListEntriesColors: Color[];
+    DisplayName: string;
+    Deletable: boolean;
+    Readonly: boolean;
+    Hidden: boolean;
+    InitialValue: string;
+    UnitType: ChangeableAttributeUnitType;
+    DrawingPathForPid: string;
+}
+export declare class DeleteChangeableAttributeParameter {
+    Uid: string;
+    Name: string;
+    DrawingPathForPid: string;
+}
+export declare class FilesTreeCreateDrawingParameter {
+    ParentTreeItemId: number;
+    DrawingTemplateName: string;
+    Name: string;
+    UseSelectedObjectsOnly: boolean;
+    UseColours: boolean;
+}
+export declare class AnimationKeyframeParameters {
+    MillisecondsSinceStart: number;
+    ElementGuids: string[];
+}
+export declare class SetAnimationStartParameters {
+    /**
+     * Example usages: "2025-08-05T14:30:00", "2025-08-05 14:30:00"
+     * see  DateTime.TryParse examples for more.
+     */
+    Date: string;
+}
+export declare class GetWindowLayoutParameter {
+    LayoutFormat: WindowLayoutFormat;
+}
+export declare class SetWindowLayoutParameter {
+    LayoutFormat: WindowLayoutFormat;
+    LayoutContent: string;
+}
+export declare class SetAnimationCurrentTimeParameters {
+    CurrentTimeMilliseconds: number;
 }
 //# sourceMappingURL=ParameterBase.d.ts.map

@@ -9,19 +9,18 @@ const CaxApiCommand_1 = require("./Internal/CaxApiCommand");
 const FilesTree_1 = require("./FilesTree");
 const AuthenticationManager_1 = require("./Objects/AuthenticationManager");
 /**
- * @class Application
  * Main Entrypoint for interacting with the UPV API
  */
 class Application {
     /**
      *
-     * @private
+     * @internal
      *
      */
     constructor() {
         this.State = new Util_1.Get(async () => {
             const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetLifeCycleState);
-            return await (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
                 .LifeCycleState;
         });
         this.Scenes = new Util_1.Get(async () => {
@@ -60,6 +59,10 @@ class Application {
             const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.SetLanguage);
             command.commandParameters.push(value);
             (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.ViewerVersion = new Util_1.Get(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetViewerVersion);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
         });
         this.Events = new Objects_1.Events();
         this.FileTree = new FilesTree_1.FileTreeManager();
@@ -172,6 +175,17 @@ class Application {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.OpenPath);
         command.commandParameters.push(path);
         return await APIConnector_1.Api.get().sendCommand(command);
+    }
+    /**
+    * This command will only returns once the viewer has finished loading the model.
+    * THis includes for example Meshloading, TextureLoading etc.
+    * If the user is actively moving this function might never return as new Load Jobs are started.
+    * This function could be used in automation steps for example in using to capture screenshots.
+    * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
+    */
+    async waitForModelLoading() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.WaitForModelLoading);
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LoadStatus;
     }
     /**
      * Checks if a connection to UPV is available and commands can be send to UPV

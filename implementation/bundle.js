@@ -10,19 +10,18 @@ const CaxApiCommand_1 = require("./Internal/CaxApiCommand");
 const FilesTree_1 = require("./FilesTree");
 const AuthenticationManager_1 = require("./Objects/AuthenticationManager");
 /**
- * @class Application
  * Main Entrypoint for interacting with the UPV API
  */
 class Application {
     /**
      *
-     * @private
+     * @internal
      *
      */
     constructor() {
         this.State = new Util_1.Get(async () => {
             const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetLifeCycleState);
-            return await (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
                 .LifeCycleState;
         });
         this.Scenes = new Util_1.Get(async () => {
@@ -61,6 +60,10 @@ class Application {
             const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.SetLanguage);
             command.commandParameters.push(value);
             (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.ViewerVersion = new Util_1.Get(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetViewerVersion);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
         });
         this.Events = new Objects_1.Events();
         this.FileTree = new FilesTree_1.FileTreeManager();
@@ -175,6 +178,17 @@ class Application {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
+    * This command will only returns once the viewer has finished loading the model.
+    * THis includes for example Meshloading, TextureLoading etc.
+    * If the user is actively moving this function might never return as new Load Jobs are started.
+    * This function could be used in automation steps for example in using to capture screenshots.
+    * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
+    */
+    async waitForModelLoading() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.WaitForModelLoading);
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LoadStatus;
+    }
+    /**
      * Checks if a connection to UPV is available and commands can be send to UPV
      * @returns
      */
@@ -184,19 +198,72 @@ class Application {
 }
 exports.Application = Application;
 
-},{"./FilesTree":20,"./Internal/APIConnector":21,"./Internal/CaxApiCommand":23,"./Objects":43,"./Objects/AuthenticationManager":25,"./Scenes":52,"./Util":59}],2:[function(require,module,exports){
+},{"./FilesTree":22,"./Internal/APIConnector":23,"./Internal/CaxApiCommand":25,"./Objects":45,"./Objects/AuthenticationManager":27,"./Scenes":54,"./Util":61}],2:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileTreeDrawing = void 0;
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
+const Util_1 = require("../Util");
+const FileTreeElement_1 = require("./FileTreeElement");
+class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+    /**
+     * Export a drawing to base64. Specify in which format you want the export to be
+     * An export can be multiple exports and this would cause multiple exports
+     * @param type Format to use
+     * @returns
+     */
+    async exportDrawing(type) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportDrawing);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        command.commandParameters.push(type.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+}
+exports.FileTreeDrawing = FileTreeDrawing;
+
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAnimation = void 0;
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
+const Util_1 = require("../Util");
 const FileTreeElement_1 = require("./FileTreeElement");
 class FileTreeAnimation extends FileTreeElement_1.FileTreeElement {
     constructor(id, name, type) {
         super(id, name, type);
+        this.AnimationCurrentTime = new Util_1.Set(async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.SetAnimationCurrentTime);
+            command.additionalParameters.SetAnimationCurrentTime = {
+                CurrentTimeMilliseconds: value
+            };
+            await APIConnector_1.Api.get().sendCommand(command);
+        });
+    }
+    /**
+     * Generate a new keyframe for the animation using the specified sketching uids
+     * @param millisecondsSinceStart at what time in the timeline the keyframe should be inserted
+     * @param elementUids sketching uids to use
+     * @returns
+     */
+    async generateAnimationKeyframe(millisecondsSinceStart, elementUids) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GenerateAnimationKeyframe);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.additionalParameters.GenerateAnimationKeyframe = {
+            ElementGuids: elementUids,
+            MillisecondsSinceStart: millisecondsSinceStart
+        };
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
 }
 exports.FileTreeAnimation = FileTreeAnimation;
 
-},{"./FileTreeElement":6}],3:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAppControl = void 0;
@@ -208,7 +275,7 @@ class FileTreeAppControl extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeAppControl = FileTreeAppControl;
 
-},{"./FileTreeElement":6}],4:[function(require,module,exports){
+},{"./FileTreeElement":7}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeComment = void 0;
@@ -220,7 +287,7 @@ class FileTreeComment extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeComment = FileTreeComment;
 
-},{"./FileTreeElement":6}],5:[function(require,module,exports){
+},{"./FileTreeElement":7}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeCommentSVG = void 0;
@@ -232,7 +299,7 @@ class FileTreeCommentSVG extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeCommentSVG = FileTreeCommentSVG;
 
-},{"./FileTreeElement":6}],6:[function(require,module,exports){
+},{"./FileTreeElement":7}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeElement = void 0;
@@ -364,7 +431,7 @@ class FileTreeElement {
 }
 exports.FileTreeElement = FileTreeElement;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],7:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeFolder = void 0;
@@ -376,7 +443,7 @@ class FileTreeFolder extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeFolder = FileTreeFolder;
 
-},{"./FileTreeElement":6}],8:[function(require,module,exports){
+},{"./FileTreeElement":7}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeManager = exports.FileTreeManagerLegacy = void 0;
@@ -399,8 +466,10 @@ const FileTreeMarkup_1 = require("./FileTreeMarkup");
 const FileTreePIDSketch_1 = require("./FileTreePIDSketch");
 const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
+const FileTreeSpraying_1 = require("./FileTreeSpraying");
+const FIleTreeDrawing_1 = require("./FIleTreeDrawing");
 /**
- * @legacy
+ * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
  * */
 class FileTreeManagerLegacy {
@@ -408,11 +477,11 @@ class FileTreeManagerLegacy {
         this.manager = manager;
     }
     /**
-         * might be removed in future from wrapper
-         * @legacy
-         * @param path
-         * @returns
-         */
+     *
+     * @deprecated might be removed in future from wrapper
+     * @param path
+     * @returns
+     */
     async loadSketch(path, viewName) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.LoadSketch);
         command.commandParameters.push(path);
@@ -421,8 +490,7 @@ class FileTreeManagerLegacy {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * might be removed in future from wrapper
-     * @legacy
+     * @deprecated might be removed in future from wrapper
      * @param path
      * @returns
      */
@@ -434,8 +502,7 @@ class FileTreeManagerLegacy {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * might be removed in future from wrapper
-     * @legacy
+     * @deprecated might be removed in future from wrapper
      * @param path
      * @returns
      */
@@ -445,7 +512,7 @@ class FileTreeManagerLegacy {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * @legacy might be removed in future from wrapper and replaced with a new function
+     * @deprecated might be removed in future from wrapper and replaced with a new function
      */
     async loadFile(path) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.LoadFile);
@@ -539,7 +606,7 @@ class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color
+     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -547,7 +614,7 @@ class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    async createPointOfIntrest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
+    async createPointOfInterest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePoi);
         command.additionalParameters = {
             PlacePoi: {
@@ -595,18 +662,48 @@ class FileTreeManager {
         return this.resolveElement(result);
     }
     /**
-    * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
-    * @param name
-    * @param parent
-    * @returns
-    */
-    async createComment(parent, name, uid = null, offset = 0) {
+     * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
+     * @param parent
+     * @param name
+     * @param uid if nothing provided, the selected element is used
+     * @param offset the offset of the comment from the object
+     * @param commentPosition Position if the comment. If not provided it will use the offset
+     * @param leaderLineEndPosition Position of the leader line end position. If not provided this is the center of the object
+     * @returns
+     */
+    async createComment(parent, name, uid = null, offset = 0, commentPosition = { X: 0, Y: 0, Z: 0 }, leaderLineEndPosition = { X: 0, Y: 0, Z: 0 }) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.FilesTreeCreateComment);
         command.commandParameters = [name, parent.Id.toString()];
         command.additionalParameters = {
             FilesTreeCreateComment: {
                 Uid: uid,
-                Offset: offset
+                Offset: offset,
+                CommentPosition: commentPosition,
+                LeaderLineEndPosition: leaderLineEndPosition
+            }
+        };
+        const result = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
+            .FilesTreeObject;
+        return this.resolveElement(result);
+    }
+    /**
+     * Can be used to create a drawing in the filestree
+     * @param parent
+     * @param name
+     * @param templateName available templates can be retrieved via the DrawingTemplates on the Model
+     * @param useColors
+     * @param useSelectedObjectsOnly
+     * @returns
+     */
+    async createDrawing(parent, name, templateName, useColors, useSelectedObjectsOnly) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.FilesTreeCreateDrawing);
+        command.additionalParameters = {
+            FilesTreeCreateDrawing: {
+                DrawingTemplateName: templateName,
+                Name: name,
+                ParentTreeItemId: parent.Id,
+                UseColours: useColors,
+                UseSelectedObjectsOnly: useSelectedObjectsOnly
             }
         };
         const result = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
@@ -647,6 +744,10 @@ class FileTreeManager {
                 return new FileTreePIDSketch_1.FileTreePIDSketch(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Report:
                 return new FileTreeReport_1.FileTreeReport(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.Spraying:
+                return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.Drawing:
+                return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
             //return new FileTreeElement(element.Id, element.Name, element.Type);
@@ -688,7 +789,7 @@ class FileTreeManager {
 }
 exports.FileTreeManager = FileTreeManager;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeFolder":7,"./FileTreeMarkup":9,"./FileTreeModel":10,"./FileTreePIDSketch":11,"./FileTreePackage":12,"./FileTreePhoto":13,"./FileTreePointOfInterest":14,"./FileTreeReport":15,"./FileTreeScreenshot":16,"./FileTreeSketch":17,"./FileTreeTwoDToThreeD":18,"./FileTreeView":19}],9:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FIleTreeDrawing":2,"./FileTreeAnimation":3,"./FileTreeAppControl":4,"./FileTreeComment":5,"./FileTreeCommentSVG":6,"./FileTreeFolder":8,"./FileTreeMarkup":10,"./FileTreeModel":11,"./FileTreePIDSketch":12,"./FileTreePackage":13,"./FileTreePhoto":14,"./FileTreePointOfInterest":15,"./FileTreeReport":16,"./FileTreeScreenshot":17,"./FileTreeSketch":18,"./FileTreeSpraying":19,"./FileTreeTwoDToThreeD":20,"./FileTreeView":21}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeMarkup = void 0;
@@ -729,7 +830,7 @@ class FileTreeMarkup extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeMarkup = FileTreeMarkup;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeElement":6}],10:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeModel = void 0;
@@ -741,7 +842,7 @@ class FileTreeModel extends FileTreeFolder_1.FileTreeFolder {
 }
 exports.FileTreeModel = FileTreeModel;
 
-},{"./FileTreeFolder":7}],11:[function(require,module,exports){
+},{"./FileTreeFolder":8}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePIDSketch = void 0;
@@ -786,7 +887,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
                 SketchColor: null
             }
         };
-        await APIConnector_1.Api.get().sendCommand(command);
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Objects;
     }
     async placeSymbol(symbol, name, position, rotation, attributes = {}) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);
@@ -821,7 +922,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePIDSketch = FileTreePIDSketch;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeElement":6}],12:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePackage = void 0;
@@ -833,7 +934,7 @@ class FileTreePackage extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePackage = FileTreePackage;
 
-},{"./FileTreeElement":6}],13:[function(require,module,exports){
+},{"./FileTreeElement":7}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePhoto = void 0;
@@ -845,7 +946,7 @@ class FileTreePhoto extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePhoto = FileTreePhoto;
 
-},{"./FileTreeElement":6}],14:[function(require,module,exports){
+},{"./FileTreeElement":7}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePointOfInterest = void 0;
@@ -857,7 +958,7 @@ class FileTreePointOfInterest extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePointOfInterest = FileTreePointOfInterest;
 
-},{"./FileTreeElement":6}],15:[function(require,module,exports){
+},{"./FileTreeElement":7}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeReport = void 0;
@@ -869,7 +970,7 @@ class FileTreeReport extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeReport = FileTreeReport;
 
-},{"./FileTreeElement":6}],16:[function(require,module,exports){
+},{"./FileTreeElement":7}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeScreenshot = void 0;
@@ -881,7 +982,7 @@ class FileTreeScreenshot extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeScreenshot = FileTreeScreenshot;
 
-},{"./FileTreeElement":6}],17:[function(require,module,exports){
+},{"./FileTreeElement":7}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSketch = void 0;
@@ -893,6 +994,11 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
     constructor(id, name, type) {
         super(id, name, type);
     }
+    /**
+     * Places the symbol in the users hand for the user to place
+     * @param symbol
+     * @returns
+     */
     async selectSymbolForPlacement(symbol) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.SelectSymbolForPlacement);
         command.commandParameters.push(symbol.Path);
@@ -900,6 +1006,15 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
+    /**
+     * Places the symbol at a specific position
+     * @param symbol
+     * @param name
+     * @param position
+     * @param rotation
+     * @param attributes
+     * @returns
+     */
     async placeSymbol(symbol, name, position, rotation, attributes = {}) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlaceSymbol);
         command.additionalParameters = {
@@ -915,6 +1030,17 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
+    /**
+     * Places a primitive at a specific position
+     * Each primitive has specific parameters it requires
+     * @param type
+     * @param name
+     * @param position
+     * @param rotation
+     * @param attributes
+     * @param parameters
+     * @returns
+     */
     async placePrimitive(type, name, position, rotation, attributes = {}, parameters = {}) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePrimitive);
         command.additionalParameters = {
@@ -930,21 +1056,75 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
+    /**
+     * Retrieve the Catalog symbols available
+     * @returns
+     */
     async getCatalogSymbols() {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetCatalogSymbols);
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
+    /**
+     * Delete a sketch item by its uid
+     * @param uid
+     * @returns
+     */
     async deleteSketchItem(uid) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.DeleteSketchItem);
         command.commandParameters.push(uid);
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommand(command));
     }
+    /**
+     * Exports a Sketch as a Base64 UPVC file
+     * @returns
+     */
+    async exportAsUpvcBase64() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsUpvc);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
+    }
+    /**
+     * Exports a Sketch as a Base64 DGN file
+     * @returns
+     */
+    async exportAsDgnBase64() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSketchAsDgn);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.DgnBase64;
+    }
 }
 exports.FileTreeSketch = FileTreeSketch;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"./FileTreeElement":6}],18:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],19:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileTreeSpraying = void 0;
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
+const Util_1 = require("../Util");
+const FileTreeElement_1 = require("./FileTreeElement");
+class FileTreeSpraying extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+    /**
+     * Exports a Sketch as a Base64 UPVC file
+     * @returns
+     */
+    async exportAsUpvcBase64() {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportSprayingAsUpvc);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UpvcBase64;
+    }
+}
+exports.FileTreeSpraying = FileTreeSpraying;
+
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeTwoDToThreeD = void 0;
@@ -956,7 +1136,7 @@ class FileTreeTwoDToThreeD extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeTwoDToThreeD = FileTreeTwoDToThreeD;
 
-},{"./FileTreeElement":6}],19:[function(require,module,exports){
+},{"./FileTreeElement":7}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeView = void 0;
@@ -968,7 +1148,7 @@ class FileTreeView extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeView = FileTreeView;
 
-},{"./FileTreeElement":6}],20:[function(require,module,exports){
+},{"./FileTreeElement":7}],22:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -990,6 +1170,7 @@ __exportStar(require("./FileTreeAnimation"), exports);
 __exportStar(require("./FileTreeAppControl"), exports);
 __exportStar(require("./FileTreeComment"), exports);
 __exportStar(require("./FileTreeCommentSVG"), exports);
+__exportStar(require("./FIleTreeDrawing"), exports);
 __exportStar(require("./FileTreeFolder"), exports);
 __exportStar(require("./FileTreeMarkup"), exports);
 __exportStar(require("./FileTreeModel"), exports);
@@ -1000,17 +1181,20 @@ __exportStar(require("./FileTreePointOfInterest"), exports);
 __exportStar(require("./FileTreeReport"), exports);
 __exportStar(require("./FileTreeScreenshot"), exports);
 __exportStar(require("./FileTreeSketch"), exports);
+__exportStar(require("./FileTreeSpraying"), exports);
 __exportStar(require("./FileTreeTwoDToThreeD"), exports);
 __exportStar(require("./FileTreeView"), exports);
 __exportStar(require("./FileTreeManager"), exports);
 
-},{"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeElement":6,"./FileTreeFolder":7,"./FileTreeManager":8,"./FileTreeMarkup":9,"./FileTreeModel":10,"./FileTreePIDSketch":11,"./FileTreePackage":12,"./FileTreePhoto":13,"./FileTreePointOfInterest":14,"./FileTreeReport":15,"./FileTreeScreenshot":16,"./FileTreeSketch":17,"./FileTreeTwoDToThreeD":18,"./FileTreeView":19}],21:[function(require,module,exports){
+},{"./FIleTreeDrawing":2,"./FileTreeAnimation":3,"./FileTreeAppControl":4,"./FileTreeComment":5,"./FileTreeCommentSVG":6,"./FileTreeElement":7,"./FileTreeFolder":8,"./FileTreeManager":9,"./FileTreeMarkup":10,"./FileTreeModel":11,"./FileTreePIDSketch":12,"./FileTreePackage":13,"./FileTreePhoto":14,"./FileTreePointOfInterest":15,"./FileTreeReport":16,"./FileTreeScreenshot":17,"./FileTreeSketch":18,"./FileTreeSpraying":19,"./FileTreeTwoDToThreeD":20,"./FileTreeView":21}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Api = exports.ApiResponseContainer = void 0;
+exports.Api = exports.ApiResponseContainer = exports.CoverageTracker = void 0;
 const Util_1 = require("../Util");
 const APIConnectorVuplex_1 = require("./APIConnectorVuplex");
 const CaxApiCommand_1 = require("./CaxApiCommand");
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+exports.CoverageTracker = {};
 class ApiResponseContainer {
 }
 exports.ApiResponseContainer = ApiResponseContainer;
@@ -1127,7 +1311,7 @@ class Api {
 exports.Api = Api;
 Api.instance = undefined;
 
-},{"../Util":59,"./APIConnectorVuplex":22,"./CaxApiCommand":23}],22:[function(require,module,exports){
+},{"../Util":61,"./APIConnectorVuplex":24,"./CaxApiCommand":25}],24:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiConnectorVuplex = void 0;
@@ -1182,7 +1366,7 @@ class ApiConnectorVuplex {
 }
 exports.ApiConnectorVuplex = ApiConnectorVuplex;
 
-},{"./APIConnector":21}],23:[function(require,module,exports){
+},{"./APIConnector":23}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaxApiCommand = void 0;
@@ -1202,7 +1386,7 @@ class CaxApiCommand {
 }
 exports.CaxApiCommand = CaxApiCommand;
 
-},{"../Util/Enums":56}],24:[function(require,module,exports){
+},{"../Util/Enums":58}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttributeTreeNode = void 0;
@@ -1267,7 +1451,7 @@ class AttributeTreeNode {
 }
 exports.AttributeTreeNode = AttributeTreeNode;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],25:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationContext = exports.AuthenticationManager = void 0;
@@ -1349,7 +1533,7 @@ class AuthenticationContext {
 }
 exports.AuthenticationContext = AuthenticationContext;
 
-},{"../Application":1,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],26:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Camera = void 0;
@@ -1437,7 +1621,7 @@ class Camera {
 }
 exports.Camera = Camera;
 
-},{"../Internal/APIConnector":21,"../Util":59}],27:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClashContext = void 0;
@@ -1484,7 +1668,7 @@ class ClashContext {
 }
 exports.ClashContext = ClashContext;
 
-},{"../Application":1,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],28:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Events = void 0;
@@ -1634,7 +1818,7 @@ class Events {
 }
 exports.Events = Events;
 
-},{"../Internal/APIConnector":21,"../ResponseTypes":47}],29:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../ResponseTypes":49}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileOperations = void 0;
@@ -1678,6 +1862,8 @@ class FileOperations {
     }
     /**
      * Load a file from the model folder. Some files are not allowed to be retrieved
+     * For example Data/test.txt, otherFolder/file.xlsx, fileinRoot.json
+     * Dont prepend a /on the file
      * @param file file to load
      * @returns
      */
@@ -1689,7 +1875,7 @@ class FileOperations {
 }
 exports.FileOperations = FileOperations;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],30:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation = void 0;
@@ -1704,6 +1890,9 @@ class FilterOperation {
         this.scene = scene;
         /**
          * The Condition used in the filter. By default this contains a match all condition (Uid=*)
+         * Note: To create an OR condition where only some sub conditions need to match set the CombineMode to CombineModes.And. The connection between the two should always be '&'
+         * Example: Uid=123...&Uid=456...   With CombineModes.Or this is evaluated as only one needs to match when it is CombineModes.And its evaluated as all need to match. The & in this case is only the separator for the conditions
+         * Any Attribute can be used inside the Condition
          */
         this.Condition = "Uid=*";
         /**
@@ -1721,7 +1910,7 @@ class FilterOperation {
         /**
          * Should objects returned by GetObjects include ChangeableAttribute Information
          */
-        this.IncludeChangableAttributes = false;
+        this.IncludeChangeableAttributes = false;
         /**
          * Should objects returned by GetObjects include linked elements Information
          */
@@ -1745,7 +1934,7 @@ class FilterOperation {
             command.command = Util_1.ApiCommands.GetCustomAttributeConfiguration;
             getCustomAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
-        if (this.IncludeChangableAttributes) {
+        if (this.IncludeChangeableAttributes) {
             command.command = Util_1.ApiCommands.GetObjectsChangeableAttributes;
             getChangeableAttributes = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
@@ -1754,7 +1943,7 @@ class FilterOperation {
             getLinkedElements = APIConnector_1.Api.get().sendCommandWithReturnType(command);
         }
         for (const uid of (await getObjects).ResultData.Objects) {
-            const model = new ModelObject_1.ModelObject(uid);
+            const model = new ModelObject_1.ModelObject(uid, this.scene);
             let attributes;
             let links;
             if (this.IncludeAttributes) {
@@ -1766,7 +1955,7 @@ class FilterOperation {
                     }
                 }
                 const changeableAttributes = {};
-                if (this.IncludeChangableAttributes) {
+                if (this.IncludeChangeableAttributes) {
                     try {
                         const tempChangeable = (await getChangeableAttributes).ResultData.ChangeableAttributes[uid];
                         for (const key of Object.keys(tempChangeable)) {
@@ -1774,7 +1963,7 @@ class FilterOperation {
                         }
                     }
                     catch (_a) {
-                        //If no changable elements exist this causes an exeption
+                        //If no Changeable elements exist this causes an exeption
                     }
                 }
                 const objectsAttribute = (await getObjectsAttributes).ResultData.ObjectsAttributes[uid];
@@ -1866,7 +2055,7 @@ class FilterOperation {
 }
 exports.FilterOperation = FilterOperation;
 
-},{"../Internal/APIConnector":21,"../Util":59,"./ModelObject":38}],31:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61,"./ModelObject":40}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation3d = void 0;
@@ -2028,7 +2217,7 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperation3d = FilterOperation3d;
 
-},{"../Internal/APIConnector":21,"../Util":59,"./AttributeTree":24,"./ClashContext":27,"./FilterOperation":30}],32:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61,"./AttributeTree":26,"./ClashContext":29,"./FilterOperation":32}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperationPid = void 0;
@@ -2087,7 +2276,7 @@ class FilterOperationPid extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperationPid = FilterOperationPid;
 
-},{"../Internal/APIConnector":21,"../Util":59,"./FilterOperation":30}],33:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61,"./FilterOperation":32}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntelliPidDrawing = void 0;
@@ -2122,7 +2311,7 @@ class IntelliPidDrawing {
 }
 exports.IntelliPidDrawing = IntelliPidDrawing;
 
-},{"../Internal/APIConnector":21,"../Util":59}],34:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer2D = void 0;
@@ -2215,7 +2404,7 @@ class Layer2D {
 }
 exports.Layer2D = Layer2D;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],35:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer3D = void 0;
@@ -2342,7 +2531,7 @@ class Layer3D {
 }
 exports.Layer3D = Layer3D;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],36:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalStorage = void 0;
@@ -2407,7 +2596,7 @@ class LocalStorage {
 }
 exports.LocalStorage = LocalStorage;
 
-},{"../Application":1,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],37:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = exports.ModelLegacy = void 0;
@@ -2418,7 +2607,7 @@ const Util_1 = require("../Util");
 const GetSet_1 = require("../Util/GetSet");
 const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
 /**
- * @legacy
+ * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
  * */
 class ModelLegacy {
@@ -2426,11 +2615,10 @@ class ModelLegacy {
         this.model = model;
     }
     /**
-         * might be removed in future from wrapper
-         * @legacy
-         * @param path
-         * @returns
-         */
+     * @deprecated might be removed in future from wrapper
+     * @param path
+     * @returns
+     */
     async loadConfigFile(file) {
         const command = this.model.createCommand(Enums_1.ApiCommands.LoadConfigFile);
         command.commandParameters.push(file);
@@ -2499,6 +2687,10 @@ class Model {
             command.commandParameters.push(Enums_1.PdfTypes.All);
             return (_a = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map(x => new _1.Pdf(x, this)).find(_ => true)) !== null && _a !== void 0 ? _a : null;
         });
+        this.DrawingTemplates = new GetSet_1.Get(async () => {
+            const command = this.createCommand(Enums_1.ApiCommands.GetDrawingTemplates);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Templates;
+        });
     }
     /**
      * Retrieve the unique attribute values in 3D. Pass the attribute keys for which you are intrested in recieving attributes
@@ -2516,11 +2708,18 @@ class Model {
      * @param attributes at least one is required
      * @returns
      */
-    async gGetUniqueAttributeValuesPid(attribute) {
+    async getUniqueAttributeValuesPid(attribute) {
         const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetModelAttributeValues);
         command.commandParameters.push(attribute);
         command.target = Enums_1.TargetEnum.Intelli;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.ModelAttributeValues[attribute];
+    }
+    async createDiameterMeasurement(position) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.CreateDiameterMeasurement);
+        command.commandParameters.push(position.X.toString());
+        command.commandParameters.push(position.Y.toString());
+        command.commandParameters.push(position.Z.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
     /**
      * @internal
@@ -2535,7 +2734,7 @@ class Model {
 }
 exports.Model = Model;
 
-},{".":43,"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59,"../Util/Enums":56,"../Util/GetSet":57}],38:[function(require,module,exports){
+},{".":45,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"../Util/Enums":58,"../Util/GetSet":59}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Attribute = exports.ModelObject = void 0;
@@ -2543,7 +2742,8 @@ const APIConnector_1 = require("../Internal/APIConnector");
 const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
 const Util_1 = require("../Util");
 class ModelObject {
-    constructor(uid) {
+    constructor(uid, target) {
+        this.target = target;
         this.Uid = uid;
     }
     /**
@@ -2601,7 +2801,7 @@ class ModelObject {
         }
     }
     /**
-     * Update a Changable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
+     * Update a Changeable Attribute. This does not work with custom Attributes. This is shortcut for get an attribute instead of using the {@link Attributes} attributes array
      * @param name attribute name
      * @param value new attribute value
      * @param user username of the person changing the attribute
@@ -2617,15 +2817,92 @@ class ModelObject {
             }
         }
     }
+    /**
+     * Add a changeable Attribute to a sketch element
+     * Samples:
+     * await element.createChangeableAttribute("Test-Freetest", "Test-Freetest", "Hello World");
+     * await element.createChangeableAttribute("Test-Color", "Test-Color", "ff1122", CustomAttributeDataType.Color);
+     * await element.createChangeableAttribute("Test-Meter", "Test-Meter", "1", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Length);
+     * await element.createChangeableAttribute("Test-Angle", "Test-Angle", "2", CustomAttributeDataType.NumericWithUnit, ChangeableAttributeUnitType.Angle);
+     * await element.createChangeableAttribute("Test-Numeric", "Test-Numeric", "2", CustomAttributeDataType.Numeric);
+     * await element.createChangeableAttribute("Test-Codelist", "Test-Codelist", "test1", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["test1", "test2", "test3", "test4"]);
+     * await element.createChangeableAttribute("Test-CodelistColor", "Test-CodelistColor", "blue", CustomAttributeDataType.CodeList, ChangeableAttributeUnitType.None, false, false, true, ["red", "green", "blue", "none"], [red, green, blue]);
+     * await element.createChangeableAttribute("Test-Readonly", "Test-Readonly", "readonly", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, true, false, true);
+     * await element.createChangeableAttribute("Test-Hidden", "Test-Hidden", "hidden", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, true, true);
+     * await element.createChangeableAttribute("Test-nondeletable", "Test-nondeletable", "nondeletable", CustomAttributeDataType.FreeText, ChangeableAttributeUnitType.None, false, false, false);
+     * @param name Internal Name
+     * @param displayName  Visible name
+     * @param initialValue The intial value this is set to
+     * @param mode What type of Attribute to create. See Samples
+     * @param unitType Leave this at none except for NumericWithUnit
+     * @param readOnly User cannot edit this field
+     * @param hidden User cannot see this field
+     * @param deletable User cannot delete this value
+     * @param codelist A codelist to use for the mode codelist
+     * @param codelistColors optional colors to use for the codelist
+     */
+    async createChangeableAttribute(name, displayName, initialValue, mode = Util_1.CustomAttributeDataType.FreeText, unitType = Util_1.ChangeableAttributeUnitType.None, readOnly = false, hidden = false, deletable = true, codelist = [], codelistColors = []) {
+        let drawingPath = "";
+        if (this.target.SceneType == Util_1.SceneType.IntelliPid) {
+            drawingPath = this.getAttribute("Drawing_NAME");
+        }
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.AddChangeableAttribute);
+        command.target = this.target.Id;
+        command.additionalParameters = {
+            AddChangeableAttribute: {
+                Uid: this.Uid,
+                DisplayName: displayName,
+                InitialValue: initialValue,
+                Deletable: deletable,
+                DrawingPathForPid: drawingPath,
+                Hidden: hidden,
+                Readonly: readOnly,
+                Name: name,
+                Mode: mode,
+                UnitType: unitType,
+                CodeListEntriesNames: codelist,
+                CodeListEntriesColors: codelistColors
+            }
+        };
+        await APIConnector_1.Api.get().sendCommand(command);
+        if (this.Attributes) {
+            this.Attributes.push(new Attribute(this.Uid, name, initialValue, false, null, null, this.target, true));
+        }
+    }
+    /**
+     * Remove a changeable attribute on a Sketch element
+     * @param name
+     */
+    async deleteChangeableAttribute(name) {
+        let drawingPath = "";
+        if (this.target.SceneType == Util_1.SceneType.IntelliPid) {
+            drawingPath = this.getAttribute("Drawing_PATH");
+            if (drawingPath == null)
+                drawingPath = this.getAttribute("Drawing_NAME");
+        }
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.DeleteChangeableAttribute);
+        command.target = this.target.Id;
+        command.additionalParameters = {
+            DeleteChangeableAttribute: {
+                Uid: this.Uid,
+                DrawingPathForPid: drawingPath,
+                Name: name
+            }
+        };
+        await APIConnector_1.Api.get().sendCommand(command);
+        if (this.Attributes) {
+            this.Attributes = this.Attributes.filter(x => x.Key != name);
+        }
+    }
 }
 exports.ModelObject = ModelObject;
 class Attribute {
-    constructor(uid, key, value, isCustomAttribute, customAttributeDefinition, customAttributeSourceValue, target, isChangableAttribute) {
+    constructor(uid, key, value, isCustomAttribute, customAttributeDefinition, customAttributeSourceValue, target, isChangeableAttribute) {
         this.uid = uid;
         this.Value = value;
         this.Key = key;
         this.IsCustomAttribute = isCustomAttribute;
-        this.IsChangableAttribute = isChangableAttribute;
+        this.IsChangeableAttribute = isChangeableAttribute;
         this.SetCustomAttribute = new Util_1.Set(async (value) => {
             if (customAttributeDefinition == null) {
                 throw new Error('no CustomAttribute information loaded. Specify in Filter or Attribute is no Custom Attribute');
@@ -2666,7 +2943,7 @@ class Attribute {
 }
 exports.Attribute = Attribute;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],39:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pdf = void 0;
@@ -2713,7 +2990,7 @@ class Pdf {
 }
 exports.Pdf = Pdf;
 
-},{"../Internal/APIConnector":21,"../Util":59}],40:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Printer = void 0;
@@ -2752,7 +3029,7 @@ class Printer {
 }
 exports.Printer = Printer;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],41:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectionSphereElement = void 0;
@@ -2765,21 +3042,19 @@ class ProjectionSphereElement {
     }
     /**
      * Enter the Projection
-     * @param opacity optional, is set overwrite the opacity value with the new value
-     * @param rotation optional, enter a rotation to view the projection from
+     * @param opacity optional (default=-1), is set overwrite the opacity value with the new value. If -1 is provided the last value will be used. Value between 0 (transparent) to 100 (opaque)
+     * @param rotation optional(default=-1), enter a rotation to view the projection from. If -1 is used for all axis UPV decides
+     * @param noUi optional (default=false), if true no UI will be visible
      * @returns
      */
-    async enterProjectionSphere(opacity, rotation) {
+    async enterProjectionSphere(opacity = -1, rotation = { X: -1, Y: -1, Z: -1 }, noUi = false) {
         const command = this.model.createCommand(Util_1.ApiCommands.EnterProjectionSphere);
         command.commandParameters = [this.projectionSphere.Guid];
-        if (opacity != null) {
-            command.commandParameters.push(opacity.toString());
-        }
-        if (rotation != null) {
-            command.commandParameters.push(rotation.X.toString());
-            command.commandParameters.push(rotation.Y.toString());
-            command.commandParameters.push(rotation.Z.toString());
-        }
+        command.commandParameters.push(opacity.toString());
+        command.commandParameters.push(rotation.X.toString());
+        command.commandParameters.push(rotation.Y.toString());
+        command.commandParameters.push(rotation.Z.toString());
+        command.commandParameters.push(noUi + "");
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
@@ -2793,7 +3068,7 @@ class ProjectionSphereElement {
 }
 exports.ProjectionSphereElement = ProjectionSphereElement;
 
-},{"../Internal/APIConnector":21,"../Util":59}],42:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Util":61}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settings = void 0;
@@ -2807,6 +3082,10 @@ class Settings {
             const command = this.createCommand(Enums_1.ApiCommands.GetUiColors);
             return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiColors;
         });
+        this.UiVariables = new GetSet_1.Get(async () => {
+            const command = this.createCommand(Enums_1.ApiCommands.GetUiVariables);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.UiVariables;
+        });
         this.CurrentUiTheme = new GetSet_1.GetSet(async () => {
             return (await this.getAvailableUiThemes()).CurrentId;
         }, async (theme) => {
@@ -2817,6 +3096,66 @@ class Settings {
         this.AvailableUiThemes = new GetSet_1.Get(async () => {
             const themes = (await this.getAvailableUiThemes()).UiThemes;
             return Object.keys(themes).map(x => { return { id: x, description: themes[x] }; });
+        });
+        this.Language = new GetSet_1.GetSet(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetLanguage);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Language;
+        }, async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetLanguage);
+            command.commandParameters.push(value);
+            (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.TextureMode = new GetSet_1.GetSet(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetLanguage);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Mode;
+        }, async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetRenderMode);
+            command.commandParameters.push(value + "");
+            (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.RenderQuality = new GetSet_1.GetSet(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetQualityLevel);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Level;
+        }, async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetQualityLevel);
+            command.commandParameters.push(value + "");
+            (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.PanoramaCentresVisibility = new GetSet_1.GetSet(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetPanoramaCentresVisibility);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Value;
+        }, async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetPanoramaCentresVisibility);
+            command.commandParameters.push(value + "");
+            (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.WindowLayoutXML = new GetSet_1.GetSet(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetWindowLayout);
+            command.additionalParameters.GetWindowLayout = {
+                LayoutFormat: Enums_1.WindowLayoutFormat.Xml
+            };
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LayoutContent;
+        }, async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetWindowLayout);
+            command.additionalParameters.SetWindowLayout = {
+                LayoutContent: value,
+                LayoutFormat: Enums_1.WindowLayoutFormat.Xml
+            };
+            (await APIConnector_1.Api.get().sendCommand(command));
+        });
+        this.WindowLayoutJson = new GetSet_1.GetSet(async () => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetWindowLayout);
+            command.additionalParameters.GetWindowLayout = {
+                LayoutFormat: Enums_1.WindowLayoutFormat.Json
+            };
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LayoutContent;
+        }, async (value) => {
+            const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetWindowLayout);
+            command.additionalParameters.SetWindowLayout = {
+                LayoutContent: value,
+                LayoutFormat: Enums_1.WindowLayoutFormat.Json
+            };
+            (await APIConnector_1.Api.get().sendCommand(command));
         });
     }
     async getAvailableUiThemes() {
@@ -2835,7 +3174,7 @@ class Settings {
 }
 exports.Settings = Settings;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util/Enums":56,"../Util/GetSet":57}],43:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util/Enums":58,"../Util/GetSet":59}],45:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -2873,7 +3212,7 @@ __exportStar(require("./Settings"), exports);
 __exportStar(require("./FileOperations"), exports);
 __exportStar(require("./Pdf"), exports);
 
-},{"./AttributeTree":24,"./AuthenticationManager":25,"./Camera":26,"./ClashContext":27,"./Events":28,"./FileOperations":29,"./FilterOperation3D":31,"./FilterOperationPid":32,"./IntelliPidDrawing":33,"./Layer2D":34,"./Layer3D":35,"./LocalStorage":36,"./Model":37,"./ModelObject":38,"./Pdf":39,"./Printer":40,"./ProjectionSphereElement":41,"./Settings":42}],44:[function(require,module,exports){
+},{"./AttributeTree":26,"./AuthenticationManager":27,"./Camera":28,"./ClashContext":29,"./Events":30,"./FileOperations":31,"./FilterOperation3D":33,"./FilterOperationPid":34,"./IntelliPidDrawing":35,"./Layer2D":36,"./Layer3D":37,"./LocalStorage":38,"./Model":39,"./ModelObject":40,"./Pdf":41,"./Printer":42,"./ProjectionSphereElement":43,"./Settings":44}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiResponseWithType = exports.ApiResponse = void 0;
@@ -2890,7 +3229,7 @@ class ApiResponseWithType extends ApiResponse {
 }
 exports.ApiResponseWithType = ApiResponseWithType;
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StorageVariableChangedEvent = exports.AuthenticationContextChangedEvent = exports.IntelliPidSelectionChanged = exports.IntelliPidSelectionChangedEvent = exports.AnimationTimestamp = exports.AnimationTimestampChangedObject = exports.LinkClicked = exports.LifeCycleEvent = exports.SelectionChanged = exports.PointerClicked = exports.ClashComputationProgressChangedEvent = exports.CustomAttributeValueChanged = exports.AnimationTimestampChangedEvent = exports.CustomAttributeValueChangedEvent = exports.LinkClickedEvent = exports.SelectionChangedEvent = exports.PointerClickedEvent = exports.ApiEvents = void 0;
@@ -2977,11 +3316,11 @@ class StorageVariableChangedEvent {
 }
 exports.StorageVariableChangedEvent = StorageVariableChangedEvent;
 
-},{}],46:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenericLoadFromFileResponse = exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
-exports.GetLinkedElements = exports.GetModelAttributeValues = void 0;
+exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
+exports.GetWindowLayoutResponse = exports.GetGenerateAnimationKeyframe = exports.GetAnimationStart = exports.GetDrawingTemplates = exports.GetExportedDrawing = exports.GetWaitForModelLoading = exports.GetPanoramaCentresVisibility = exports.GetRenderQuality = exports.GetViewerVersion = exports.GetRenderMode = exports.GetExportUpvObjectAsUpvcResponse = exports.GetExportUpvObjectAsDgnResponse = exports.GetPipeMeasurementResponse = exports.GetLinkedElements = exports.GetModelAttributeValues = exports.GenericLoadFromFileResponse = void 0;
 class GetObjects {
 }
 exports.GetObjects = GetObjects;
@@ -3150,6 +3489,12 @@ class GetUiColors {
     }
 }
 exports.GetUiColors = GetUiColors;
+class GetUiVariables {
+    constructor() {
+        this.UiVariables = {};
+    }
+}
+exports.GetUiVariables = GetUiVariables;
 class GetUiThemes {
     constructor() {
         this.UiThemes = {};
@@ -3171,8 +3516,47 @@ exports.GetModelAttributeValues = GetModelAttributeValues;
 class GetLinkedElements {
 }
 exports.GetLinkedElements = GetLinkedElements;
+class GetPipeMeasurementResponse {
+}
+exports.GetPipeMeasurementResponse = GetPipeMeasurementResponse;
+class GetExportUpvObjectAsDgnResponse {
+}
+exports.GetExportUpvObjectAsDgnResponse = GetExportUpvObjectAsDgnResponse;
+class GetExportUpvObjectAsUpvcResponse {
+}
+exports.GetExportUpvObjectAsUpvcResponse = GetExportUpvObjectAsUpvcResponse;
+class GetRenderMode {
+}
+exports.GetRenderMode = GetRenderMode;
+class GetViewerVersion {
+}
+exports.GetViewerVersion = GetViewerVersion;
+class GetRenderQuality {
+}
+exports.GetRenderQuality = GetRenderQuality;
+class GetPanoramaCentresVisibility {
+}
+exports.GetPanoramaCentresVisibility = GetPanoramaCentresVisibility;
+class GetWaitForModelLoading {
+}
+exports.GetWaitForModelLoading = GetWaitForModelLoading;
+class GetExportedDrawing {
+}
+exports.GetExportedDrawing = GetExportedDrawing;
+class GetDrawingTemplates {
+}
+exports.GetDrawingTemplates = GetDrawingTemplates;
+class GetAnimationStart {
+}
+exports.GetAnimationStart = GetAnimationStart;
+class GetGenerateAnimationKeyframe {
+}
+exports.GetGenerateAnimationKeyframe = GetGenerateAnimationKeyframe;
+class GetWindowLayoutResponse {
+}
+exports.GetWindowLayoutResponse = GetWindowLayoutResponse;
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3193,7 +3577,7 @@ __exportStar(require("./ApiResponse"), exports);
 __exportStar(require("./GetObjects"), exports);
 __exportStar(require("./Events"), exports);
 
-},{"./ApiResponse":44,"./Events":45,"./GetObjects":46}],48:[function(require,module,exports){
+},{"./ApiResponse":46,"./Events":47,"./GetObjects":48}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppControlScene = void 0;
@@ -3213,7 +3597,7 @@ class AppControlScene extends Scene_1.Scene {
 }
 exports.AppControlScene = AppControlScene;
 
-},{"./Scene":49}],49:[function(require,module,exports){
+},{"./Scene":51}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
@@ -3294,7 +3678,7 @@ class Scene {
 }
 exports.Scene = Scene;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util":59}],50:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene3d = void 0;
@@ -3371,7 +3755,7 @@ class Scene3d extends Scene_1.Scene {
 }
 exports.Scene3d = Scene3d;
 
-},{"../Internal/APIConnector":21,"../Objects":43,"../Util":59,"./Scene":49}],51:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Objects":45,"../Util":61,"./Scene":51}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScenePid = void 0;
@@ -3395,7 +3779,7 @@ class ScenePid extends Scene_1.Scene {
 }
 exports.ScenePid = ScenePid;
 
-},{"../Objects":43,"./Scene":49}],52:[function(require,module,exports){
+},{"../Objects":45,"./Scene":51}],54:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3417,7 +3801,7 @@ __exportStar(require("./Scene3d"), exports);
 __exportStar(require("./ScenePid"), exports);
 __exportStar(require("./AppControlScene"), exports);
 
-},{"./AppControlScene":48,"./Scene":49,"./Scene3d":50,"./ScenePid":51}],53:[function(require,module,exports){
+},{"./AppControlScene":50,"./Scene":51,"./Scene3d":52,"./ScenePid":53}],55:[function(require,module,exports){
 "use strict";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3427,7 +3811,7 @@ exports.Theme = void 0;
  */
 class Theme {
     /**
-     * Provides @mui/material/styles/ThemeOptions for use in AppControls. To not add Material UI as a requirement any type is returned here
+     * Provides \@mui/material/styles/ThemeOptions for use in AppControls. To not add Material UI as a requirement any type is returned here
      * It is safe to cast this to ThemeOptions in your code or directly provide it to createTheme function
     */
     static async getTheme() {
@@ -3457,10 +3841,10 @@ class Theme {
 }
 exports.Theme = Theme;
 
-},{}],54:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
+exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
 class Vector2D {
     constructor(X, Y) {
         this.X = X;
@@ -3611,8 +3995,17 @@ exports.Intellipid = Intellipid;
 class PdfDocument {
 }
 exports.PdfDocument = PdfDocument;
+class ViewerVersion {
+}
+exports.ViewerVersion = ViewerVersion;
+class ViewerFileVersion {
+}
+exports.ViewerFileVersion = ViewerFileVersion;
+class DrawingTemplate {
+}
+exports.DrawingTemplate = DrawingTemplate;
 
-},{}],55:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomAttributes = exports.CustomAttributeLegacy = void 0;
@@ -3704,6 +4097,9 @@ class CustomAttributes {
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
             .ExportCustomAttributes;
     }
+    /**
+     * @internal
+     */
     createCommand(apiCommands) {
         const command = new CaxApiCommand_1.CaxApiCommand(apiCommands);
         return command;
@@ -3711,10 +4107,10 @@ class CustomAttributes {
 }
 exports.CustomAttributes = CustomAttributes;
 
-},{"../Internal/APIConnector":21,"../Internal/CaxApiCommand":23,"../Util/Enums":56}],56:[function(require,module,exports){
+},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util/Enums":58}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 /**
  * @deprecated
  * Old UPV Target codes
@@ -3751,12 +4147,13 @@ var UpdateModes;
 })(UpdateModes = exports.UpdateModes || (exports.UpdateModes = {}));
 var CustomAttributeDataType;
 (function (CustomAttributeDataType) {
-    CustomAttributeDataType[CustomAttributeDataType["Calculation"] = 0] = "Calculation";
+    //Calculation = 0,
     CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
     CustomAttributeDataType[CustomAttributeDataType["FreeText"] = 2] = "FreeText";
     CustomAttributeDataType[CustomAttributeDataType["Numeric"] = 3] = "Numeric";
-    CustomAttributeDataType[CustomAttributeDataType["Unknown"] = 4] = "Unknown";
-    CustomAttributeDataType[CustomAttributeDataType["Color"] = 5] = "Color";
+    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
+    //Unknown = 5,
+    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
 })(CustomAttributeDataType = exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
 var FeatureTypes;
 (function (FeatureTypes) {
@@ -3818,6 +4215,8 @@ var ApiCommands;
     ApiCommands["GetObjectsSnapInfo"] = "GetObjectsSnapInfo";
     ApiCommands["GetObjectsChangeableAttributes"] = "GetObjectsChangeableAttributes";
     ApiCommands["SetAttribute"] = "SetAttribute";
+    ApiCommands["AddChangeableAttribute"] = "AddChangeableAttribute";
+    ApiCommands["DeleteChangeableAttribute"] = "DeleteChangeableAttribute";
     ApiCommands["Select"] = "Select";
     ApiCommands["ClearSelection"] = "ClearSelection";
     ApiCommands["Fit"] = "Fit";
@@ -3871,6 +4270,7 @@ var ApiCommands;
     ApiCommands["GetActivePdfTab"] = "GetActivePdfTab";
     ApiCommands["OpenPdf"] = "OpenPdf";
     ApiCommands["ClosePdf"] = "ClosePdf";
+    ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
     //Scene
     ApiCommands["TakeScreenshot"] = "TakeScreenshot";
     ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
@@ -3900,6 +4300,12 @@ var ApiCommands;
     ApiCommands["FilesTreeSetState"] = "FilesTreeSetState";
     ApiCommands["FilesTreeGetState"] = "FilesTreeGetState";
     ApiCommands["FilesTreeCreateComment"] = "FilesTreeCreateComment";
+    ApiCommands["ExportSketchAsUpvc"] = "ExportSketchAsUpvc";
+    ApiCommands["ExportSketchAsDgn"] = "ExportSketchAsDgn";
+    ApiCommands["ExportSprayingAsUpvc"] = "ExportSprayingAsUpvc";
+    ApiCommands["FilesTreeCreateDrawing"] = "FilesTreeCreateDrawing";
+    ApiCommands["GetDrawingTemplates"] = "GetDrawingTemplates";
+    ApiCommands["ExportDrawing"] = "ExportDrawing";
     //Folder
     ApiCommands["GetFilesTreeRoot"] = "GetFilesTreeRoot";
     ApiCommands["FilesTreeCreateFolder"] = "FilesTreeCreateFolder";
@@ -3929,8 +4335,16 @@ var ApiCommands;
     ApiCommands["ClearAuthConfig"] = "ClearAuthConfig";
     ApiCommands["SetAuthConfig"] = "SetAuthConfig";
     ApiCommands["OpenPath"] = "OpenPath";
+    ApiCommands["WaitForModelLoading"] = "WaitForModelLoading";
     ApiCommands["SetLanguage"] = "SetLanguage";
     ApiCommands["GetLanguage"] = "GetLanguage";
+    ApiCommands["GetRenderMode"] = "GetRenderMode";
+    ApiCommands["SetRenderMode"] = "SetRenderMode";
+    ApiCommands["GetQualityLevel"] = "GetQualityLevel";
+    ApiCommands["SetQualityLevel"] = "SetQualityLevel";
+    ApiCommands["GetPanoramaCentresVisibility"] = "GetPanoramaCentresVisibility";
+    ApiCommands["SetPanoramaCentresVisibility"] = "SetPanoramaCentresVisibility";
+    ApiCommands["GetViewerVersion"] = "GetViewerVersion";
     //Attribute Tree
     ApiCommands["GetTreeRootNode"] = "GetTreeRootNode";
     ApiCommands["GetTreeFolderChildren"] = "GetTreeFolderChildren";
@@ -3971,10 +4385,19 @@ var ApiCommands;
     ApiCommands["GetUiColors"] = "GetUiColors";
     ApiCommands["GetUiThemes"] = "GetUiThemes";
     ApiCommands["SetActiveUiTheme"] = "SetActiveUiTheme";
+    ApiCommands["GetUiVariables"] = "GetUiVariables";
     // Fileoperations
     ApiCommands["SaveFileDialog"] = "SaveFileDialog";
     ApiCommands["LoadFileDialog"] = "LoadFileDialog";
     ApiCommands["GenericLoadFromFile"] = "GenericLoadFromFile";
+    // Animation
+    ApiCommands["GenerateAnimationKeyframe"] = "GenerateAnimationKeyframe";
+    ApiCommands["SetAnimationCurrentTime"] = "SetAnimationCurrentTime";
+    //    SetAnimationStart = "SetAnimationStart",
+    //    GetAnimationStart = "GetAnimationStart",
+    // Layout
+    ApiCommands["GetWindowLayout"] = "GetWindowLayout";
+    ApiCommands["SetWindowLayout"] = "SetWindowLayout";
 })(ApiCommands = exports.ApiCommands || (exports.ApiCommands = {}));
 var PackageConditionTypes;
 (function (PackageConditionTypes) {
@@ -4054,10 +4477,12 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["Valve"] = 7] = "Valve";
     //CustomSymbol = 8,
     //IntelliPidLayer = 9,
-    //Text = 10,
+    PidSketchToolMode[PidSketchToolMode["Text"] = 10] = "Text";
     //Copied = 11,
     //Legend = 12,
     PidSketchToolMode[PidSketchToolMode["Cloud"] = 13] = "Cloud";
+    PidSketchToolMode[PidSketchToolMode["FreeHand"] = 15] = "FreeHand";
+    PidSketchToolMode[PidSketchToolMode["PolyLine"] = 16] = "PolyLine";
     //
     // These are added extra 
     PidSketchToolMode[PidSketchToolMode["BreakLine"] = 99] = "BreakLine";
@@ -4066,6 +4491,9 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["Rotate"] = 102] = "Rotate";
     PidSketchToolMode[PidSketchToolMode["Undo"] = 103] = "Undo";
     PidSketchToolMode[PidSketchToolMode["Redo"] = 104] = "Redo";
+    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
+    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
+    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
 })(PidSketchToolMode = exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
 var ExportableOptions;
 (function (ExportableOptions) {
@@ -4127,8 +4555,50 @@ var PdfTypes;
     PdfTypes[PdfTypes["Document"] = 1] = "Document";
     PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
 })(PdfTypes = exports.PdfTypes || (exports.PdfTypes = {}));
+var ChangeableAttributeUnitType;
+(function (ChangeableAttributeUnitType) {
+    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
+    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
+    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
+})(ChangeableAttributeUnitType = exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {}));
+var TextureRenderMode;
+(function (TextureRenderMode) {
+    TextureRenderMode[TextureRenderMode["Normal"] = 0] = "Normal";
+    TextureRenderMode[TextureRenderMode["HeightMap"] = 1] = "HeightMap";
+    TextureRenderMode[TextureRenderMode["NoTexture"] = 2] = "NoTexture";
+})(TextureRenderMode = exports.TextureRenderMode || (exports.TextureRenderMode = {}));
+var QualityLevel;
+(function (QualityLevel) {
+    QualityLevel[QualityLevel["Low"] = 0] = "Low";
+    QualityLevel[QualityLevel["Medium"] = 1] = "Medium";
+    QualityLevel[QualityLevel["High"] = 2] = "High";
+})(QualityLevel = exports.QualityLevel || (exports.QualityLevel = {}));
+var ModelLoadMessageType;
+(function (ModelLoadMessageType) {
+    ModelLoadMessageType[ModelLoadMessageType["AlreadyLoaded"] = 0] = "AlreadyLoaded";
+    ModelLoadMessageType[ModelLoadMessageType["FinishedLoading"] = 1] = "FinishedLoading";
+})(ModelLoadMessageType = exports.ModelLoadMessageType || (exports.ModelLoadMessageType = {}));
+var DrawingExportType;
+(function (DrawingExportType) {
+    DrawingExportType[DrawingExportType["Svg"] = 0] = "Svg";
+    DrawingExportType[DrawingExportType["Acadpdf"] = 1] = "Acadpdf";
+    DrawingExportType[DrawingExportType["Pdf"] = 2] = "Pdf";
+    DrawingExportType[DrawingExportType["Png"] = 3] = "Png";
+    DrawingExportType[DrawingExportType["Dxf"] = 4] = "Dxf";
+})(DrawingExportType = exports.DrawingExportType || (exports.DrawingExportType = {}));
+var AnimationMessageTypes;
+(function (AnimationMessageTypes) {
+    AnimationMessageTypes[AnimationMessageTypes["MissingParameters"] = 0] = "MissingParameters";
+    AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
+    AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
+})(AnimationMessageTypes = exports.AnimationMessageTypes || (exports.AnimationMessageTypes = {}));
+var WindowLayoutFormat;
+(function (WindowLayoutFormat) {
+    WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
+    WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
+})(WindowLayoutFormat = exports.WindowLayoutFormat || (exports.WindowLayoutFormat = {}));
 
-},{}],57:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetSet = exports.Set = exports.Get = void 0;
@@ -4151,7 +4621,7 @@ class Set {
     }
     /**
      * Sets the Value asynchronous
-     * @param value
+     * @param value - The value to set
      * @returns
      */
     async set(value) {
@@ -4173,7 +4643,7 @@ class GetSet {
     }
     /**
      * Sets the Value asynchronous
-     * @param value
+     * @param value - The value to set
      * @returns
      */
     async set(value) {
@@ -4182,10 +4652,10 @@ class GetSet {
 }
 exports.GetSet = GetSet;
 
-},{}],58:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
+exports.SetAnimationCurrentTimeParameters = exports.SetWindowLayoutParameter = exports.GetWindowLayoutParameter = exports.SetAnimationStartParameters = exports.AnimationKeyframeParameters = exports.FilesTreeCreateDrawingParameter = exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
 const _1 = require(".");
 class ParameterBase {
 }
@@ -4356,8 +4826,32 @@ exports.LoadFileDialogParameters = LoadFileDialogParameters;
 class PdfDocumentParameter {
 }
 exports.PdfDocumentParameter = PdfDocumentParameter;
+class AddChangeableAttributeParameter {
+}
+exports.AddChangeableAttributeParameter = AddChangeableAttributeParameter;
+class DeleteChangeableAttributeParameter {
+}
+exports.DeleteChangeableAttributeParameter = DeleteChangeableAttributeParameter;
+class FilesTreeCreateDrawingParameter {
+}
+exports.FilesTreeCreateDrawingParameter = FilesTreeCreateDrawingParameter;
+class AnimationKeyframeParameters {
+}
+exports.AnimationKeyframeParameters = AnimationKeyframeParameters;
+class SetAnimationStartParameters {
+}
+exports.SetAnimationStartParameters = SetAnimationStartParameters;
+class GetWindowLayoutParameter {
+}
+exports.GetWindowLayoutParameter = GetWindowLayoutParameter;
+class SetWindowLayoutParameter {
+}
+exports.SetWindowLayoutParameter = SetWindowLayoutParameter;
+class SetAnimationCurrentTimeParameters {
+}
+exports.SetAnimationCurrentTimeParameters = SetAnimationCurrentTimeParameters;
 
-},{".":59}],59:[function(require,module,exports){
+},{".":61}],61:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4380,7 +4874,7 @@ __exportStar(require("./GetSet"), exports);
 __exportStar(require("./Enums"), exports);
 __exportStar(require("./CustomAttributes"), exports);
 
-},{"./BaseDataTypes":54,"./CustomAttributes":55,"./Enums":56,"./GetSet":57,"./ParameterBase":58}],60:[function(require,module,exports){
+},{"./BaseDataTypes":56,"./CustomAttributes":57,"./Enums":58,"./GetSet":59,"./ParameterBase":60}],62:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4405,5 +4899,5 @@ __exportStar(require("./Util"), exports);
 __exportStar(require("./ResponseTypes"), exports);
 __exportStar(require("./Objects"), exports);
 
-},{"./Application":1,"./FilesTree":20,"./Objects":43,"./ResponseTypes":47,"./Scenes":52,"./Theme":53,"./Util":59}]},{},[60])(60)
+},{"./Application":1,"./FilesTree":22,"./Objects":45,"./ResponseTypes":49,"./Scenes":54,"./Theme":55,"./Util":61}]},{},[62])(62)
 });

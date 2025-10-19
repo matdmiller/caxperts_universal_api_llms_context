@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Api = exports.ApiResponseContainer = void 0;
+exports.Api = exports.ApiResponseContainer = exports.CoverageTracker = void 0;
 const Util_1 = require("../Util");
 const APIConnectorVuplex_1 = require("./APIConnectorVuplex");
 const CaxApiCommand_1 = require("./CaxApiCommand");
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+exports.CoverageTracker = {};
 class ApiResponseContainer {
 }
 exports.ApiResponseContainer = ApiResponseContainer;

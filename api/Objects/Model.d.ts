@@ -1,24 +1,24 @@
 import { IntelliPidDrawing, Pdf, ProjectionSphereElement } from ".";
 import { ApiResponse } from "../ResponseTypes";
+import { GetPipeMeasurementResponse } from "../ResponseTypes/GetObjects";
 import { Scene } from "../Scenes/Scene";
-import { ModelInfo, ProjectInfo } from "../Util/BaseDataTypes";
+import { DrawingTemplate, ModelInfo, ProjectInfo, Vector3D } from "../Util/BaseDataTypes";
 import { ApiCommands } from "../Util/Enums";
 import { CustomAttributes } from "../Util";
 import { Get } from "../Util/GetSet";
 import { CaxApiCommand } from "../Internal/CaxApiCommand";
 /**
- * @legacy
+ * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
  * */
 export declare class ModelLegacy {
     private model;
     constructor(model: Model);
     /**
-         * might be removed in future from wrapper
-         * @legacy
-         * @param path
-         * @returns
-         */
+     * @deprecated might be removed in future from wrapper
+     * @param path
+     * @returns
+     */
     loadConfigFile(file: string): Promise<ApiResponse>;
 }
 export declare class Model {
@@ -60,6 +60,10 @@ export declare class Model {
      */
     ActivePdf: Get<Pdf>;
     /**
+     * Returns the List of active Drawing templates available for use in the createDrawing function in the Filestree
+     */
+    DrawingTemplates: Get<DrawingTemplate[]>;
+    /**
      * Access Custom Attributes
      */
     get CustomAttributes(): CustomAttributes;
@@ -75,7 +79,8 @@ export declare class Model {
      * @param attributes at least one is required
      * @returns
      */
-    gGetUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
+    getUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
+    createDiameterMeasurement(position: Vector3D): Promise<GetPipeMeasurementResponse>;
     /**
      * @internal
      * @param apiCommands

@@ -1,16 +1,15 @@
 import { Events, FileOperations, LocalStorage, Model, Settings } from "./Objects";
-import { LifeCycleState } from "./ResponseTypes";
+import { GetViewerVersion, LifeCycleState } from "./ResponseTypes";
 import { AppControlScene, Scene, ScenePid, Scene3d } from "./Scenes";
 import { Get, GetSet } from "./Util";
 import { FileTreeManager } from "./FilesTree";
 import { AuthenticationManager } from "./Objects/AuthenticationManager";
 /**
- * @class Application
  * Main Entrypoint for interacting with the UPV API
  */
 export declare class Application {
     /**
-     * Contains all Scenes in the running UPV Instance. To Filter for specific scenes individual properties exist. Example @see{@link ScenePid}
+     * Contains all Scenes in the running UPV Instance. To Filter for specific scenes individual properties exist. Example @link ScenePid
      */
     Scenes: Get<Scene[]>;
     /**
@@ -34,6 +33,7 @@ export declare class Application {
      */
     State: Get<LifeCycleState>;
     /**
+     * @deprecated Please use Language inside Settings instead. THis will be removed in a future version
      * The current language of UPV
      */
     Language: GetSet<string>;
@@ -59,8 +59,12 @@ export declare class Application {
     FileOperations: FileOperations;
     Settings: Settings;
     /**
+     * Return the Version and FIleVersion of the Viewer
+     */
+    ViewerVersion: Get<GetViewerVersion>;
+    /**
      *
-     * @private
+     * @internal
      *
      */
     private constructor();
@@ -128,6 +132,14 @@ export declare class Application {
      * @returns
      */
     openPath(path: string): Promise<import("./ResponseTypes").ApiResponse>;
+    /**
+    * This command will only returns once the viewer has finished loading the model.
+    * THis includes for example Meshloading, TextureLoading etc.
+    * If the user is actively moving this function might never return as new Load Jobs are started.
+    * This function could be used in automation steps for example in using to capture screenshots.
+    * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
+    */
+    waitForModelLoading(): Promise<import("./Util").ModelLoadMessageType>;
     /**
      * Checks if a connection to UPV is available and commands can be send to UPV
      * @returns

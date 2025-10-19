@@ -20,8 +20,10 @@ const FileTreeMarkup_1 = require("./FileTreeMarkup");
 const FileTreePIDSketch_1 = require("./FileTreePIDSketch");
 const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
+const FileTreeSpraying_1 = require("./FileTreeSpraying");
+const FIleTreeDrawing_1 = require("./FIleTreeDrawing");
 /**
- * @legacy
+ * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
  * */
 class FileTreeManagerLegacy {
@@ -29,11 +31,11 @@ class FileTreeManagerLegacy {
         this.manager = manager;
     }
     /**
-         * might be removed in future from wrapper
-         * @legacy
-         * @param path
-         * @returns
-         */
+     *
+     * @deprecated might be removed in future from wrapper
+     * @param path
+     * @returns
+     */
     async loadSketch(path, viewName) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.LoadSketch);
         command.commandParameters.push(path);
@@ -42,8 +44,7 @@ class FileTreeManagerLegacy {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * might be removed in future from wrapper
-     * @legacy
+     * @deprecated might be removed in future from wrapper
      * @param path
      * @returns
      */
@@ -55,8 +56,7 @@ class FileTreeManagerLegacy {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * might be removed in future from wrapper
-     * @legacy
+     * @deprecated might be removed in future from wrapper
      * @param path
      * @returns
      */
@@ -66,7 +66,7 @@ class FileTreeManagerLegacy {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-     * @legacy might be removed in future from wrapper and replaced with a new function
+     * @deprecated might be removed in future from wrapper and replaced with a new function
      */
     async loadFile(path) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.LoadFile);
@@ -160,7 +160,7 @@ class FileTreeManager {
      * @param name
      * @param position
      * @param rotation
-     * @param color
+     * @param color the color range in this case for RGBA is between 0-255 despite normal colors being between 0-1
      * @param diameter size of the poi in meters
      * @param attributes define attributes on the poi
      * @param links define links on the poi
@@ -168,7 +168,7 @@ class FileTreeManager {
      * @param customMeshPath path to the custom mesh in obj format. Can be a filepath or website path
      * @returns
      */
-    async createPointOfIntrest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
+    async createPointOfInterest(parent, name, position, rotation, color, diameter, attributes = {}, links = {}, type = Util_1.PointOfInterestType.Sphere, customMeshPath = "") {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PlacePoi);
         command.additionalParameters = {
             PlacePoi: {
@@ -216,18 +216,48 @@ class FileTreeManager {
         return this.resolveElement(result);
     }
     /**
-    * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
-    * @param name
-    * @param parent
-    * @returns
-    */
-    async createComment(parent, name, uid = null, offset = 0) {
+     * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
+     * @param parent
+     * @param name
+     * @param uid if nothing provided, the selected element is used
+     * @param offset the offset of the comment from the object
+     * @param commentPosition Position if the comment. If not provided it will use the offset
+     * @param leaderLineEndPosition Position of the leader line end position. If not provided this is the center of the object
+     * @returns
+     */
+    async createComment(parent, name, uid = null, offset = 0, commentPosition = { X: 0, Y: 0, Z: 0 }, leaderLineEndPosition = { X: 0, Y: 0, Z: 0 }) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.FilesTreeCreateComment);
         command.commandParameters = [name, parent.Id.toString()];
         command.additionalParameters = {
             FilesTreeCreateComment: {
                 Uid: uid,
-                Offset: offset
+                Offset: offset,
+                CommentPosition: commentPosition,
+                LeaderLineEndPosition: leaderLineEndPosition
+            }
+        };
+        const result = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
+            .FilesTreeObject;
+        return this.resolveElement(result);
+    }
+    /**
+     * Can be used to create a drawing in the filestree
+     * @param parent
+     * @param name
+     * @param templateName available templates can be retrieved via the DrawingTemplates on the Model
+     * @param useColors
+     * @param useSelectedObjectsOnly
+     * @returns
+     */
+    async createDrawing(parent, name, templateName, useColors, useSelectedObjectsOnly) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.FilesTreeCreateDrawing);
+        command.additionalParameters = {
+            FilesTreeCreateDrawing: {
+                DrawingTemplateName: templateName,
+                Name: name,
+                ParentTreeItemId: parent.Id,
+                UseColours: useColors,
+                UseSelectedObjectsOnly: useSelectedObjectsOnly
             }
         };
         const result = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
@@ -268,6 +298,10 @@ class FileTreeManager {
                 return new FileTreePIDSketch_1.FileTreePIDSketch(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Report:
                 return new FileTreeReport_1.FileTreeReport(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.Spraying:
+                return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.Drawing:
+                return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
             //return new FileTreeElement(element.Id, element.Name, element.Type);

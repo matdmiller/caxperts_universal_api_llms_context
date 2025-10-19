@@ -23,6 +23,9 @@ export declare class CustomAttributes {
     setCustomAttributeConfiguration(definitions: Definition[], updateMode: UpdateModes): Promise<ApiResponse>;
     getCustomAttributeConfiguration(): Promise<Definition[]>;
     exportCustomAttributes(exportAll: boolean): Promise<import("./BaseDataTypes").ExportCustomAttributes>;
+    /**
+     * @internal
+     */
     createCommand(apiCommands: ApiCommands): CaxApiCommand;
 }
 //# sourceMappingURL=CustomAttributes.d.ts.map

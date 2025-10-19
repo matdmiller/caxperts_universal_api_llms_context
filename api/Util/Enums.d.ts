@@ -29,12 +29,11 @@ export declare enum UpdateModes {
     Full = 1
 }
 export declare enum CustomAttributeDataType {
-    Calculation = 0,
     CodeList = 1,
     FreeText = 2,
     Numeric = 3,
-    Unknown = 4,
-    Color = 5
+    NumericWithUnit = 4,
+    Color = 6
 }
 export declare enum FeatureTypes {
     Unknown = "Unknown",
@@ -91,6 +90,8 @@ export declare enum ApiCommands {
     GetObjectsSnapInfo = "GetObjectsSnapInfo",
     GetObjectsChangeableAttributes = "GetObjectsChangeableAttributes",
     SetAttribute = "SetAttribute",
+    AddChangeableAttribute = "AddChangeableAttribute",
+    DeleteChangeableAttribute = "DeleteChangeableAttribute",
     Select = "Select",
     ClearSelection = "ClearSelection",
     Fit = "Fit",
@@ -141,6 +142,7 @@ export declare enum ApiCommands {
     GetActivePdfTab = "GetActivePdfTab",
     OpenPdf = "OpenPdf",
     ClosePdf = "ClosePdf",
+    CreateDiameterMeasurement = "CreateDiameterMeasurement",
     TakeScreenshot = "TakeScreenshot",
     TakeAndSaveScreenShot = "TakeAndSaveScreenshot",
     GetTreeConfiguration = "GetTreeConfiguration",
@@ -168,6 +170,12 @@ export declare enum ApiCommands {
     FilesTreeSetState = "FilesTreeSetState",
     FilesTreeGetState = "FilesTreeGetState",
     FilesTreeCreateComment = "FilesTreeCreateComment",
+    ExportSketchAsUpvc = "ExportSketchAsUpvc",
+    ExportSketchAsDgn = "ExportSketchAsDgn",
+    ExportSprayingAsUpvc = "ExportSprayingAsUpvc",
+    FilesTreeCreateDrawing = "FilesTreeCreateDrawing",
+    GetDrawingTemplates = "GetDrawingTemplates",
+    ExportDrawing = "ExportDrawing",
     GetFilesTreeRoot = "GetFilesTreeRoot",
     FilesTreeCreateFolder = "FilesTreeCreateFolder",
     PlacePoi = "PlacePoi",
@@ -192,8 +200,16 @@ export declare enum ApiCommands {
     ClearAuthConfig = "ClearAuthConfig",
     SetAuthConfig = "SetAuthConfig",
     OpenPath = "OpenPath",
+    WaitForModelLoading = "WaitForModelLoading",
     SetLanguage = "SetLanguage",
     GetLanguage = "GetLanguage",
+    GetRenderMode = "GetRenderMode",
+    SetRenderMode = "SetRenderMode",
+    GetQualityLevel = "GetQualityLevel",
+    SetQualityLevel = "SetQualityLevel",
+    GetPanoramaCentresVisibility = "GetPanoramaCentresVisibility",
+    SetPanoramaCentresVisibility = "SetPanoramaCentresVisibility",
+    GetViewerVersion = "GetViewerVersion",
     GetTreeRootNode = "GetTreeRootNode",
     GetTreeFolderChildren = "GetTreeFolderChildren",
     GetTreeFolderSiblings = "GetTreeFolderSiblings",
@@ -226,9 +242,14 @@ export declare enum ApiCommands {
     GetUiColors = "GetUiColors",
     GetUiThemes = "GetUiThemes",
     SetActiveUiTheme = "SetActiveUiTheme",
+    GetUiVariables = "GetUiVariables",
     SaveFileDialog = "SaveFileDialog",
     LoadFileDialog = "LoadFileDialog",
-    GenericLoadFromFile = "GenericLoadFromFile"
+    GenericLoadFromFile = "GenericLoadFromFile",
+    GenerateAnimationKeyframe = "GenerateAnimationKeyframe",
+    SetAnimationCurrentTime = "SetAnimationCurrentTime",
+    GetWindowLayout = "GetWindowLayout",
+    SetWindowLayout = "SetWindowLayout"
 }
 export declare enum PackageConditionTypes {
     None = "None",
@@ -282,13 +303,19 @@ export declare enum PidSketchToolMode {
     Rectangle = 5,
     Circle = 6,
     Valve = 7,
+    Text = 10,
     Cloud = 13,
+    FreeHand = 15,
+    PolyLine = 16,
     BreakLine = 99,
     UnBreakLine = 100,
     Copy = 101,
     Rotate = 102,
     Undo = 103,
-    Redo = 104
+    Redo = 104,
+    HideObjects = 105,
+    ShowHiddenObjects = 106,
+    UnhideObjects = 107
 }
 export declare enum ExportableOptions {
     Inherit = 0,
@@ -342,5 +369,40 @@ export declare enum PdfTypes {
     All = 0,
     Document = 1,
     Drawing = 2
+}
+export declare enum ChangeableAttributeUnitType {
+    None = 0,
+    Length = 1,
+    Angle = 2
+}
+export declare enum TextureRenderMode {
+    Normal = 0,
+    HeightMap = 1,
+    NoTexture = 2
+}
+export declare enum QualityLevel {
+    Low = 0,
+    Medium = 1,
+    High = 2
+}
+export declare enum ModelLoadMessageType {
+    AlreadyLoaded = 0,
+    FinishedLoading = 1
+}
+export declare enum DrawingExportType {
+    Svg = 0,
+    Acadpdf = 1,
+    Pdf = 2,
+    Png = 3,
+    Dxf = 4
+}
+export declare enum AnimationMessageTypes {
+    MissingParameters = 0,
+    AnimationNotFound = 1,
+    Success = 2
+}
+export declare enum WindowLayoutFormat {
+    Xml = 1,
+    Json = 2
 }
 //# sourceMappingURL=Enums.d.ts.map

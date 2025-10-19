@@ -10,6 +10,9 @@ export declare abstract class FilterOperation {
     constructor(scene: Scene);
     /**
      * The Condition used in the filter. By default this contains a match all condition (Uid=*)
+     * Note: To create an OR condition where only some sub conditions need to match set the CombineMode to CombineModes.And. The connection between the two should always be '&'
+     * Example: Uid=123...&Uid=456...   With CombineModes.Or this is evaluated as only one needs to match when it is CombineModes.And its evaluated as all need to match. The & in this case is only the separator for the conditions
+     * Any Attribute can be used inside the Condition
      */
     Condition?: string;
     /**
@@ -31,7 +34,7 @@ export declare abstract class FilterOperation {
     /**
      * Should objects returned by GetObjects include ChangeableAttribute Information
      */
-    IncludeChangableAttributes: boolean;
+    IncludeChangeableAttributes: boolean;
     /**
      * Should objects returned by GetObjects include linked elements Information
      */

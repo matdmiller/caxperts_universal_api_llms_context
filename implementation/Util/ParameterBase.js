@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
+exports.SetAnimationCurrentTimeParameters = exports.SetWindowLayoutParameter = exports.GetWindowLayoutParameter = exports.SetAnimationStartParameters = exports.AnimationKeyframeParameters = exports.FilesTreeCreateDrawingParameter = exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
 const _1 = require(".");
 class ParameterBase {
 }
@@ -171,3 +171,27 @@ exports.LoadFileDialogParameters = LoadFileDialogParameters;
 class PdfDocumentParameter {
 }
 exports.PdfDocumentParameter = PdfDocumentParameter;
+class AddChangeableAttributeParameter {
+}
+exports.AddChangeableAttributeParameter = AddChangeableAttributeParameter;
+class DeleteChangeableAttributeParameter {
+}
+exports.DeleteChangeableAttributeParameter = DeleteChangeableAttributeParameter;
+class FilesTreeCreateDrawingParameter {
+}
+exports.FilesTreeCreateDrawingParameter = FilesTreeCreateDrawingParameter;
+class AnimationKeyframeParameters {
+}
+exports.AnimationKeyframeParameters = AnimationKeyframeParameters;
+class SetAnimationStartParameters {
+}
+exports.SetAnimationStartParameters = SetAnimationStartParameters;
+class GetWindowLayoutParameter {
+}
+exports.GetWindowLayoutParameter = GetWindowLayoutParameter;
+class SetWindowLayoutParameter {
+}
+exports.SetWindowLayoutParameter = SetWindowLayoutParameter;
+class SetAnimationCurrentTimeParameters {
+}
+exports.SetAnimationCurrentTimeParameters = SetAnimationCurrentTimeParameters;

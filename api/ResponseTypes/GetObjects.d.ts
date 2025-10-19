@@ -1,4 +1,4 @@
-import { ApiSerializationContainer, AttributeTreeNodeType, BoundsInfo, CameraView, ClippingDescriptor, Definition, ExportCustomAttributes, FilesTreeObject, CatalogSymbol, IntelliPidDrawingInfo, ModelInfo, ObjectColors, ProjectInfo, ProjectionSphere, SnapInfo, TakeScreenshot, ExportableOptions, Bounds, Vector3D, FileDialogApiReturnType, GenericLoadFromFileResponseResultType, ElementLinks, Intellipid, PdfInfo } from "../Util";
+import { ApiSerializationContainer, AttributeTreeNodeType, BoundsInfo, CameraView, ClippingDescriptor, Definition, ExportCustomAttributes, FilesTreeObject, CatalogSymbol, IntelliPidDrawingInfo, ModelInfo, ObjectColors, ProjectInfo, ProjectionSphere, SnapInfo, TakeScreenshot, ExportableOptions, Bounds, Vector3D, FileDialogApiReturnType, GenericLoadFromFileResponseResultType, ElementLinks, Intellipid, PdfInfo, TextureRenderMode, ViewerVersion, ViewerFileVersion, QualityLevel, ModelLoadMessageType, DrawingTemplate, AnimationMessageTypes } from "../Util";
 export declare class GetObjects {
     Objects: string[];
 }
@@ -178,6 +178,11 @@ export declare class GetUiColors {
         [id: string]: string;
     };
 }
+export declare class GetUiVariables {
+    UiVariables: {
+        [id: string]: string;
+    };
+}
 export declare class GetUiThemes {
     CurrentId: string;
     UiThemes: {
@@ -209,5 +214,52 @@ export declare class GetLinkedElements {
     Links: {
         [key: string]: ElementLinks;
     };
+}
+export declare class GetPipeMeasurementResponse {
+    PipeFound: boolean;
+    PipeDiameter: number;
+}
+export declare class GetExportUpvObjectAsDgnResponse {
+    DgnBase64: string;
+}
+export declare class GetExportUpvObjectAsUpvcResponse {
+    UpvcBase64: string;
+}
+export declare class GetRenderMode {
+    Mode: TextureRenderMode;
+}
+export declare class GetViewerVersion {
+    Version: ViewerVersion;
+    VersionString: string;
+    FileVersion: ViewerFileVersion;
+    FileVersionString: string;
+}
+export declare class GetRenderQuality {
+    Level: QualityLevel;
+}
+export declare class GetPanoramaCentresVisibility {
+    Value: boolean;
+}
+export declare class GetWaitForModelLoading {
+    LoadStatus: ModelLoadMessageType;
+}
+export declare class GetExportedDrawing {
+    /**
+     * If the template has more than one view and the export type is multi paged (e.g. png) more than one content is return -\> collection
+     */
+    ContentBase64: string[];
+    Name: string;
+}
+export declare class GetDrawingTemplates {
+    Templates: DrawingTemplate[];
+}
+export declare class GetAnimationStart {
+    AnimationStartDayTime: string;
+}
+export declare class GetGenerateAnimationKeyframe {
+    AnimationStatus: AnimationMessageTypes;
+}
+export declare class GetWindowLayoutResponse {
+    LayoutContent: string;
 }
 //# sourceMappingURL=GetObjects.d.ts.map

@@ -41,6 +41,8 @@ class FileOperations {
     }
     /**
      * Load a file from the model folder. Some files are not allowed to be retrieved
+     * For example Data/test.txt, otherFolder/file.xlsx, fileinRoot.json
+     * Dont prepend a /on the file
      * @param file file to load
      * @returns
      */

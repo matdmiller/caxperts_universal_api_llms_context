@@ -8,7 +8,7 @@ const Util_1 = require("../Util");
 const GetSet_1 = require("../Util/GetSet");
 const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
 /**
- * @legacy
+ * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
  * */
 class ModelLegacy {
@@ -16,11 +16,10 @@ class ModelLegacy {
         this.model = model;
     }
     /**
-         * might be removed in future from wrapper
-         * @legacy
-         * @param path
-         * @returns
-         */
+     * @deprecated might be removed in future from wrapper
+     * @param path
+     * @returns
+     */
     async loadConfigFile(file) {
         const command = this.model.createCommand(Enums_1.ApiCommands.LoadConfigFile);
         command.commandParameters.push(file);
@@ -89,6 +88,10 @@ class Model {
             command.commandParameters.push(Enums_1.PdfTypes.All);
             return (_a = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map(x => new _1.Pdf(x, this)).find(_ => true)) !== null && _a !== void 0 ? _a : null;
         });
+        this.DrawingTemplates = new GetSet_1.Get(async () => {
+            const command = this.createCommand(Enums_1.ApiCommands.GetDrawingTemplates);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Templates;
+        });
     }
     /**
      * Retrieve the unique attribute values in 3D. Pass the attribute keys for which you are intrested in recieving attributes
@@ -106,11 +109,18 @@ class Model {
      * @param attributes at least one is required
      * @returns
      */
-    async gGetUniqueAttributeValuesPid(attribute) {
+    async getUniqueAttributeValuesPid(attribute) {
         const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetModelAttributeValues);
         command.commandParameters.push(attribute);
         command.target = Enums_1.TargetEnum.Intelli;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.ModelAttributeValues[attribute];
+    }
+    async createDiameterMeasurement(position) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.CreateDiameterMeasurement);
+        command.commandParameters.push(position.X.toString());
+        command.commandParameters.push(position.Y.toString());
+        command.commandParameters.push(position.Z.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
     /**
      * @internal

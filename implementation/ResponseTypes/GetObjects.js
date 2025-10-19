@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GenericLoadFromFileResponse = exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
-exports.GetLinkedElements = exports.GetModelAttributeValues = void 0;
+exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
+exports.GetWindowLayoutResponse = exports.GetGenerateAnimationKeyframe = exports.GetAnimationStart = exports.GetDrawingTemplates = exports.GetExportedDrawing = exports.GetWaitForModelLoading = exports.GetPanoramaCentresVisibility = exports.GetRenderQuality = exports.GetViewerVersion = exports.GetRenderMode = exports.GetExportUpvObjectAsUpvcResponse = exports.GetExportUpvObjectAsDgnResponse = exports.GetPipeMeasurementResponse = exports.GetLinkedElements = exports.GetModelAttributeValues = exports.GenericLoadFromFileResponse = void 0;
 class GetObjects {
 }
 exports.GetObjects = GetObjects;
@@ -170,6 +170,12 @@ class GetUiColors {
     }
 }
 exports.GetUiColors = GetUiColors;
+class GetUiVariables {
+    constructor() {
+        this.UiVariables = {};
+    }
+}
+exports.GetUiVariables = GetUiVariables;
 class GetUiThemes {
     constructor() {
         this.UiThemes = {};
@@ -191,3 +197,42 @@ exports.GetModelAttributeValues = GetModelAttributeValues;
 class GetLinkedElements {
 }
 exports.GetLinkedElements = GetLinkedElements;
+class GetPipeMeasurementResponse {
+}
+exports.GetPipeMeasurementResponse = GetPipeMeasurementResponse;
+class GetExportUpvObjectAsDgnResponse {
+}
+exports.GetExportUpvObjectAsDgnResponse = GetExportUpvObjectAsDgnResponse;
+class GetExportUpvObjectAsUpvcResponse {
+}
+exports.GetExportUpvObjectAsUpvcResponse = GetExportUpvObjectAsUpvcResponse;
+class GetRenderMode {
+}
+exports.GetRenderMode = GetRenderMode;
+class GetViewerVersion {
+}
+exports.GetViewerVersion = GetViewerVersion;
+class GetRenderQuality {
+}
+exports.GetRenderQuality = GetRenderQuality;
+class GetPanoramaCentresVisibility {
+}
+exports.GetPanoramaCentresVisibility = GetPanoramaCentresVisibility;
+class GetWaitForModelLoading {
+}
+exports.GetWaitForModelLoading = GetWaitForModelLoading;
+class GetExportedDrawing {
+}
+exports.GetExportedDrawing = GetExportedDrawing;
+class GetDrawingTemplates {
+}
+exports.GetDrawingTemplates = GetDrawingTemplates;
+class GetAnimationStart {
+}
+exports.GetAnimationStart = GetAnimationStart;
+class GetGenerateAnimationKeyframe {
+}
+exports.GetGenerateAnimationKeyframe = GetGenerateAnimationKeyframe;
+class GetWindowLayoutResponse {
+}
+exports.GetWindowLayoutResponse = GetWindowLayoutResponse;

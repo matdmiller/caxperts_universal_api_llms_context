@@ -20,7 +20,7 @@ class Set {
     }
     /**
      * Sets the Value asynchronous
-     * @param value
+     * @param value - The value to set
      * @returns
      */
     async set(value) {
@@ -42,7 +42,7 @@ class GetSet {
     }
     /**
      * Sets the Value asynchronous
-     * @param value
+     * @param value - The value to set
      * @returns
      */
     async set(value) {

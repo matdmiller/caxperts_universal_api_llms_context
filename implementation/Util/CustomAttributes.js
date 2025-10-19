@@ -89,6 +89,9 @@ class CustomAttributes {
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
             .ExportCustomAttributes;
     }
+    /**
+     * @internal
+     */
     createCommand(apiCommands) {
         const command = new CaxApiCommand_1.CaxApiCommand(apiCommands);
         return command;

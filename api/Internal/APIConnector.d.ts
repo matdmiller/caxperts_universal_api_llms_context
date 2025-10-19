@@ -1,5 +1,8 @@
 import { ApiEvents, ApiResponse, ApiResponseWithType } from '../ResponseTypes';
 import { CaxApiCommand } from "./CaxApiCommand";
+export declare const CoverageTracker: {
+    [key: string]: boolean;
+};
 /**
  * @internal
  * Defines capabilities of a connector.
