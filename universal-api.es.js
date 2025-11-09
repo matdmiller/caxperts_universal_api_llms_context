@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - ES Module Bundle
  * Version: ** 7.2.1
- * Bundled on: 2025-11-02
+ * Bundled on: 2025-11-09
  * This file was automatically generated from the TypeScript source.
  */
 
@@ -477,29 +477,29 @@ var hasRequiredEnums;
 function requireEnums () {
 	if (hasRequiredEnums) return Enums;
 	hasRequiredEnums = 1;
-	(function (exports) {
-		Object.defineProperty(exports, "__esModule", { value: true });
-		exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+	(function (exports$1) {
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		exports$1.WindowLayoutFormat = exports$1.AnimationMessageTypes = exports$1.DrawingExportType = exports$1.ModelLoadMessageType = exports$1.QualityLevel = exports$1.TextureRenderMode = exports$1.ChangeableAttributeUnitType = exports$1.PdfTypes = exports$1.GenericLoadFromFileResponseResultType = exports$1.ClashMode = exports$1.FileDialogApiReturnType = exports$1.PrimitiveType = exports$1.ColorMode = exports$1.ExportableOptions = exports$1.PidSketchToolMode = exports$1.MarkupMode = exports$1.ClippingMode = exports$1.PointOfInterestType = exports$1.VolumeConditionMode = exports$1.AttributeConditionComparison = exports$1.ConsolidationMode = exports$1.PackageConditionTypes = exports$1.ApiCommands = exports$1.ProjectionSphereType = exports$1.FeatureTypes = exports$1.CustomAttributeDataType = exports$1.UpdateModes = exports$1.SceneType = exports$1.CombineModes = exports$1.TargetEnum = void 0;
 		(function (TargetEnum) {
 		    TargetEnum["Undefined"] = "0";
 		    TargetEnum["ThreeD"] = "1";
 		    TargetEnum["Intelli"] = "10";
 		    TargetEnum["Browser"] = "11";
-		})(exports.TargetEnum || (exports.TargetEnum = {}));
+		})(exports$1.TargetEnum || (exports$1.TargetEnum = {}));
 		(function (CombineModes) {
 		    CombineModes["And"] = "AND";
 		    CombineModes["Or"] = "OR";
-		})(exports.CombineModes || (exports.CombineModes = {}));
+		})(exports$1.CombineModes || (exports$1.CombineModes = {}));
 		(function (SceneType) {
 		    SceneType["Undefined"] = "0";
 		    SceneType["ThreeD"] = "1";
 		    SceneType["IntelliPid"] = "10";
 		    SceneType["Browser"] = "11";
-		})(exports.SceneType || (exports.SceneType = {}));
+		})(exports$1.SceneType || (exports$1.SceneType = {}));
 		(function (UpdateModes) {
 		    UpdateModes[UpdateModes["Append"] = 0] = "Append";
 		    UpdateModes[UpdateModes["Full"] = 1] = "Full";
-		})(exports.UpdateModes || (exports.UpdateModes = {}));
+		})(exports$1.UpdateModes || (exports$1.UpdateModes = {}));
 		(function (CustomAttributeDataType) {
 		    //Calculation = 0,
 		    CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
@@ -508,7 +508,7 @@ function requireEnums () {
 		    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
 		    //Unknown = 5,
 		    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
-		})(exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
+		})(exports$1.CustomAttributeDataType || (exports$1.CustomAttributeDataType = {}));
 		(function (FeatureTypes) {
 		    FeatureTypes["Unknown"] = "Unknown";
 		    FeatureTypes["Model"] = "Model";
@@ -542,11 +542,11 @@ function requireEnums () {
 		    FeatureTypes["Animation"] = "Animation";
 		    FeatureTypes["PIDSketch"] = "PIDSketch";
 		    FeatureTypes["Report"] = "Report";
-		})(exports.FeatureTypes || (exports.FeatureTypes = {}));
+		})(exports$1.FeatureTypes || (exports$1.FeatureTypes = {}));
 		(function (ProjectionSphereType) {
 		    ProjectionSphereType[ProjectionSphereType["Picture"] = 0] = "Picture";
 		    ProjectionSphereType[ProjectionSphereType["Panorama"] = 1] = "Panorama";
-		})(exports.ProjectionSphereType || (exports.ProjectionSphereType = {}));
+		})(exports$1.ProjectionSphereType || (exports$1.ProjectionSphereType = {}));
 		(function (ApiCommands) {
 		    //Camera
 		    ApiCommands["SetCameraView"] = "SetCameraView";
@@ -746,26 +746,26 @@ function requireEnums () {
 		    // Layout
 		    ApiCommands["GetWindowLayout"] = "GetWindowLayout";
 		    ApiCommands["SetWindowLayout"] = "SetWindowLayout";
-		})(exports.ApiCommands || (exports.ApiCommands = {}));
+		})(exports$1.ApiCommands || (exports$1.ApiCommands = {}));
 		(function (PackageConditionTypes) {
 		    PackageConditionTypes["None"] = "None";
 		    PackageConditionTypes["IntelliVolume"] = "IntelliVolume";
 		    PackageConditionTypes["Group"] = "Group";
 		    PackageConditionTypes["Attribute"] = "Attribute";
 		    PackageConditionTypes["Volume"] = "Volume";
-		})(exports.PackageConditionTypes || (exports.PackageConditionTypes = {}));
+		})(exports$1.PackageConditionTypes || (exports$1.PackageConditionTypes = {}));
 		(function (ConsolidationMode) {
 		    ConsolidationMode["Base"] = "Base";
 		    ConsolidationMode["AndNot"] = "AndNot";
 		    ConsolidationMode["Or"] = "Or";
 		    ConsolidationMode["And"] = "And";
-		})(exports.ConsolidationMode || (exports.ConsolidationMode = {}));
+		})(exports$1.ConsolidationMode || (exports$1.ConsolidationMode = {}));
 		(function (AttributeConditionComparison) {
 		    AttributeConditionComparison["Equals"] = "==";
 		    AttributeConditionComparison["NotEquals"] = "!=";
 		    AttributeConditionComparison["Like"] = "Like";
 		    AttributeConditionComparison["NotLike"] = "Not Like";
-		})(exports.AttributeConditionComparison || (exports.AttributeConditionComparison = {}));
+		})(exports$1.AttributeConditionComparison || (exports$1.AttributeConditionComparison = {}));
 		(function (VolumeConditionMode) {
 		    /// <summary>
 		    /// Inside
@@ -783,17 +783,17 @@ function requireEnums () {
 		    /// Outside
 		    /// </summary>
 		    VolumeConditionMode["NotOverlaps"] = "Not Overlaps";
-		})(exports.VolumeConditionMode || (exports.VolumeConditionMode = {}));
+		})(exports$1.VolumeConditionMode || (exports$1.VolumeConditionMode = {}));
 		(function (PointOfInterestType) {
 		    PointOfInterestType[PointOfInterestType["Sphere"] = 0] = "Sphere";
 		    PointOfInterestType[PointOfInterestType["CustomMesh"] = 1] = "CustomMesh";
-		})(exports.PointOfInterestType || (exports.PointOfInterestType = {}));
+		})(exports$1.PointOfInterestType || (exports$1.PointOfInterestType = {}));
 		(function (ClippingMode) {
 		    ClippingMode[ClippingMode["None"] = 0] = "None";
 		    ClippingMode[ClippingMode["Volume"] = 1] = "Volume";
 		    ClippingMode[ClippingMode["GridMeasure"] = 2] = "GridMeasure";
 		    ClippingMode[ClippingMode["Intelli"] = 3] = "Intelli";
-		})(exports.ClippingMode || (exports.ClippingMode = {}));
+		})(exports$1.ClippingMode || (exports$1.ClippingMode = {}));
 		(function (MarkupMode) {
 		    MarkupMode[MarkupMode["None"] = 0] = "None";
 		    MarkupMode[MarkupMode["Line"] = 1] = "Line";
@@ -804,7 +804,7 @@ function requireEnums () {
 		    MarkupMode[MarkupMode["Erase"] = 6] = "Erase";
 		    MarkupMode[MarkupMode["OrthogonalLine"] = 7] = "OrthogonalLine";
 		    MarkupMode[MarkupMode["Move"] = 8] = "Move";
-		})(exports.MarkupMode || (exports.MarkupMode = {}));
+		})(exports$1.MarkupMode || (exports$1.MarkupMode = {}));
 		(function (PidSketchToolMode) {
 		    // This reflects UPV
 		    PidSketchToolMode[PidSketchToolMode["None"] = 0] = "None";
@@ -834,17 +834,17 @@ function requireEnums () {
 		    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
 		    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
 		    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
-		})(exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
+		})(exports$1.PidSketchToolMode || (exports$1.PidSketchToolMode = {}));
 		(function (ExportableOptions) {
 		    ExportableOptions[ExportableOptions["Inherit"] = 0] = "Inherit";
 		    ExportableOptions[ExportableOptions["Export"] = 1] = "Export";
 		    ExportableOptions[ExportableOptions["Ignore"] = 2] = "Ignore";
-		})(exports.ExportableOptions || (exports.ExportableOptions = {}));
+		})(exports$1.ExportableOptions || (exports$1.ExportableOptions = {}));
 		(function (ColorMode) {
 		    ColorMode[ColorMode["Default"] = 0] = "Default";
 		    ColorMode[ColorMode["AsModified"] = 1] = "AsModified";
 		    ColorMode[ColorMode["Original"] = 2] = "Original";
-		})(exports.ColorMode || (exports.ColorMode = {}));
+		})(exports$1.ColorMode || (exports$1.ColorMode = {}));
 		(function (PrimitiveType) {
 		    PrimitiveType[PrimitiveType["GroundPlate"] = 300] = "GroundPlate";
 		    PrimitiveType[PrimitiveType["Column"] = 310] = "Column";
@@ -856,12 +856,12 @@ function requireEnums () {
 		    PrimitiveType[PrimitiveType["Sphere"] = 1050] = "Sphere";
 		    PrimitiveType[PrimitiveType["Platform"] = 200] = "Platform";
 		    PrimitiveType[PrimitiveType["CustomObj"] = 9999] = "CustomObj";
-		})(exports.PrimitiveType || (exports.PrimitiveType = {}));
+		})(exports$1.PrimitiveType || (exports$1.PrimitiveType = {}));
 		(function (FileDialogApiReturnType) {
 		    FileDialogApiReturnType[FileDialogApiReturnType["Cancelled"] = 0] = "Cancelled";
 		    FileDialogApiReturnType[FileDialogApiReturnType["Ok"] = 1] = "Ok";
 		    FileDialogApiReturnType[FileDialogApiReturnType["Error"] = 2] = "Error";
-		})(exports.FileDialogApiReturnType || (exports.FileDialogApiReturnType = {}));
+		})(exports$1.FileDialogApiReturnType || (exports$1.FileDialogApiReturnType = {}));
 		(function (ClashMode) {
 		    /**
 		     *
@@ -875,54 +875,54 @@ function requireEnums () {
 		     *
 		     */
 		    ClashMode[ClashMode["PackageAAgainstPackageBWithinQuery"] = 2] = "PackageAAgainstPackageBWithinQuery";
-		})(exports.ClashMode || (exports.ClashMode = {}));
+		})(exports$1.ClashMode || (exports$1.ClashMode = {}));
 		(function (GenericLoadFromFileResponseResultType) {
 		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Ok"] = 0] = "Ok";
 		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotFound"] = 1] = "FileNotFound";
 		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotAllowed"] = 2] = "FileNotAllowed";
 		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["OtherError"] = 3] = "OtherError";
 		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Undefined"] = 4] = "Undefined";
-		})(exports.GenericLoadFromFileResponseResultType || (exports.GenericLoadFromFileResponseResultType = {}));
+		})(exports$1.GenericLoadFromFileResponseResultType || (exports$1.GenericLoadFromFileResponseResultType = {}));
 		(function (PdfTypes) {
 		    PdfTypes[PdfTypes["All"] = 0] = "All";
 		    PdfTypes[PdfTypes["Document"] = 1] = "Document";
 		    PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
-		})(exports.PdfTypes || (exports.PdfTypes = {}));
+		})(exports$1.PdfTypes || (exports$1.PdfTypes = {}));
 		(function (ChangeableAttributeUnitType) {
 		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
 		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
 		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
-		})(exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {}));
+		})(exports$1.ChangeableAttributeUnitType || (exports$1.ChangeableAttributeUnitType = {}));
 		(function (TextureRenderMode) {
 		    TextureRenderMode[TextureRenderMode["Normal"] = 0] = "Normal";
 		    TextureRenderMode[TextureRenderMode["HeightMap"] = 1] = "HeightMap";
 		    TextureRenderMode[TextureRenderMode["NoTexture"] = 2] = "NoTexture";
-		})(exports.TextureRenderMode || (exports.TextureRenderMode = {}));
+		})(exports$1.TextureRenderMode || (exports$1.TextureRenderMode = {}));
 		(function (QualityLevel) {
 		    QualityLevel[QualityLevel["Low"] = 0] = "Low";
 		    QualityLevel[QualityLevel["Medium"] = 1] = "Medium";
 		    QualityLevel[QualityLevel["High"] = 2] = "High";
-		})(exports.QualityLevel || (exports.QualityLevel = {}));
+		})(exports$1.QualityLevel || (exports$1.QualityLevel = {}));
 		(function (ModelLoadMessageType) {
 		    ModelLoadMessageType[ModelLoadMessageType["AlreadyLoaded"] = 0] = "AlreadyLoaded";
 		    ModelLoadMessageType[ModelLoadMessageType["FinishedLoading"] = 1] = "FinishedLoading";
-		})(exports.ModelLoadMessageType || (exports.ModelLoadMessageType = {}));
+		})(exports$1.ModelLoadMessageType || (exports$1.ModelLoadMessageType = {}));
 		(function (DrawingExportType) {
 		    DrawingExportType[DrawingExportType["Svg"] = 0] = "Svg";
 		    DrawingExportType[DrawingExportType["Acadpdf"] = 1] = "Acadpdf";
 		    DrawingExportType[DrawingExportType["Pdf"] = 2] = "Pdf";
 		    DrawingExportType[DrawingExportType["Png"] = 3] = "Png";
 		    DrawingExportType[DrawingExportType["Dxf"] = 4] = "Dxf";
-		})(exports.DrawingExportType || (exports.DrawingExportType = {}));
+		})(exports$1.DrawingExportType || (exports$1.DrawingExportType = {}));
 		(function (AnimationMessageTypes) {
 		    AnimationMessageTypes[AnimationMessageTypes["MissingParameters"] = 0] = "MissingParameters";
 		    AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
 		    AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
-		})(exports.AnimationMessageTypes || (exports.AnimationMessageTypes = {}));
+		})(exports$1.AnimationMessageTypes || (exports$1.AnimationMessageTypes = {}));
 		(function (WindowLayoutFormat) {
 		    WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
 		    WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
-		})(exports.WindowLayoutFormat || (exports.WindowLayoutFormat = {})); 
+		})(exports$1.WindowLayoutFormat || (exports$1.WindowLayoutFormat = {})); 
 	} (Enums));
 	return Enums;
 }
@@ -1068,7 +1068,7 @@ var hasRequiredUtil;
 function requireUtil () {
 	if (hasRequiredUtil) return Util;
 	hasRequiredUtil = 1;
-	(function (exports) {
+	(function (exports$1) {
 		var __createBinding = (Util && Util.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -1080,15 +1080,15 @@ function requireUtil () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (Util && Util.__exportStar) || function(m, exports) {
-		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+		var __exportStar = (Util && Util.__exportStar) || function(m, exports$1) {
+		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
 		};
-		Object.defineProperty(exports, "__esModule", { value: true });
-		__exportStar(requireBaseDataTypes(), exports);
-		__exportStar(requireParameterBase(), exports);
-		__exportStar(requireGetSet(), exports);
-		__exportStar(requireEnums(), exports);
-		__exportStar(requireCustomAttributes(), exports); 
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		__exportStar(requireBaseDataTypes(), exports$1);
+		__exportStar(requireParameterBase(), exports$1);
+		__exportStar(requireGetSet(), exports$1);
+		__exportStar(requireEnums(), exports$1);
+		__exportStar(requireCustomAttributes(), exports$1); 
 	} (Util));
 	return Util;
 }
@@ -2084,9 +2084,9 @@ var hasRequiredEvents$1;
 function requireEvents$1 () {
 	if (hasRequiredEvents$1) return Events;
 	hasRequiredEvents$1 = 1;
-	(function (exports) {
-		Object.defineProperty(exports, "__esModule", { value: true });
-		exports.StorageVariableChangedEvent = exports.AuthenticationContextChangedEvent = exports.IntelliPidSelectionChanged = exports.IntelliPidSelectionChangedEvent = exports.AnimationTimestamp = exports.AnimationTimestampChangedObject = exports.LinkClicked = exports.LifeCycleEvent = exports.SelectionChanged = exports.PointerClicked = exports.ClashComputationProgressChangedEvent = exports.CustomAttributeValueChanged = exports.AnimationTimestampChangedEvent = exports.CustomAttributeValueChangedEvent = exports.LinkClickedEvent = exports.SelectionChangedEvent = exports.PointerClickedEvent = exports.ApiEvents = void 0;
+	(function (exports$1) {
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		exports$1.StorageVariableChangedEvent = exports$1.AuthenticationContextChangedEvent = exports$1.IntelliPidSelectionChanged = exports$1.IntelliPidSelectionChangedEvent = exports$1.AnimationTimestamp = exports$1.AnimationTimestampChangedObject = exports$1.LinkClicked = exports$1.LifeCycleEvent = exports$1.SelectionChanged = exports$1.PointerClicked = exports$1.ClashComputationProgressChangedEvent = exports$1.CustomAttributeValueChanged = exports$1.AnimationTimestampChangedEvent = exports$1.CustomAttributeValueChangedEvent = exports$1.LinkClickedEvent = exports$1.SelectionChangedEvent = exports$1.PointerClickedEvent = exports$1.ApiEvents = void 0;
 		(function (ApiEvents) {
 		    ApiEvents["SelectionChanged"] = "SelectionChanged";
 		    ApiEvents["PointerClicked"] = "PointerClicked";
@@ -2098,73 +2098,73 @@ function requireEvents$1 () {
 		    ApiEvents["AuthenticationContextChanged"] = "AuthenticationContextChanged";
 		    ApiEvents["ClashComputationProgressChanged"] = "ClashComputationProgressChanged";
 		    ApiEvents["StorageVariableChanged"] = "StorageVariableChanged";
-		})(exports.ApiEvents || (exports.ApiEvents = {}));
+		})(exports$1.ApiEvents || (exports$1.ApiEvents = {}));
 		/**
 		 * @internal
 		 */
 		class PointerClickedEvent {
 		}
-		exports.PointerClickedEvent = PointerClickedEvent;
+		exports$1.PointerClickedEvent = PointerClickedEvent;
 		/**
 		 * @internal
 		 */
 		class SelectionChangedEvent {
 		}
-		exports.SelectionChangedEvent = SelectionChangedEvent;
+		exports$1.SelectionChangedEvent = SelectionChangedEvent;
 		/**
 		 * @internal
 		 */
 		class LinkClickedEvent {
 		}
-		exports.LinkClickedEvent = LinkClickedEvent;
+		exports$1.LinkClickedEvent = LinkClickedEvent;
 		/**
 		 * @internal
 		 */
 		class CustomAttributeValueChangedEvent {
 		}
-		exports.CustomAttributeValueChangedEvent = CustomAttributeValueChangedEvent;
+		exports$1.CustomAttributeValueChangedEvent = CustomAttributeValueChangedEvent;
 		/**
 		 * @internal
 		 */
 		class AnimationTimestampChangedEvent {
 		}
-		exports.AnimationTimestampChangedEvent = AnimationTimestampChangedEvent;
+		exports$1.AnimationTimestampChangedEvent = AnimationTimestampChangedEvent;
 		class CustomAttributeValueChanged {
 		}
-		exports.CustomAttributeValueChanged = CustomAttributeValueChanged;
+		exports$1.CustomAttributeValueChanged = CustomAttributeValueChanged;
 		class ClashComputationProgressChangedEvent {
 		}
-		exports.ClashComputationProgressChangedEvent = ClashComputationProgressChangedEvent;
+		exports$1.ClashComputationProgressChangedEvent = ClashComputationProgressChangedEvent;
 		class PointerClicked {
 		}
-		exports.PointerClicked = PointerClicked;
+		exports$1.PointerClicked = PointerClicked;
 		class SelectionChanged {
 		}
-		exports.SelectionChanged = SelectionChanged;
+		exports$1.SelectionChanged = SelectionChanged;
 		class LifeCycleEvent {
 		}
-		exports.LifeCycleEvent = LifeCycleEvent;
+		exports$1.LifeCycleEvent = LifeCycleEvent;
 		class LinkClicked {
 		}
-		exports.LinkClicked = LinkClicked;
+		exports$1.LinkClicked = LinkClicked;
 		class AnimationTimestampChangedObject {
 		}
-		exports.AnimationTimestampChangedObject = AnimationTimestampChangedObject;
+		exports$1.AnimationTimestampChangedObject = AnimationTimestampChangedObject;
 		class AnimationTimestamp {
 		}
-		exports.AnimationTimestamp = AnimationTimestamp;
+		exports$1.AnimationTimestamp = AnimationTimestamp;
 		class IntelliPidSelectionChangedEvent {
 		}
-		exports.IntelliPidSelectionChangedEvent = IntelliPidSelectionChangedEvent;
+		exports$1.IntelliPidSelectionChangedEvent = IntelliPidSelectionChangedEvent;
 		class IntelliPidSelectionChanged {
 		}
-		exports.IntelliPidSelectionChanged = IntelliPidSelectionChanged;
+		exports$1.IntelliPidSelectionChanged = IntelliPidSelectionChanged;
 		class AuthenticationContextChangedEvent {
 		}
-		exports.AuthenticationContextChangedEvent = AuthenticationContextChangedEvent;
+		exports$1.AuthenticationContextChangedEvent = AuthenticationContextChangedEvent;
 		class StorageVariableChangedEvent {
 		}
-		exports.StorageVariableChangedEvent = StorageVariableChangedEvent; 
+		exports$1.StorageVariableChangedEvent = StorageVariableChangedEvent; 
 	} (Events));
 	return Events;
 }
@@ -2174,7 +2174,7 @@ var hasRequiredResponseTypes;
 function requireResponseTypes () {
 	if (hasRequiredResponseTypes) return ResponseTypes;
 	hasRequiredResponseTypes = 1;
-	(function (exports) {
+	(function (exports$1) {
 		var __createBinding = (ResponseTypes && ResponseTypes.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -2186,13 +2186,13 @@ function requireResponseTypes () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (ResponseTypes && ResponseTypes.__exportStar) || function(m, exports) {
-		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+		var __exportStar = (ResponseTypes && ResponseTypes.__exportStar) || function(m, exports$1) {
+		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
 		};
-		Object.defineProperty(exports, "__esModule", { value: true });
-		__exportStar(requireApiResponse(), exports);
-		__exportStar(requireGetObjects(), exports);
-		__exportStar(requireEvents$1(), exports); 
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		__exportStar(requireApiResponse(), exports$1);
+		__exportStar(requireGetObjects(), exports$1);
+		__exportStar(requireEvents$1(), exports$1); 
 	} (ResponseTypes));
 	return ResponseTypes;
 }
@@ -3604,7 +3604,7 @@ var hasRequiredObjects;
 function requireObjects () {
 	if (hasRequiredObjects) return Objects;
 	hasRequiredObjects = 1;
-	(function (exports) {
+	(function (exports$1) {
 		var __createBinding = (Objects && Objects.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -3616,30 +3616,30 @@ function requireObjects () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (Objects && Objects.__exportStar) || function(m, exports) {
-		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+		var __exportStar = (Objects && Objects.__exportStar) || function(m, exports$1) {
+		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
 		};
-		Object.defineProperty(exports, "__esModule", { value: true });
-		__exportStar(requireCamera(), exports);
-		__exportStar(requireLayer2D(), exports);
-		__exportStar(requireLayer3D(), exports);
-		__exportStar(requireModel(), exports);
-		__exportStar(requireIntelliPidDrawing(), exports);
-		__exportStar(requireEvents(), exports);
-		__exportStar(requireProjectionSphereElement(), exports);
-		__exportStar(requireClashContext(), exports);
-		__exportStar(requireFilterOperation3D(), exports);
-		__exportStar(requireFilterOperationPid(), exports);
-		__exportStar(requireModelObject(), exports);
-		__exportStar(requirePrinter(), exports);
-		__exportStar(requireLocalStorage(), exports);
-		__exportStar(requireAttributeTree(), exports);
-		__exportStar(requireAuthenticationManager(), exports);
-		__exportStar(requireEvents(), exports);
-		__exportStar(requireModel(), exports);
-		__exportStar(requireSettings(), exports);
-		__exportStar(requireFileOperations(), exports);
-		__exportStar(requirePdf(), exports); 
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		__exportStar(requireCamera(), exports$1);
+		__exportStar(requireLayer2D(), exports$1);
+		__exportStar(requireLayer3D(), exports$1);
+		__exportStar(requireModel(), exports$1);
+		__exportStar(requireIntelliPidDrawing(), exports$1);
+		__exportStar(requireEvents(), exports$1);
+		__exportStar(requireProjectionSphereElement(), exports$1);
+		__exportStar(requireClashContext(), exports$1);
+		__exportStar(requireFilterOperation3D(), exports$1);
+		__exportStar(requireFilterOperationPid(), exports$1);
+		__exportStar(requireModelObject(), exports$1);
+		__exportStar(requirePrinter(), exports$1);
+		__exportStar(requireLocalStorage(), exports$1);
+		__exportStar(requireAttributeTree(), exports$1);
+		__exportStar(requireAuthenticationManager(), exports$1);
+		__exportStar(requireEvents(), exports$1);
+		__exportStar(requireModel(), exports$1);
+		__exportStar(requireSettings(), exports$1);
+		__exportStar(requireFileOperations(), exports$1);
+		__exportStar(requirePdf(), exports$1); 
 	} (Objects));
 	return Objects;
 }
@@ -3881,7 +3881,7 @@ var hasRequiredScenes;
 function requireScenes () {
 	if (hasRequiredScenes) return Scenes;
 	hasRequiredScenes = 1;
-	(function (exports) {
+	(function (exports$1) {
 		var __createBinding = (Scenes && Scenes.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -3893,14 +3893,14 @@ function requireScenes () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (Scenes && Scenes.__exportStar) || function(m, exports) {
-		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+		var __exportStar = (Scenes && Scenes.__exportStar) || function(m, exports$1) {
+		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
 		};
-		Object.defineProperty(exports, "__esModule", { value: true });
-		__exportStar(requireScene(), exports);
-		__exportStar(requireScene3d(), exports);
-		__exportStar(requireScenePid(), exports);
-		__exportStar(requireAppControlScene(), exports); 
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		__exportStar(requireScene(), exports$1);
+		__exportStar(requireScene3d(), exports$1);
+		__exportStar(requireScenePid(), exports$1);
+		__exportStar(requireAppControlScene(), exports$1); 
 	} (Scenes));
 	return Scenes;
 }
@@ -5002,7 +5002,7 @@ var hasRequiredFilesTree;
 function requireFilesTree () {
 	if (hasRequiredFilesTree) return FilesTree;
 	hasRequiredFilesTree = 1;
-	(function (exports) {
+	(function (exports$1) {
 		var __createBinding = (FilesTree && FilesTree.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5014,30 +5014,30 @@ function requireFilesTree () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (FilesTree && FilesTree.__exportStar) || function(m, exports) {
-		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+		var __exportStar = (FilesTree && FilesTree.__exportStar) || function(m, exports$1) {
+		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
 		};
-		Object.defineProperty(exports, "__esModule", { value: true });
-		__exportStar(requireFileTreeElement(), exports);
-		__exportStar(requireFileTreeAnimation(), exports);
-		__exportStar(requireFileTreeAppControl(), exports);
-		__exportStar(requireFileTreeComment(), exports);
-		__exportStar(requireFileTreeCommentSVG(), exports);
-		__exportStar(requireFIleTreeDrawing(), exports);
-		__exportStar(requireFileTreeFolder(), exports);
-		__exportStar(requireFileTreeMarkup(), exports);
-		__exportStar(requireFileTreeModel(), exports);
-		__exportStar(requireFileTreePackage(), exports);
-		__exportStar(requireFileTreePhoto(), exports);
-		__exportStar(requireFileTreePIDSketch(), exports);
-		__exportStar(requireFileTreePointOfInterest(), exports);
-		__exportStar(requireFileTreeReport(), exports);
-		__exportStar(requireFileTreeScreenshot(), exports);
-		__exportStar(requireFileTreeSketch(), exports);
-		__exportStar(requireFileTreeSpraying(), exports);
-		__exportStar(requireFileTreeTwoDToThreeD(), exports);
-		__exportStar(requireFileTreeView(), exports);
-		__exportStar(requireFileTreeManager(), exports); 
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		__exportStar(requireFileTreeElement(), exports$1);
+		__exportStar(requireFileTreeAnimation(), exports$1);
+		__exportStar(requireFileTreeAppControl(), exports$1);
+		__exportStar(requireFileTreeComment(), exports$1);
+		__exportStar(requireFileTreeCommentSVG(), exports$1);
+		__exportStar(requireFIleTreeDrawing(), exports$1);
+		__exportStar(requireFileTreeFolder(), exports$1);
+		__exportStar(requireFileTreeMarkup(), exports$1);
+		__exportStar(requireFileTreeModel(), exports$1);
+		__exportStar(requireFileTreePackage(), exports$1);
+		__exportStar(requireFileTreePhoto(), exports$1);
+		__exportStar(requireFileTreePIDSketch(), exports$1);
+		__exportStar(requireFileTreePointOfInterest(), exports$1);
+		__exportStar(requireFileTreeReport(), exports$1);
+		__exportStar(requireFileTreeScreenshot(), exports$1);
+		__exportStar(requireFileTreeSketch(), exports$1);
+		__exportStar(requireFileTreeSpraying(), exports$1);
+		__exportStar(requireFileTreeTwoDToThreeD(), exports$1);
+		__exportStar(requireFileTreeView(), exports$1);
+		__exportStar(requireFileTreeManager(), exports$1); 
 	} (FilesTree));
 	return FilesTree;
 }
@@ -5299,7 +5299,7 @@ var hasRequiredUniversal_api;
 function requireUniversal_api () {
 	if (hasRequiredUniversal_api) return universal_api;
 	hasRequiredUniversal_api = 1;
-	(function (exports) {
+	(function (exports$1) {
 		var __createBinding = (universal_api && universal_api.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 		    if (k2 === undefined) k2 = k;
 		    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5311,17 +5311,17 @@ function requireUniversal_api () {
 		    if (k2 === undefined) k2 = k;
 		    o[k2] = m[k];
 		}));
-		var __exportStar = (universal_api && universal_api.__exportStar) || function(m, exports) {
-		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+		var __exportStar = (universal_api && universal_api.__exportStar) || function(m, exports$1) {
+		    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
 		};
-		Object.defineProperty(exports, "__esModule", { value: true });
-		__exportStar(requireApplication(), exports);
-		__exportStar(requireTheme(), exports);
-		__exportStar(requireFilesTree(), exports);
-		__exportStar(requireScenes(), exports);
-		__exportStar(requireUtil(), exports);
-		__exportStar(requireResponseTypes(), exports);
-		__exportStar(requireObjects(), exports); 
+		Object.defineProperty(exports$1, "__esModule", { value: true });
+		__exportStar(requireApplication(), exports$1);
+		__exportStar(requireTheme(), exports$1);
+		__exportStar(requireFilesTree(), exports$1);
+		__exportStar(requireScenes(), exports$1);
+		__exportStar(requireUtil(), exports$1);
+		__exportStar(requireResponseTypes(), exports$1);
+		__exportStar(requireObjects(), exports$1); 
 	} (universal_api));
 	return universal_api;
 }
