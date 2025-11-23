@@ -183,6 +183,36 @@ export declare class FileTreeDrawing extends FileTreeElement {
 
 ---
 
+## FilesTree/FIleTreeIntelliPIDLegendPosition.d.ts
+
+<FilesTree/FIleTreeIntelliPIDLegendPosition.d.ts>
+```typescript
+import { FeatureTypes } from "../Util";
+import { FileTreeElement } from "./FileTreeElement";
+export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
+    constructor(id: number, name: string, type: FeatureTypes);
+}
+//# sourceMappingURL=FIleTreeIntelliPIDLegendPosition.d.ts.map
+```
+</FilesTree/FIleTreeIntelliPIDLegendPosition.d.ts>
+
+---
+
+## FilesTree/FIleTreeWindowLayout.d.ts
+
+<FilesTree/FIleTreeWindowLayout.d.ts>
+```typescript
+import { FeatureTypes } from "../Util";
+import { FileTreeElement } from "./FileTreeElement";
+export declare class FIleTreeWindowLayout extends FileTreeElement {
+    constructor(id: number, name: string, type: FeatureTypes);
+}
+//# sourceMappingURL=FIleTreeWindowLayout.d.ts.map
+```
+</FilesTree/FIleTreeWindowLayout.d.ts>
+
+---
+
 ## FilesTree/FileTreeAnimation.d.ts
 
 <FilesTree/FileTreeAnimation.d.ts>
@@ -288,7 +318,7 @@ export declare class FileTreeElement {
      * @param _name
      * @param _type
      */
-    protected constructor(_id: number, _name: string, _type: FeatureTypes);
+    constructor(_id: number, _name: string, _type: FeatureTypes);
     /**
      * Delete File tree element
      */
@@ -796,6 +826,7 @@ export * from "./FileTreeComment";
 export * from "./FileTreeCommentSVG";
 export * from "./FIleTreeDrawing";
 export * from "./FileTreeFolder";
+export * from "./FIleTreeIntelliPIDLegendPosition";
 export * from "./FileTreeMarkup";
 export * from "./FileTreeModel";
 export * from "./FileTreePackage";
@@ -808,6 +839,7 @@ export * from "./FileTreeSketch";
 export * from "./FileTreeSpraying";
 export * from "./FileTreeTwoDToThreeD";
 export * from "./FileTreeView";
+export * from "./FIleTreeWindowLayout";
 export * from "./FileTreeManager";
 //# sourceMappingURL=index.d.ts.map
 ```
@@ -2932,8 +2964,7 @@ export declare class CustomAttributes {
 export declare enum TargetEnum {
     Undefined = "0",
     ThreeD = "1",
-    Intelli = "10",
-    Browser = "11"
+    Intelli = "10"
 }
 /**
  * how Queries will be combined
@@ -2994,7 +3025,9 @@ export declare enum FeatureTypes {
     AppControl = "AppControl",
     Animation = "Animation",
     PIDSketch = "PIDSketch",
-    Report = "Report"
+    Report = "Report",
+    WindowLayout = "WindowLayout",
+    IntelliPIDLegendPosition = "IntelliPIDLegendPosition"
 }
 export declare enum ProjectionSphereType {
     Picture = 0,
@@ -4734,7 +4767,9 @@ export declare class Application {
         AppControl = "AppControl",
         Animation = "Animation",
         PIDSketch = "PIDSketch",
-        Report = "Report"
+        Report = "Report",
+        WindowLayout = "WindowLayout",
+        IntelliPIDLegendPosition = "IntelliPIDLegendPosition"
     }
 
     export declare enum FileDialogApiReturnType {
@@ -4889,7 +4924,7 @@ export declare class Application {
          * @param _name
          * @param _type
          */
-        protected constructor(_id: number, _name: string, _type: FeatureTypes);
+        constructor(_id: number, _name: string, _type: FeatureTypes);
         /**
          * Delete File tree element
          */
@@ -4932,6 +4967,10 @@ export declare class Application {
     }
 
     export declare class FileTreeFolder extends FileTreeElement {
+        constructor(id: number, name: string, type: FeatureTypes);
+    }
+
+    export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
@@ -5245,6 +5284,10 @@ export declare class Application {
     }
 
     export declare class FileTreeView extends FileTreeElement {
+        constructor(id: number, name: string, type: FeatureTypes);
+    }
+
+    export declare class FIleTreeWindowLayout extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
@@ -6817,8 +6860,7 @@ export declare class Application {
     export declare enum TargetEnum {
         Undefined = "0",
         ThreeD = "1",
-        Intelli = "10",
-        Browser = "11"
+        Intelli = "10"
     }
 
     export declare enum TextureRenderMode {

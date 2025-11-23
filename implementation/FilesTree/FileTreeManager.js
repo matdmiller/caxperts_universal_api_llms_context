@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeManager = exports.FileTreeManagerLegacy = void 0;
+const FileTreeElement_1 = require("./FileTreeElement");
 const Util_1 = require("../Util");
 const FileTreePointOfInterest_1 = require("./FileTreePointOfInterest");
 const FileTreePackage_1 = require("./FileTreePackage");
@@ -22,6 +23,8 @@ const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
 const FileTreeSpraying_1 = require("./FileTreeSpraying");
 const FIleTreeDrawing_1 = require("./FIleTreeDrawing");
+const FIleTreeIntelliPIDLegendPosition_1 = require("./FIleTreeIntelliPIDLegendPosition");
+const FIleTreeWindowLayout_1 = require("./FIleTreeWindowLayout");
 /**
  * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -302,9 +305,13 @@ class FileTreeManager {
                 return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Drawing:
                 return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.WindowLayout:
+                return new FIleTreeWindowLayout_1.FIleTreeWindowLayout(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.IntelliPIDLegendPosition:
+                return new FIleTreeIntelliPIDLegendPosition_1.FIleTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
-            //return new FileTreeElement(element.Id, element.Name, element.Type);
+                return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);
         }
     }
     /**

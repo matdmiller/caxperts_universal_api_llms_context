@@ -5,8 +5,7 @@
 export declare enum TargetEnum {
     Undefined = "0",
     ThreeD = "1",
-    Intelli = "10",
-    Browser = "11"
+    Intelli = "10"
 }
 /**
  * how Queries will be combined
@@ -67,7 +66,9 @@ export declare enum FeatureTypes {
     AppControl = "AppControl",
     Animation = "Animation",
     PIDSketch = "PIDSketch",
-    Report = "Report"
+    Report = "Report",
+    WindowLayout = "WindowLayout",
+    IntelliPIDLegendPosition = "IntelliPIDLegendPosition"
 }
 export declare enum ProjectionSphereType {
     Picture = 0,

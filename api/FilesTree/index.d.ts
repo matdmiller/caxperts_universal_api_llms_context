@@ -5,6 +5,7 @@ export * from "./FileTreeComment";
 export * from "./FileTreeCommentSVG";
 export * from "./FIleTreeDrawing";
 export * from "./FileTreeFolder";
+export * from "./FIleTreeIntelliPIDLegendPosition";
 export * from "./FileTreeMarkup";
 export * from "./FileTreeModel";
 export * from "./FileTreePackage";
@@ -17,5 +18,6 @@ export * from "./FileTreeSketch";
 export * from "./FileTreeSpraying";
 export * from "./FileTreeTwoDToThreeD";
 export * from "./FileTreeView";
+export * from "./FIleTreeWindowLayout";
 export * from "./FileTreeManager";
 //# sourceMappingURL=index.d.ts.map

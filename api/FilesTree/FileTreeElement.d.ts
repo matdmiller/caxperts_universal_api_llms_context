@@ -27,7 +27,7 @@ export declare class FileTreeElement {
      * @param _name
      * @param _type
      */
-    protected constructor(_id: number, _name: string, _type: FeatureTypes);
+    constructor(_id: number, _name: string, _type: FeatureTypes);
     /**
      * Delete File tree element
      */

@@ -10,7 +10,6 @@ var TargetEnum;
     TargetEnum["Undefined"] = "0";
     TargetEnum["ThreeD"] = "1";
     TargetEnum["Intelli"] = "10";
-    TargetEnum["Browser"] = "11";
 })(TargetEnum = exports.TargetEnum || (exports.TargetEnum = {}));
 /**
  * how Queries will be combined
@@ -79,6 +78,8 @@ var FeatureTypes;
     FeatureTypes["Animation"] = "Animation";
     FeatureTypes["PIDSketch"] = "PIDSketch";
     FeatureTypes["Report"] = "Report";
+    FeatureTypes["WindowLayout"] = "WindowLayout";
+    FeatureTypes["IntelliPIDLegendPosition"] = "IntelliPIDLegendPosition";
 })(FeatureTypes = exports.FeatureTypes || (exports.FeatureTypes = {}));
 var ProjectionSphereType;
 (function (ProjectionSphereType) {

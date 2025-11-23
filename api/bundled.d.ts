@@ -965,7 +965,9 @@ export declare class Application {
         AppControl = "AppControl",
         Animation = "Animation",
         PIDSketch = "PIDSketch",
-        Report = "Report"
+        Report = "Report",
+        WindowLayout = "WindowLayout",
+        IntelliPIDLegendPosition = "IntelliPIDLegendPosition"
     }
 
     export declare enum FileDialogApiReturnType {
@@ -1120,7 +1122,7 @@ export declare class Application {
          * @param _name
          * @param _type
          */
-        protected constructor(_id: number, _name: string, _type: FeatureTypes);
+        constructor(_id: number, _name: string, _type: FeatureTypes);
         /**
          * Delete File tree element
          */
@@ -1163,6 +1165,10 @@ export declare class Application {
     }
 
     export declare class FileTreeFolder extends FileTreeElement {
+        constructor(id: number, name: string, type: FeatureTypes);
+    }
+
+    export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
@@ -1476,6 +1482,10 @@ export declare class Application {
     }
 
     export declare class FileTreeView extends FileTreeElement {
+        constructor(id: number, name: string, type: FeatureTypes);
+    }
+
+    export declare class FIleTreeWindowLayout extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
@@ -3048,8 +3058,7 @@ export declare class Application {
     export declare enum TargetEnum {
         Undefined = "0",
         ThreeD = "1",
-        Intelli = "10",
-        Browser = "11"
+        Intelli = "10"
     }
 
     export declare enum TextureRenderMode {

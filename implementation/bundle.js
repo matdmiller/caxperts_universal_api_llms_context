@@ -198,7 +198,7 @@ class Application {
 }
 exports.Application = Application;
 
-},{"./FilesTree":22,"./Internal/APIConnector":23,"./Internal/CaxApiCommand":25,"./Objects":45,"./Objects/AuthenticationManager":27,"./Scenes":54,"./Util":61}],2:[function(require,module,exports){
+},{"./FilesTree":24,"./Internal/APIConnector":25,"./Internal/CaxApiCommand":27,"./Objects":47,"./Objects/AuthenticationManager":29,"./Scenes":56,"./Util":63}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeDrawing = void 0;
@@ -226,7 +226,31 @@ class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeDrawing = FileTreeDrawing;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],3:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],3:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FIleTreeIntelliPIDLegendPosition = void 0;
+const FileTreeElement_1 = require("./FileTreeElement");
+class FIleTreeIntelliPIDLegendPosition extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+}
+exports.FIleTreeIntelliPIDLegendPosition = FIleTreeIntelliPIDLegendPosition;
+
+},{"./FileTreeElement":9}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FIleTreeWindowLayout = void 0;
+const FileTreeElement_1 = require("./FileTreeElement");
+class FIleTreeWindowLayout extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+}
+exports.FIleTreeWindowLayout = FIleTreeWindowLayout;
+
+},{"./FileTreeElement":9}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAnimation = void 0;
@@ -263,7 +287,7 @@ class FileTreeAnimation extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeAnimation = FileTreeAnimation;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],4:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],6:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAppControl = void 0;
@@ -275,7 +299,7 @@ class FileTreeAppControl extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeAppControl = FileTreeAppControl;
 
-},{"./FileTreeElement":7}],5:[function(require,module,exports){
+},{"./FileTreeElement":9}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeComment = void 0;
@@ -287,7 +311,7 @@ class FileTreeComment extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeComment = FileTreeComment;
 
-},{"./FileTreeElement":7}],6:[function(require,module,exports){
+},{"./FileTreeElement":9}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeCommentSVG = void 0;
@@ -299,7 +323,7 @@ class FileTreeCommentSVG extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeCommentSVG = FileTreeCommentSVG;
 
-},{"./FileTreeElement":7}],7:[function(require,module,exports){
+},{"./FileTreeElement":9}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeElement = void 0;
@@ -431,7 +455,7 @@ class FileTreeElement {
 }
 exports.FileTreeElement = FileTreeElement;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],8:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeFolder = void 0;
@@ -443,10 +467,11 @@ class FileTreeFolder extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeFolder = FileTreeFolder;
 
-},{"./FileTreeElement":7}],9:[function(require,module,exports){
+},{"./FileTreeElement":9}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeManager = exports.FileTreeManagerLegacy = void 0;
+const FileTreeElement_1 = require("./FileTreeElement");
 const Util_1 = require("../Util");
 const FileTreePointOfInterest_1 = require("./FileTreePointOfInterest");
 const FileTreePackage_1 = require("./FileTreePackage");
@@ -468,6 +493,8 @@ const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
 const FileTreeSpraying_1 = require("./FileTreeSpraying");
 const FIleTreeDrawing_1 = require("./FIleTreeDrawing");
+const FIleTreeIntelliPIDLegendPosition_1 = require("./FIleTreeIntelliPIDLegendPosition");
+const FIleTreeWindowLayout_1 = require("./FIleTreeWindowLayout");
 /**
  * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -748,9 +775,13 @@ class FileTreeManager {
                 return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Drawing:
                 return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.WindowLayout:
+                return new FIleTreeWindowLayout_1.FIleTreeWindowLayout(element.Id, element.Name, element.Type);
+            case Util_1.FeatureTypes.IntelliPIDLegendPosition:
+                return new FIleTreeIntelliPIDLegendPosition_1.FIleTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
-            //return new FileTreeElement(element.Id, element.Name, element.Type);
+                return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);
         }
     }
     /**
@@ -789,7 +820,7 @@ class FileTreeManager {
 }
 exports.FileTreeManager = FileTreeManager;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FIleTreeDrawing":2,"./FileTreeAnimation":3,"./FileTreeAppControl":4,"./FileTreeComment":5,"./FileTreeCommentSVG":6,"./FileTreeFolder":8,"./FileTreeMarkup":10,"./FileTreeModel":11,"./FileTreePIDSketch":12,"./FileTreePackage":13,"./FileTreePhoto":14,"./FileTreePointOfInterest":15,"./FileTreeReport":16,"./FileTreeScreenshot":17,"./FileTreeSketch":18,"./FileTreeSpraying":19,"./FileTreeTwoDToThreeD":20,"./FileTreeView":21}],10:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FIleTreeDrawing":2,"./FIleTreeIntelliPIDLegendPosition":3,"./FIleTreeWindowLayout":4,"./FileTreeAnimation":5,"./FileTreeAppControl":6,"./FileTreeComment":7,"./FileTreeCommentSVG":8,"./FileTreeElement":9,"./FileTreeFolder":10,"./FileTreeMarkup":12,"./FileTreeModel":13,"./FileTreePIDSketch":14,"./FileTreePackage":15,"./FileTreePhoto":16,"./FileTreePointOfInterest":17,"./FileTreeReport":18,"./FileTreeScreenshot":19,"./FileTreeSketch":20,"./FileTreeSpraying":21,"./FileTreeTwoDToThreeD":22,"./FileTreeView":23}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeMarkup = void 0;
@@ -830,7 +861,7 @@ class FileTreeMarkup extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeMarkup = FileTreeMarkup;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],11:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeModel = void 0;
@@ -842,7 +873,7 @@ class FileTreeModel extends FileTreeFolder_1.FileTreeFolder {
 }
 exports.FileTreeModel = FileTreeModel;
 
-},{"./FileTreeFolder":8}],12:[function(require,module,exports){
+},{"./FileTreeFolder":10}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePIDSketch = void 0;
@@ -922,7 +953,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePIDSketch = FileTreePIDSketch;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],13:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePackage = void 0;
@@ -934,7 +965,7 @@ class FileTreePackage extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePackage = FileTreePackage;
 
-},{"./FileTreeElement":7}],14:[function(require,module,exports){
+},{"./FileTreeElement":9}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePhoto = void 0;
@@ -946,7 +977,7 @@ class FileTreePhoto extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePhoto = FileTreePhoto;
 
-},{"./FileTreeElement":7}],15:[function(require,module,exports){
+},{"./FileTreeElement":9}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePointOfInterest = void 0;
@@ -958,7 +989,7 @@ class FileTreePointOfInterest extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePointOfInterest = FileTreePointOfInterest;
 
-},{"./FileTreeElement":7}],16:[function(require,module,exports){
+},{"./FileTreeElement":9}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeReport = void 0;
@@ -970,7 +1001,7 @@ class FileTreeReport extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeReport = FileTreeReport;
 
-},{"./FileTreeElement":7}],17:[function(require,module,exports){
+},{"./FileTreeElement":9}],19:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeScreenshot = void 0;
@@ -982,7 +1013,7 @@ class FileTreeScreenshot extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeScreenshot = FileTreeScreenshot;
 
-},{"./FileTreeElement":7}],18:[function(require,module,exports){
+},{"./FileTreeElement":9}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSketch = void 0;
@@ -1099,7 +1130,7 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeSketch = FileTreeSketch;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],19:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSpraying = void 0;
@@ -1124,7 +1155,7 @@ class FileTreeSpraying extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeSpraying = FileTreeSpraying;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"./FileTreeElement":7}],20:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeTwoDToThreeD = void 0;
@@ -1136,7 +1167,7 @@ class FileTreeTwoDToThreeD extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeTwoDToThreeD = FileTreeTwoDToThreeD;
 
-},{"./FileTreeElement":7}],21:[function(require,module,exports){
+},{"./FileTreeElement":9}],23:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeView = void 0;
@@ -1148,7 +1179,7 @@ class FileTreeView extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeView = FileTreeView;
 
-},{"./FileTreeElement":7}],22:[function(require,module,exports){
+},{"./FileTreeElement":9}],24:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1172,6 +1203,7 @@ __exportStar(require("./FileTreeComment"), exports);
 __exportStar(require("./FileTreeCommentSVG"), exports);
 __exportStar(require("./FIleTreeDrawing"), exports);
 __exportStar(require("./FileTreeFolder"), exports);
+__exportStar(require("./FIleTreeIntelliPIDLegendPosition"), exports);
 __exportStar(require("./FileTreeMarkup"), exports);
 __exportStar(require("./FileTreeModel"), exports);
 __exportStar(require("./FileTreePackage"), exports);
@@ -1184,9 +1216,10 @@ __exportStar(require("./FileTreeSketch"), exports);
 __exportStar(require("./FileTreeSpraying"), exports);
 __exportStar(require("./FileTreeTwoDToThreeD"), exports);
 __exportStar(require("./FileTreeView"), exports);
+__exportStar(require("./FIleTreeWindowLayout"), exports);
 __exportStar(require("./FileTreeManager"), exports);
 
-},{"./FIleTreeDrawing":2,"./FileTreeAnimation":3,"./FileTreeAppControl":4,"./FileTreeComment":5,"./FileTreeCommentSVG":6,"./FileTreeElement":7,"./FileTreeFolder":8,"./FileTreeManager":9,"./FileTreeMarkup":10,"./FileTreeModel":11,"./FileTreePIDSketch":12,"./FileTreePackage":13,"./FileTreePhoto":14,"./FileTreePointOfInterest":15,"./FileTreeReport":16,"./FileTreeScreenshot":17,"./FileTreeSketch":18,"./FileTreeSpraying":19,"./FileTreeTwoDToThreeD":20,"./FileTreeView":21}],23:[function(require,module,exports){
+},{"./FIleTreeDrawing":2,"./FIleTreeIntelliPIDLegendPosition":3,"./FIleTreeWindowLayout":4,"./FileTreeAnimation":5,"./FileTreeAppControl":6,"./FileTreeComment":7,"./FileTreeCommentSVG":8,"./FileTreeElement":9,"./FileTreeFolder":10,"./FileTreeManager":11,"./FileTreeMarkup":12,"./FileTreeModel":13,"./FileTreePIDSketch":14,"./FileTreePackage":15,"./FileTreePhoto":16,"./FileTreePointOfInterest":17,"./FileTreeReport":18,"./FileTreeScreenshot":19,"./FileTreeSketch":20,"./FileTreeSpraying":21,"./FileTreeTwoDToThreeD":22,"./FileTreeView":23}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = exports.ApiResponseContainer = exports.CoverageTracker = void 0;
@@ -1311,7 +1344,7 @@ class Api {
 exports.Api = Api;
 Api.instance = undefined;
 
-},{"../Util":61,"./APIConnectorVuplex":24,"./CaxApiCommand":25}],24:[function(require,module,exports){
+},{"../Util":63,"./APIConnectorVuplex":26,"./CaxApiCommand":27}],26:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiConnectorVuplex = void 0;
@@ -1366,7 +1399,7 @@ class ApiConnectorVuplex {
 }
 exports.ApiConnectorVuplex = ApiConnectorVuplex;
 
-},{"./APIConnector":23}],25:[function(require,module,exports){
+},{"./APIConnector":25}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaxApiCommand = void 0;
@@ -1386,7 +1419,7 @@ class CaxApiCommand {
 }
 exports.CaxApiCommand = CaxApiCommand;
 
-},{"../Util/Enums":58}],26:[function(require,module,exports){
+},{"../Util/Enums":60}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttributeTreeNode = void 0;
@@ -1451,7 +1484,7 @@ class AttributeTreeNode {
 }
 exports.AttributeTreeNode = AttributeTreeNode;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],27:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationContext = exports.AuthenticationManager = void 0;
@@ -1533,7 +1566,7 @@ class AuthenticationContext {
 }
 exports.AuthenticationContext = AuthenticationContext;
 
-},{"../Application":1,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],28:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Camera = void 0;
@@ -1621,7 +1654,7 @@ class Camera {
 }
 exports.Camera = Camera;
 
-},{"../Internal/APIConnector":23,"../Util":61}],29:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClashContext = void 0;
@@ -1668,7 +1701,7 @@ class ClashContext {
 }
 exports.ClashContext = ClashContext;
 
-},{"../Application":1,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],30:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Events = void 0;
@@ -1818,7 +1851,7 @@ class Events {
 }
 exports.Events = Events;
 
-},{"../Internal/APIConnector":23,"../ResponseTypes":49}],31:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../ResponseTypes":51}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileOperations = void 0;
@@ -1875,7 +1908,7 @@ class FileOperations {
 }
 exports.FileOperations = FileOperations;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],32:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation = void 0;
@@ -2055,7 +2088,7 @@ class FilterOperation {
 }
 exports.FilterOperation = FilterOperation;
 
-},{"../Internal/APIConnector":23,"../Util":61,"./ModelObject":40}],33:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63,"./ModelObject":42}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation3d = void 0;
@@ -2217,7 +2250,7 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperation3d = FilterOperation3d;
 
-},{"../Internal/APIConnector":23,"../Util":61,"./AttributeTree":26,"./ClashContext":29,"./FilterOperation":32}],34:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63,"./AttributeTree":28,"./ClashContext":31,"./FilterOperation":34}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperationPid = void 0;
@@ -2276,7 +2309,7 @@ class FilterOperationPid extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperationPid = FilterOperationPid;
 
-},{"../Internal/APIConnector":23,"../Util":61,"./FilterOperation":32}],35:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63,"./FilterOperation":34}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntelliPidDrawing = void 0;
@@ -2311,7 +2344,7 @@ class IntelliPidDrawing {
 }
 exports.IntelliPidDrawing = IntelliPidDrawing;
 
-},{"../Internal/APIConnector":23,"../Util":61}],36:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer2D = void 0;
@@ -2404,7 +2437,7 @@ class Layer2D {
 }
 exports.Layer2D = Layer2D;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],37:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer3D = void 0;
@@ -2531,7 +2564,7 @@ class Layer3D {
 }
 exports.Layer3D = Layer3D;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],38:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalStorage = void 0;
@@ -2596,7 +2629,7 @@ class LocalStorage {
 }
 exports.LocalStorage = LocalStorage;
 
-},{"../Application":1,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],39:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = exports.ModelLegacy = void 0;
@@ -2734,7 +2767,7 @@ class Model {
 }
 exports.Model = Model;
 
-},{".":45,"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61,"../Util/Enums":58,"../Util/GetSet":59}],40:[function(require,module,exports){
+},{".":47,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"../Util/Enums":60,"../Util/GetSet":61}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Attribute = exports.ModelObject = void 0;
@@ -2943,7 +2976,7 @@ class Attribute {
 }
 exports.Attribute = Attribute;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],41:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pdf = void 0;
@@ -2990,7 +3023,7 @@ class Pdf {
 }
 exports.Pdf = Pdf;
 
-},{"../Internal/APIConnector":23,"../Util":61}],42:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Printer = void 0;
@@ -3029,7 +3062,7 @@ class Printer {
 }
 exports.Printer = Printer;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],43:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectionSphereElement = void 0;
@@ -3068,7 +3101,7 @@ class ProjectionSphereElement {
 }
 exports.ProjectionSphereElement = ProjectionSphereElement;
 
-},{"../Internal/APIConnector":23,"../Util":61}],44:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":63}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settings = void 0;
@@ -3174,7 +3207,7 @@ class Settings {
 }
 exports.Settings = Settings;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util/Enums":58,"../Util/GetSet":59}],45:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util/Enums":60,"../Util/GetSet":61}],47:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3212,7 +3245,7 @@ __exportStar(require("./Settings"), exports);
 __exportStar(require("./FileOperations"), exports);
 __exportStar(require("./Pdf"), exports);
 
-},{"./AttributeTree":26,"./AuthenticationManager":27,"./Camera":28,"./ClashContext":29,"./Events":30,"./FileOperations":31,"./FilterOperation3D":33,"./FilterOperationPid":34,"./IntelliPidDrawing":35,"./Layer2D":36,"./Layer3D":37,"./LocalStorage":38,"./Model":39,"./ModelObject":40,"./Pdf":41,"./Printer":42,"./ProjectionSphereElement":43,"./Settings":44}],46:[function(require,module,exports){
+},{"./AttributeTree":28,"./AuthenticationManager":29,"./Camera":30,"./ClashContext":31,"./Events":32,"./FileOperations":33,"./FilterOperation3D":35,"./FilterOperationPid":36,"./IntelliPidDrawing":37,"./Layer2D":38,"./Layer3D":39,"./LocalStorage":40,"./Model":41,"./ModelObject":42,"./Pdf":43,"./Printer":44,"./ProjectionSphereElement":45,"./Settings":46}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiResponseWithType = exports.ApiResponse = void 0;
@@ -3229,7 +3262,7 @@ class ApiResponseWithType extends ApiResponse {
 }
 exports.ApiResponseWithType = ApiResponseWithType;
 
-},{}],47:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StorageVariableChangedEvent = exports.AuthenticationContextChangedEvent = exports.IntelliPidSelectionChanged = exports.IntelliPidSelectionChangedEvent = exports.AnimationTimestamp = exports.AnimationTimestampChangedObject = exports.LinkClicked = exports.LifeCycleEvent = exports.SelectionChanged = exports.PointerClicked = exports.ClashComputationProgressChangedEvent = exports.CustomAttributeValueChanged = exports.AnimationTimestampChangedEvent = exports.CustomAttributeValueChangedEvent = exports.LinkClickedEvent = exports.SelectionChangedEvent = exports.PointerClickedEvent = exports.ApiEvents = void 0;
@@ -3316,7 +3349,7 @@ class StorageVariableChangedEvent {
 }
 exports.StorageVariableChangedEvent = StorageVariableChangedEvent;
 
-},{}],48:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
@@ -3556,7 +3589,7 @@ class GetWindowLayoutResponse {
 }
 exports.GetWindowLayoutResponse = GetWindowLayoutResponse;
 
-},{}],49:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3577,7 +3610,7 @@ __exportStar(require("./ApiResponse"), exports);
 __exportStar(require("./GetObjects"), exports);
 __exportStar(require("./Events"), exports);
 
-},{"./ApiResponse":46,"./Events":47,"./GetObjects":48}],50:[function(require,module,exports){
+},{"./ApiResponse":48,"./Events":49,"./GetObjects":50}],52:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppControlScene = void 0;
@@ -3597,7 +3630,7 @@ class AppControlScene extends Scene_1.Scene {
 }
 exports.AppControlScene = AppControlScene;
 
-},{"./Scene":51}],51:[function(require,module,exports){
+},{"./Scene":53}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
@@ -3678,7 +3711,7 @@ class Scene {
 }
 exports.Scene = Scene;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util":61}],52:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene3d = void 0;
@@ -3755,7 +3788,7 @@ class Scene3d extends Scene_1.Scene {
 }
 exports.Scene3d = Scene3d;
 
-},{"../Internal/APIConnector":23,"../Objects":45,"../Util":61,"./Scene":51}],53:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Objects":47,"../Util":63,"./Scene":53}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScenePid = void 0;
@@ -3779,7 +3812,7 @@ class ScenePid extends Scene_1.Scene {
 }
 exports.ScenePid = ScenePid;
 
-},{"../Objects":45,"./Scene":51}],54:[function(require,module,exports){
+},{"../Objects":47,"./Scene":53}],56:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3801,7 +3834,7 @@ __exportStar(require("./Scene3d"), exports);
 __exportStar(require("./ScenePid"), exports);
 __exportStar(require("./AppControlScene"), exports);
 
-},{"./AppControlScene":50,"./Scene":51,"./Scene3d":52,"./ScenePid":53}],55:[function(require,module,exports){
+},{"./AppControlScene":52,"./Scene":53,"./Scene3d":54,"./ScenePid":55}],57:[function(require,module,exports){
 "use strict";
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -3841,7 +3874,7 @@ class Theme {
 }
 exports.Theme = Theme;
 
-},{}],56:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
@@ -4005,7 +4038,7 @@ class DrawingTemplate {
 }
 exports.DrawingTemplate = DrawingTemplate;
 
-},{}],57:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomAttributes = exports.CustomAttributeLegacy = void 0;
@@ -4107,7 +4140,7 @@ class CustomAttributes {
 }
 exports.CustomAttributes = CustomAttributes;
 
-},{"../Internal/APIConnector":23,"../Internal/CaxApiCommand":25,"../Util/Enums":58}],58:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util/Enums":60}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
@@ -4120,7 +4153,6 @@ var TargetEnum;
     TargetEnum["Undefined"] = "0";
     TargetEnum["ThreeD"] = "1";
     TargetEnum["Intelli"] = "10";
-    TargetEnum["Browser"] = "11";
 })(TargetEnum = exports.TargetEnum || (exports.TargetEnum = {}));
 /**
  * how Queries will be combined
@@ -4189,6 +4221,8 @@ var FeatureTypes;
     FeatureTypes["Animation"] = "Animation";
     FeatureTypes["PIDSketch"] = "PIDSketch";
     FeatureTypes["Report"] = "Report";
+    FeatureTypes["WindowLayout"] = "WindowLayout";
+    FeatureTypes["IntelliPIDLegendPosition"] = "IntelliPIDLegendPosition";
 })(FeatureTypes = exports.FeatureTypes || (exports.FeatureTypes = {}));
 var ProjectionSphereType;
 (function (ProjectionSphereType) {
@@ -4598,7 +4632,7 @@ var WindowLayoutFormat;
     WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
 })(WindowLayoutFormat = exports.WindowLayoutFormat || (exports.WindowLayoutFormat = {}));
 
-},{}],59:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetSet = exports.Set = exports.Get = void 0;
@@ -4652,7 +4686,7 @@ class GetSet {
 }
 exports.GetSet = GetSet;
 
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SetAnimationCurrentTimeParameters = exports.SetWindowLayoutParameter = exports.GetWindowLayoutParameter = exports.SetAnimationStartParameters = exports.AnimationKeyframeParameters = exports.FilesTreeCreateDrawingParameter = exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
@@ -4851,7 +4885,7 @@ class SetAnimationCurrentTimeParameters {
 }
 exports.SetAnimationCurrentTimeParameters = SetAnimationCurrentTimeParameters;
 
-},{".":61}],61:[function(require,module,exports){
+},{".":63}],63:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4874,7 +4908,7 @@ __exportStar(require("./GetSet"), exports);
 __exportStar(require("./Enums"), exports);
 __exportStar(require("./CustomAttributes"), exports);
 
-},{"./BaseDataTypes":56,"./CustomAttributes":57,"./Enums":58,"./GetSet":59,"./ParameterBase":60}],62:[function(require,module,exports){
+},{"./BaseDataTypes":58,"./CustomAttributes":59,"./Enums":60,"./GetSet":61,"./ParameterBase":62}],64:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4899,5 +4933,5 @@ __exportStar(require("./Util"), exports);
 __exportStar(require("./ResponseTypes"), exports);
 __exportStar(require("./Objects"), exports);
 
-},{"./Application":1,"./FilesTree":22,"./Objects":45,"./ResponseTypes":49,"./Scenes":54,"./Theme":55,"./Util":61}]},{},[62])(62)
+},{"./Application":1,"./FilesTree":24,"./Objects":47,"./ResponseTypes":51,"./Scenes":56,"./Theme":57,"./Util":63}]},{},[64])(64)
 });
