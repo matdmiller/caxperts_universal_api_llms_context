@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - ES Module Bundle
  * Version: ** 7.2.1
- * Bundled on: 2025-11-30
+ * Bundled on: 2025-12-07
  * This file was automatically generated from the TypeScript source.
  */
 
@@ -4148,20 +4148,20 @@ function requireFileTreeCommentSVG () {
 	return FileTreeCommentSVG;
 }
 
-var FIleTreeDrawing = {};
+var FileTreeDrawing = {};
 
-var hasRequiredFIleTreeDrawing;
+var hasRequiredFileTreeDrawing;
 
-function requireFIleTreeDrawing () {
-	if (hasRequiredFIleTreeDrawing) return FIleTreeDrawing;
-	hasRequiredFIleTreeDrawing = 1;
-	Object.defineProperty(FIleTreeDrawing, "__esModule", { value: true });
-	FIleTreeDrawing.FileTreeDrawing = void 0;
+function requireFileTreeDrawing () {
+	if (hasRequiredFileTreeDrawing) return FileTreeDrawing;
+	hasRequiredFileTreeDrawing = 1;
+	Object.defineProperty(FileTreeDrawing, "__esModule", { value: true });
+	FileTreeDrawing.FileTreeDrawing = void 0;
 	const APIConnector_1 = requireAPIConnector();
 	const CaxApiCommand_1 = requireCaxApiCommand();
 	const Util_1 = requireUtil();
 	const FileTreeElement_1 = requireFileTreeElement();
-	class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
+	let FileTreeDrawing$1 = class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
 	    constructor(id, name, type) {
 	        super(id, name, type);
 	    }
@@ -4178,9 +4178,9 @@ function requireFIleTreeDrawing () {
 	        command.commandParameters.push(type.toString());
 	        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
 	    }
-	}
-	FIleTreeDrawing.FileTreeDrawing = FileTreeDrawing;
-	return FIleTreeDrawing;
+	};
+	FileTreeDrawing.FileTreeDrawing = FileTreeDrawing$1;
+	return FileTreeDrawing;
 }
 
 var FileTreeFolder = {};
@@ -4202,23 +4202,23 @@ function requireFileTreeFolder () {
 	return FileTreeFolder;
 }
 
-var FIleTreeIntelliPIDLegendPosition = {};
+var FileTreeIntelliPIDLegendPosition = {};
 
-var hasRequiredFIleTreeIntelliPIDLegendPosition;
+var hasRequiredFileTreeIntelliPIDLegendPosition;
 
-function requireFIleTreeIntelliPIDLegendPosition () {
-	if (hasRequiredFIleTreeIntelliPIDLegendPosition) return FIleTreeIntelliPIDLegendPosition;
-	hasRequiredFIleTreeIntelliPIDLegendPosition = 1;
-	Object.defineProperty(FIleTreeIntelliPIDLegendPosition, "__esModule", { value: true });
-	FIleTreeIntelliPIDLegendPosition.FIleTreeIntelliPIDLegendPosition = void 0;
+function requireFileTreeIntelliPIDLegendPosition () {
+	if (hasRequiredFileTreeIntelliPIDLegendPosition) return FileTreeIntelliPIDLegendPosition;
+	hasRequiredFileTreeIntelliPIDLegendPosition = 1;
+	Object.defineProperty(FileTreeIntelliPIDLegendPosition, "__esModule", { value: true });
+	FileTreeIntelliPIDLegendPosition.FileTreeIntelliPIDLegendPosition = void 0;
 	const FileTreeElement_1 = requireFileTreeElement();
-	let FIleTreeIntelliPIDLegendPosition$1 = class FIleTreeIntelliPIDLegendPosition extends FileTreeElement_1.FileTreeElement {
+	let FileTreeIntelliPIDLegendPosition$1 = class FileTreeIntelliPIDLegendPosition extends FileTreeElement_1.FileTreeElement {
 	    constructor(id, name, type) {
 	        super(id, name, type);
 	    }
 	};
-	FIleTreeIntelliPIDLegendPosition.FIleTreeIntelliPIDLegendPosition = FIleTreeIntelliPIDLegendPosition$1;
-	return FIleTreeIntelliPIDLegendPosition;
+	FileTreeIntelliPIDLegendPosition.FileTreeIntelliPIDLegendPosition = FileTreeIntelliPIDLegendPosition$1;
+	return FileTreeIntelliPIDLegendPosition;
 }
 
 var FileTreeMarkup = {};
@@ -4664,23 +4664,23 @@ function requireFileTreeView () {
 	return FileTreeView;
 }
 
-var FIleTreeWindowLayout = {};
+var FileTreeWindowLayout = {};
 
-var hasRequiredFIleTreeWindowLayout;
+var hasRequiredFileTreeWindowLayout;
 
-function requireFIleTreeWindowLayout () {
-	if (hasRequiredFIleTreeWindowLayout) return FIleTreeWindowLayout;
-	hasRequiredFIleTreeWindowLayout = 1;
-	Object.defineProperty(FIleTreeWindowLayout, "__esModule", { value: true });
-	FIleTreeWindowLayout.FIleTreeWindowLayout = void 0;
+function requireFileTreeWindowLayout () {
+	if (hasRequiredFileTreeWindowLayout) return FileTreeWindowLayout;
+	hasRequiredFileTreeWindowLayout = 1;
+	Object.defineProperty(FileTreeWindowLayout, "__esModule", { value: true });
+	FileTreeWindowLayout.FileTreeWindowLayout = void 0;
 	const FileTreeElement_1 = requireFileTreeElement();
-	let FIleTreeWindowLayout$1 = class FIleTreeWindowLayout extends FileTreeElement_1.FileTreeElement {
+	let FileTreeWindowLayout$1 = class FileTreeWindowLayout extends FileTreeElement_1.FileTreeElement {
 	    constructor(id, name, type) {
 	        super(id, name, type);
 	    }
 	};
-	FIleTreeWindowLayout.FIleTreeWindowLayout = FIleTreeWindowLayout$1;
-	return FIleTreeWindowLayout;
+	FileTreeWindowLayout.FileTreeWindowLayout = FileTreeWindowLayout$1;
+	return FileTreeWindowLayout;
 }
 
 var FileTreeManager = {};
@@ -4713,9 +4713,9 @@ function requireFileTreeManager () {
 	const FileTreeReport_1 = requireFileTreeReport();
 	const FileTreeCommentSVG_1 = requireFileTreeCommentSVG();
 	const FileTreeSpraying_1 = requireFileTreeSpraying();
-	const FIleTreeDrawing_1 = requireFIleTreeDrawing();
-	const FIleTreeIntelliPIDLegendPosition_1 = requireFIleTreeIntelliPIDLegendPosition();
-	const FIleTreeWindowLayout_1 = requireFIleTreeWindowLayout();
+	const FileTreeDrawing_1 = requireFileTreeDrawing();
+	const FileTreeIntelliPIDLegendPosition_1 = requireFileTreeIntelliPIDLegendPosition();
+	const FileTreeWindowLayout_1 = requireFileTreeWindowLayout();
 	/**
 	 * @deprecated
 	 * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -4995,11 +4995,11 @@ function requireFileTreeManager () {
 	            case Util_1.FeatureTypes.Spraying:
 	                return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
 	            case Util_1.FeatureTypes.Drawing:
-	                return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
+	                return new FileTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
 	            case Util_1.FeatureTypes.WindowLayout:
-	                return new FIleTreeWindowLayout_1.FIleTreeWindowLayout(element.Id, element.Name, element.Type);
+	                return new FileTreeWindowLayout_1.FileTreeWindowLayout(element.Id, element.Name, element.Type);
 	            case Util_1.FeatureTypes.IntelliPIDLegendPosition:
-	                return new FIleTreeIntelliPIDLegendPosition_1.FIleTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
+	                return new FileTreeIntelliPIDLegendPosition_1.FileTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
 	            default:
 	                console.log("Could not resolve " + element.Type);
 	                return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);
@@ -5069,9 +5069,9 @@ function requireFilesTree () {
 		__exportStar(requireFileTreeAppControl(), exports$1);
 		__exportStar(requireFileTreeComment(), exports$1);
 		__exportStar(requireFileTreeCommentSVG(), exports$1);
-		__exportStar(requireFIleTreeDrawing(), exports$1);
+		__exportStar(requireFileTreeDrawing(), exports$1);
 		__exportStar(requireFileTreeFolder(), exports$1);
-		__exportStar(requireFIleTreeIntelliPIDLegendPosition(), exports$1);
+		__exportStar(requireFileTreeIntelliPIDLegendPosition(), exports$1);
 		__exportStar(requireFileTreeMarkup(), exports$1);
 		__exportStar(requireFileTreeModel(), exports$1);
 		__exportStar(requireFileTreePackage(), exports$1);
@@ -5084,7 +5084,7 @@ function requireFilesTree () {
 		__exportStar(requireFileTreeSpraying(), exports$1);
 		__exportStar(requireFileTreeTwoDToThreeD(), exports$1);
 		__exportStar(requireFileTreeView(), exports$1);
-		__exportStar(requireFIleTreeWindowLayout(), exports$1);
+		__exportStar(requireFileTreeWindowLayout(), exports$1);
 		__exportStar(requireFileTreeManager(), exports$1); 
 	} (FilesTree));
 	return FilesTree;
@@ -5123,12 +5123,6 @@ function requireApplication () {
 	            const scenes = [];
 	            scenes.push(new Scenes_1.Scene3d(Util_1.TargetEnum.ThreeD));
 	            scenes.push(new Scenes_1.ScenePid(Util_1.TargetEnum.Intelli));
-	            scenes.push(new Scenes_1.AppControlScene(Util_1.TargetEnum.Browser));
-	            return scenes;
-	        });
-	        this.ScenesAppControls = new Util_1.Get(async () => {
-	            const scenes = [];
-	            scenes.push(new Scenes_1.AppControlScene(Util_1.TargetEnum.Browser));
 	            return scenes;
 	        });
 	        this.Scenes3d = new Util_1.Get(async () => {
@@ -5145,7 +5139,6 @@ function requireApplication () {
 	            const models = [];
 	            models.push(new Objects_1.Model(Util_1.TargetEnum.ThreeD));
 	            models.push(new Objects_1.Model(Util_1.TargetEnum.Intelli));
-	            models.push(new Objects_1.Model(Util_1.TargetEnum.Browser));
 	            return models;
 	        });
 	        this.Language = new Util_1.GetSet(async () => {
