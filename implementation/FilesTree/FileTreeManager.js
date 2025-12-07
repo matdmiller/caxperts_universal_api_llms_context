@@ -22,9 +22,9 @@ const FileTreePIDSketch_1 = require("./FileTreePIDSketch");
 const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
 const FileTreeSpraying_1 = require("./FileTreeSpraying");
-const FIleTreeDrawing_1 = require("./FIleTreeDrawing");
-const FIleTreeIntelliPIDLegendPosition_1 = require("./FIleTreeIntelliPIDLegendPosition");
-const FIleTreeWindowLayout_1 = require("./FIleTreeWindowLayout");
+const FileTreeDrawing_1 = require("./FileTreeDrawing");
+const FileTreeIntelliPIDLegendPosition_1 = require("./FileTreeIntelliPIDLegendPosition");
+const FileTreeWindowLayout_1 = require("./FileTreeWindowLayout");
 /**
  * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -304,11 +304,11 @@ class FileTreeManager {
             case Util_1.FeatureTypes.Spraying:
                 return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Drawing:
-                return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
+                return new FileTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.WindowLayout:
-                return new FIleTreeWindowLayout_1.FIleTreeWindowLayout(element.Id, element.Name, element.Type);
+                return new FileTreeWindowLayout_1.FileTreeWindowLayout(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.IntelliPIDLegendPosition:
-                return new FIleTreeIntelliPIDLegendPosition_1.FIleTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
+                return new FileTreeIntelliPIDLegendPosition_1.FileTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
                 return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);

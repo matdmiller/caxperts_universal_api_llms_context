@@ -11,4 +11,4 @@ export declare class FileTreeDrawing extends FileTreeElement {
      */
     exportDrawing(type: DrawingExportType): Promise<GetExportedDrawing>;
 }
-//# sourceMappingURL=FIleTreeDrawing.d.ts.map
+//# sourceMappingURL=FileTreeDrawing.d.ts.map

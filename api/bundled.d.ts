@@ -304,10 +304,6 @@ export declare class Application {
      */
     Scenes3d: Get<Scene3d[]>;
     /**
-     * Contains all app control scenes
-     */
-    ScenesAppControls: Get<AppControlScene[]>;
-    /**
      * Contains all model loaded inside UPV
      */
     Models: Get<Model[]>;
@@ -342,7 +338,7 @@ export declare class Application {
     FileOperations: FileOperations;
     Settings: Settings;
     /**
-     * Return the Version and FIleVersion of the Viewer
+     * Return the Version and FileVersion of the Viewer
      */
     ViewerVersion: Get<GetViewerVersion>;
     /**
@@ -1168,7 +1164,7 @@ export declare class Application {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
-    export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
+    export declare class FileTreeIntelliPIDLegendPosition extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
@@ -1485,7 +1481,7 @@ export declare class Application {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
-    export declare class FIleTreeWindowLayout extends FileTreeElement {
+    export declare class FileTreeWindowLayout extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 

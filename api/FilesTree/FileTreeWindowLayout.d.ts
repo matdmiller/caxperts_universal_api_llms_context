@@ -1,6 +1,6 @@
 import { FeatureTypes } from "../Util";
 import { FileTreeElement } from "./FileTreeElement";
-export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
+export declare class FileTreeWindowLayout extends FileTreeElement {
     constructor(id: number, name: string, type: FeatureTypes);
 }
-//# sourceMappingURL=FIleTreeIntelliPIDLegendPosition.d.ts.map
+//# sourceMappingURL=FileTreeWindowLayout.d.ts.map

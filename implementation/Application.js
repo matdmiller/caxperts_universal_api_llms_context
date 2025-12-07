@@ -27,12 +27,6 @@ class Application {
             const scenes = [];
             scenes.push(new Scenes_1.Scene3d(Util_1.TargetEnum.ThreeD));
             scenes.push(new Scenes_1.ScenePid(Util_1.TargetEnum.Intelli));
-            scenes.push(new Scenes_1.AppControlScene(Util_1.TargetEnum.Browser));
-            return scenes;
-        });
-        this.ScenesAppControls = new Util_1.Get(async () => {
-            const scenes = [];
-            scenes.push(new Scenes_1.AppControlScene(Util_1.TargetEnum.Browser));
             return scenes;
         });
         this.Scenes3d = new Util_1.Get(async () => {
@@ -49,7 +43,6 @@ class Application {
             const models = [];
             models.push(new Objects_1.Model(Util_1.TargetEnum.ThreeD));
             models.push(new Objects_1.Model(Util_1.TargetEnum.Intelli));
-            models.push(new Objects_1.Model(Util_1.TargetEnum.Browser));
             return models;
         });
         this.Language = new Util_1.GetSet(async () => {

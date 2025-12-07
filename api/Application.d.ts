@@ -1,6 +1,6 @@
 import { Events, FileOperations, LocalStorage, Model, Settings } from "./Objects";
 import { GetViewerVersion, LifeCycleState } from "./ResponseTypes";
-import { AppControlScene, Scene, ScenePid, Scene3d } from "./Scenes";
+import { Scene, ScenePid, Scene3d } from "./Scenes";
 import { Get, GetSet } from "./Util";
 import { FileTreeManager } from "./FilesTree";
 import { AuthenticationManager } from "./Objects/AuthenticationManager";
@@ -20,10 +20,6 @@ export declare class Application {
      * Contains all 3D scenes
      */
     Scenes3d: Get<Scene3d[]>;
-    /**
-     * Contains all app control scenes
-     */
-    ScenesAppControls: Get<AppControlScene[]>;
     /**
      * Contains all model loaded inside UPV
      */
@@ -59,7 +55,7 @@ export declare class Application {
     FileOperations: FileOperations;
     Settings: Settings;
     /**
-     * Return the Version and FIleVersion of the Viewer
+     * Return the Version and FileVersion of the Viewer
      */
     ViewerVersion: Get<GetViewerVersion>;
     /**

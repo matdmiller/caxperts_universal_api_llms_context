@@ -28,12 +28,6 @@ class Application {
             const scenes = [];
             scenes.push(new Scenes_1.Scene3d(Util_1.TargetEnum.ThreeD));
             scenes.push(new Scenes_1.ScenePid(Util_1.TargetEnum.Intelli));
-            scenes.push(new Scenes_1.AppControlScene(Util_1.TargetEnum.Browser));
-            return scenes;
-        });
-        this.ScenesAppControls = new Util_1.Get(async () => {
-            const scenes = [];
-            scenes.push(new Scenes_1.AppControlScene(Util_1.TargetEnum.Browser));
             return scenes;
         });
         this.Scenes3d = new Util_1.Get(async () => {
@@ -50,7 +44,6 @@ class Application {
             const models = [];
             models.push(new Objects_1.Model(Util_1.TargetEnum.ThreeD));
             models.push(new Objects_1.Model(Util_1.TargetEnum.Intelli));
-            models.push(new Objects_1.Model(Util_1.TargetEnum.Browser));
             return models;
         });
         this.Language = new Util_1.GetSet(async () => {
@@ -201,58 +194,6 @@ exports.Application = Application;
 },{"./FilesTree":24,"./Internal/APIConnector":25,"./Internal/CaxApiCommand":27,"./Objects":47,"./Objects/AuthenticationManager":29,"./Scenes":56,"./Util":63}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FileTreeDrawing = void 0;
-const APIConnector_1 = require("../Internal/APIConnector");
-const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
-const Util_1 = require("../Util");
-const FileTreeElement_1 = require("./FileTreeElement");
-class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
-    constructor(id, name, type) {
-        super(id, name, type);
-    }
-    /**
-     * Export a drawing to base64. Specify in which format you want the export to be
-     * An export can be multiple exports and this would cause multiple exports
-     * @param type Format to use
-     * @returns
-     */
-    async exportDrawing(type) {
-        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportDrawing);
-        command.target = Util_1.TargetEnum.ThreeD;
-        command.commandParameters.push(this.Id.toString());
-        command.commandParameters.push(type.toString());
-        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
-    }
-}
-exports.FileTreeDrawing = FileTreeDrawing;
-
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],3:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FIleTreeIntelliPIDLegendPosition = void 0;
-const FileTreeElement_1 = require("./FileTreeElement");
-class FIleTreeIntelliPIDLegendPosition extends FileTreeElement_1.FileTreeElement {
-    constructor(id, name, type) {
-        super(id, name, type);
-    }
-}
-exports.FIleTreeIntelliPIDLegendPosition = FIleTreeIntelliPIDLegendPosition;
-
-},{"./FileTreeElement":9}],4:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.FIleTreeWindowLayout = void 0;
-const FileTreeElement_1 = require("./FileTreeElement");
-class FIleTreeWindowLayout extends FileTreeElement_1.FileTreeElement {
-    constructor(id, name, type) {
-        super(id, name, type);
-    }
-}
-exports.FIleTreeWindowLayout = FIleTreeWindowLayout;
-
-},{"./FileTreeElement":9}],5:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAnimation = void 0;
 const APIConnector_1 = require("../Internal/APIConnector");
 const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
@@ -287,7 +228,7 @@ class FileTreeAnimation extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeAnimation = FileTreeAnimation;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],6:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAppControl = void 0;
@@ -299,7 +240,7 @@ class FileTreeAppControl extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeAppControl = FileTreeAppControl;
 
-},{"./FileTreeElement":9}],7:[function(require,module,exports){
+},{"./FileTreeElement":7}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeComment = void 0;
@@ -311,7 +252,7 @@ class FileTreeComment extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeComment = FileTreeComment;
 
-},{"./FileTreeElement":9}],8:[function(require,module,exports){
+},{"./FileTreeElement":7}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeCommentSVG = void 0;
@@ -323,7 +264,35 @@ class FileTreeCommentSVG extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeCommentSVG = FileTreeCommentSVG;
 
-},{"./FileTreeElement":9}],9:[function(require,module,exports){
+},{"./FileTreeElement":7}],6:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileTreeDrawing = void 0;
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
+const Util_1 = require("../Util");
+const FileTreeElement_1 = require("./FileTreeElement");
+class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+    /**
+     * Export a drawing to base64. Specify in which format you want the export to be
+     * An export can be multiple exports and this would cause multiple exports
+     * @param type Format to use
+     * @returns
+     */
+    async exportDrawing(type) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ExportDrawing);
+        command.target = Util_1.TargetEnum.ThreeD;
+        command.commandParameters.push(this.Id.toString());
+        command.commandParameters.push(type.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+}
+exports.FileTreeDrawing = FileTreeDrawing;
+
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeElement = void 0;
@@ -455,7 +424,7 @@ class FileTreeElement {
 }
 exports.FileTreeElement = FileTreeElement;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],10:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeFolder = void 0;
@@ -467,7 +436,19 @@ class FileTreeFolder extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeFolder = FileTreeFolder;
 
-},{"./FileTreeElement":9}],11:[function(require,module,exports){
+},{"./FileTreeElement":7}],9:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileTreeIntelliPIDLegendPosition = void 0;
+const FileTreeElement_1 = require("./FileTreeElement");
+class FileTreeIntelliPIDLegendPosition extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+}
+exports.FileTreeIntelliPIDLegendPosition = FileTreeIntelliPIDLegendPosition;
+
+},{"./FileTreeElement":7}],10:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeManager = exports.FileTreeManagerLegacy = void 0;
@@ -492,9 +473,9 @@ const FileTreePIDSketch_1 = require("./FileTreePIDSketch");
 const FileTreeReport_1 = require("./FileTreeReport");
 const FileTreeCommentSVG_1 = require("./FileTreeCommentSVG");
 const FileTreeSpraying_1 = require("./FileTreeSpraying");
-const FIleTreeDrawing_1 = require("./FIleTreeDrawing");
-const FIleTreeIntelliPIDLegendPosition_1 = require("./FIleTreeIntelliPIDLegendPosition");
-const FIleTreeWindowLayout_1 = require("./FIleTreeWindowLayout");
+const FileTreeDrawing_1 = require("./FileTreeDrawing");
+const FileTreeIntelliPIDLegendPosition_1 = require("./FileTreeIntelliPIDLegendPosition");
+const FileTreeWindowLayout_1 = require("./FileTreeWindowLayout");
 /**
  * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -774,11 +755,11 @@ class FileTreeManager {
             case Util_1.FeatureTypes.Spraying:
                 return new FileTreeSpraying_1.FileTreeSpraying(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.Drawing:
-                return new FIleTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
+                return new FileTreeDrawing_1.FileTreeDrawing(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.WindowLayout:
-                return new FIleTreeWindowLayout_1.FIleTreeWindowLayout(element.Id, element.Name, element.Type);
+                return new FileTreeWindowLayout_1.FileTreeWindowLayout(element.Id, element.Name, element.Type);
             case Util_1.FeatureTypes.IntelliPIDLegendPosition:
-                return new FIleTreeIntelliPIDLegendPosition_1.FIleTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
+                return new FileTreeIntelliPIDLegendPosition_1.FileTreeIntelliPIDLegendPosition(element.Id, element.Name, element.Type);
             default:
                 console.log("Could not resolve " + element.Type);
                 return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);
@@ -820,7 +801,7 @@ class FileTreeManager {
 }
 exports.FileTreeManager = FileTreeManager;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FIleTreeDrawing":2,"./FIleTreeIntelliPIDLegendPosition":3,"./FIleTreeWindowLayout":4,"./FileTreeAnimation":5,"./FileTreeAppControl":6,"./FileTreeComment":7,"./FileTreeCommentSVG":8,"./FileTreeElement":9,"./FileTreeFolder":10,"./FileTreeMarkup":12,"./FileTreeModel":13,"./FileTreePIDSketch":14,"./FileTreePackage":15,"./FileTreePhoto":16,"./FileTreePointOfInterest":17,"./FileTreeReport":18,"./FileTreeScreenshot":19,"./FileTreeSketch":20,"./FileTreeSpraying":21,"./FileTreeTwoDToThreeD":22,"./FileTreeView":23}],12:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeDrawing":6,"./FileTreeElement":7,"./FileTreeFolder":8,"./FileTreeIntelliPIDLegendPosition":9,"./FileTreeMarkup":11,"./FileTreeModel":12,"./FileTreePIDSketch":13,"./FileTreePackage":14,"./FileTreePhoto":15,"./FileTreePointOfInterest":16,"./FileTreeReport":17,"./FileTreeScreenshot":18,"./FileTreeSketch":19,"./FileTreeSpraying":20,"./FileTreeTwoDToThreeD":21,"./FileTreeView":22,"./FileTreeWindowLayout":23}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeMarkup = void 0;
@@ -861,7 +842,7 @@ class FileTreeMarkup extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeMarkup = FileTreeMarkup;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],13:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeModel = void 0;
@@ -873,7 +854,7 @@ class FileTreeModel extends FileTreeFolder_1.FileTreeFolder {
 }
 exports.FileTreeModel = FileTreeModel;
 
-},{"./FileTreeFolder":10}],14:[function(require,module,exports){
+},{"./FileTreeFolder":8}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePIDSketch = void 0;
@@ -953,7 +934,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePIDSketch = FileTreePIDSketch;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],15:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePackage = void 0;
@@ -965,7 +946,7 @@ class FileTreePackage extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePackage = FileTreePackage;
 
-},{"./FileTreeElement":9}],16:[function(require,module,exports){
+},{"./FileTreeElement":7}],15:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePhoto = void 0;
@@ -977,7 +958,7 @@ class FileTreePhoto extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePhoto = FileTreePhoto;
 
-},{"./FileTreeElement":9}],17:[function(require,module,exports){
+},{"./FileTreeElement":7}],16:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePointOfInterest = void 0;
@@ -989,7 +970,7 @@ class FileTreePointOfInterest extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePointOfInterest = FileTreePointOfInterest;
 
-},{"./FileTreeElement":9}],18:[function(require,module,exports){
+},{"./FileTreeElement":7}],17:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeReport = void 0;
@@ -1001,7 +982,7 @@ class FileTreeReport extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeReport = FileTreeReport;
 
-},{"./FileTreeElement":9}],19:[function(require,module,exports){
+},{"./FileTreeElement":7}],18:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeScreenshot = void 0;
@@ -1013,7 +994,7 @@ class FileTreeScreenshot extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeScreenshot = FileTreeScreenshot;
 
-},{"./FileTreeElement":9}],20:[function(require,module,exports){
+},{"./FileTreeElement":7}],19:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSketch = void 0;
@@ -1130,7 +1111,7 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeSketch = FileTreeSketch;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],21:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSpraying = void 0;
@@ -1155,7 +1136,7 @@ class FileTreeSpraying extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeSpraying = FileTreeSpraying;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":9}],22:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeTwoDToThreeD = void 0;
@@ -1167,7 +1148,7 @@ class FileTreeTwoDToThreeD extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeTwoDToThreeD = FileTreeTwoDToThreeD;
 
-},{"./FileTreeElement":9}],23:[function(require,module,exports){
+},{"./FileTreeElement":7}],22:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeView = void 0;
@@ -1179,7 +1160,19 @@ class FileTreeView extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeView = FileTreeView;
 
-},{"./FileTreeElement":9}],24:[function(require,module,exports){
+},{"./FileTreeElement":7}],23:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.FileTreeWindowLayout = void 0;
+const FileTreeElement_1 = require("./FileTreeElement");
+class FileTreeWindowLayout extends FileTreeElement_1.FileTreeElement {
+    constructor(id, name, type) {
+        super(id, name, type);
+    }
+}
+exports.FileTreeWindowLayout = FileTreeWindowLayout;
+
+},{"./FileTreeElement":7}],24:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -1201,9 +1194,9 @@ __exportStar(require("./FileTreeAnimation"), exports);
 __exportStar(require("./FileTreeAppControl"), exports);
 __exportStar(require("./FileTreeComment"), exports);
 __exportStar(require("./FileTreeCommentSVG"), exports);
-__exportStar(require("./FIleTreeDrawing"), exports);
+__exportStar(require("./FileTreeDrawing"), exports);
 __exportStar(require("./FileTreeFolder"), exports);
-__exportStar(require("./FIleTreeIntelliPIDLegendPosition"), exports);
+__exportStar(require("./FileTreeIntelliPIDLegendPosition"), exports);
 __exportStar(require("./FileTreeMarkup"), exports);
 __exportStar(require("./FileTreeModel"), exports);
 __exportStar(require("./FileTreePackage"), exports);
@@ -1216,10 +1209,10 @@ __exportStar(require("./FileTreeSketch"), exports);
 __exportStar(require("./FileTreeSpraying"), exports);
 __exportStar(require("./FileTreeTwoDToThreeD"), exports);
 __exportStar(require("./FileTreeView"), exports);
-__exportStar(require("./FIleTreeWindowLayout"), exports);
+__exportStar(require("./FileTreeWindowLayout"), exports);
 __exportStar(require("./FileTreeManager"), exports);
 
-},{"./FIleTreeDrawing":2,"./FIleTreeIntelliPIDLegendPosition":3,"./FIleTreeWindowLayout":4,"./FileTreeAnimation":5,"./FileTreeAppControl":6,"./FileTreeComment":7,"./FileTreeCommentSVG":8,"./FileTreeElement":9,"./FileTreeFolder":10,"./FileTreeManager":11,"./FileTreeMarkup":12,"./FileTreeModel":13,"./FileTreePIDSketch":14,"./FileTreePackage":15,"./FileTreePhoto":16,"./FileTreePointOfInterest":17,"./FileTreeReport":18,"./FileTreeScreenshot":19,"./FileTreeSketch":20,"./FileTreeSpraying":21,"./FileTreeTwoDToThreeD":22,"./FileTreeView":23}],25:[function(require,module,exports){
+},{"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeDrawing":6,"./FileTreeElement":7,"./FileTreeFolder":8,"./FileTreeIntelliPIDLegendPosition":9,"./FileTreeManager":10,"./FileTreeMarkup":11,"./FileTreeModel":12,"./FileTreePIDSketch":13,"./FileTreePackage":14,"./FileTreePhoto":15,"./FileTreePointOfInterest":16,"./FileTreeReport":17,"./FileTreeScreenshot":18,"./FileTreeSketch":19,"./FileTreeSpraying":20,"./FileTreeTwoDToThreeD":21,"./FileTreeView":22,"./FileTreeWindowLayout":23}],25:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = exports.ApiResponseContainer = exports.CoverageTracker = void 0;

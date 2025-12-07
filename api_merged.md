@@ -8,7 +8,7 @@ This file contains all TypeScript declaration files from the package, merged for
 ```typescript
 import { Events, FileOperations, LocalStorage, Model, Settings } from "./Objects";
 import { GetViewerVersion, LifeCycleState } from "./ResponseTypes";
-import { AppControlScene, Scene, ScenePid, Scene3d } from "./Scenes";
+import { Scene, ScenePid, Scene3d } from "./Scenes";
 import { Get, GetSet } from "./Util";
 import { FileTreeManager } from "./FilesTree";
 import { AuthenticationManager } from "./Objects/AuthenticationManager";
@@ -28,10 +28,6 @@ export declare class Application {
      * Contains all 3D scenes
      */
     Scenes3d: Get<Scene3d[]>;
-    /**
-     * Contains all app control scenes
-     */
-    ScenesAppControls: Get<AppControlScene[]>;
     /**
      * Contains all model loaded inside UPV
      */
@@ -67,7 +63,7 @@ export declare class Application {
     FileOperations: FileOperations;
     Settings: Settings;
     /**
-     * Return the Version and FIleVersion of the Viewer
+     * Return the Version and FileVersion of the Viewer
      */
     ViewerVersion: Get<GetViewerVersion>;
     /**
@@ -160,59 +156,6 @@ export declare class Application {
 
 ---
 
-## FilesTree/FIleTreeDrawing.d.ts
-
-<FilesTree/FIleTreeDrawing.d.ts>
-```typescript
-import { GetExportedDrawing } from "../ResponseTypes";
-import { DrawingExportType, FeatureTypes } from "../Util";
-import { FileTreeElement } from "./FileTreeElement";
-export declare class FileTreeDrawing extends FileTreeElement {
-    constructor(id: number, name: string, type: FeatureTypes);
-    /**
-     * Export a drawing to base64. Specify in which format you want the export to be
-     * An export can be multiple exports and this would cause multiple exports
-     * @param type Format to use
-     * @returns
-     */
-    exportDrawing(type: DrawingExportType): Promise<GetExportedDrawing>;
-}
-//# sourceMappingURL=FIleTreeDrawing.d.ts.map
-```
-</FilesTree/FIleTreeDrawing.d.ts>
-
----
-
-## FilesTree/FIleTreeIntelliPIDLegendPosition.d.ts
-
-<FilesTree/FIleTreeIntelliPIDLegendPosition.d.ts>
-```typescript
-import { FeatureTypes } from "../Util";
-import { FileTreeElement } from "./FileTreeElement";
-export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
-    constructor(id: number, name: string, type: FeatureTypes);
-}
-//# sourceMappingURL=FIleTreeIntelliPIDLegendPosition.d.ts.map
-```
-</FilesTree/FIleTreeIntelliPIDLegendPosition.d.ts>
-
----
-
-## FilesTree/FIleTreeWindowLayout.d.ts
-
-<FilesTree/FIleTreeWindowLayout.d.ts>
-```typescript
-import { FeatureTypes } from "../Util";
-import { FileTreeElement } from "./FileTreeElement";
-export declare class FIleTreeWindowLayout extends FileTreeElement {
-    constructor(id: number, name: string, type: FeatureTypes);
-}
-//# sourceMappingURL=FIleTreeWindowLayout.d.ts.map
-```
-</FilesTree/FIleTreeWindowLayout.d.ts>
-
----
-
 ## FilesTree/FileTreeAnimation.d.ts
 
 <FilesTree/FileTreeAnimation.d.ts>
@@ -282,6 +225,29 @@ export declare class FileTreeCommentSVG extends FileTreeElement {
 //# sourceMappingURL=FileTreeCommentSVG.d.ts.map
 ```
 </FilesTree/FileTreeCommentSVG.d.ts>
+
+---
+
+## FilesTree/FileTreeDrawing.d.ts
+
+<FilesTree/FileTreeDrawing.d.ts>
+```typescript
+import { GetExportedDrawing } from "../ResponseTypes";
+import { DrawingExportType, FeatureTypes } from "../Util";
+import { FileTreeElement } from "./FileTreeElement";
+export declare class FileTreeDrawing extends FileTreeElement {
+    constructor(id: number, name: string, type: FeatureTypes);
+    /**
+     * Export a drawing to base64. Specify in which format you want the export to be
+     * An export can be multiple exports and this would cause multiple exports
+     * @param type Format to use
+     * @returns
+     */
+    exportDrawing(type: DrawingExportType): Promise<GetExportedDrawing>;
+}
+//# sourceMappingURL=FileTreeDrawing.d.ts.map
+```
+</FilesTree/FileTreeDrawing.d.ts>
 
 ---
 
@@ -380,6 +346,21 @@ export declare class FileTreeFolder extends FileTreeElement {
 
 ---
 
+## FilesTree/FileTreeIntelliPIDLegendPosition.d.ts
+
+<FilesTree/FileTreeIntelliPIDLegendPosition.d.ts>
+```typescript
+import { FeatureTypes } from "../Util";
+import { FileTreeElement } from "./FileTreeElement";
+export declare class FileTreeIntelliPIDLegendPosition extends FileTreeElement {
+    constructor(id: number, name: string, type: FeatureTypes);
+}
+//# sourceMappingURL=FileTreeIntelliPIDLegendPosition.d.ts.map
+```
+</FilesTree/FileTreeIntelliPIDLegendPosition.d.ts>
+
+---
+
 ## FilesTree/FileTreeManager.d.ts
 
 <FilesTree/FileTreeManager.d.ts>
@@ -393,7 +374,7 @@ import { FileTreeFolder } from "./FileTreeFolder";
 import { FileTreeComment } from "./FileTreeComment";
 import { FileTreePIDSketch } from "./FileTreePIDSketch";
 import { FileTreeCommentSVG } from "./FileTreeCommentSVG";
-import { FileTreeDrawing } from "./FIleTreeDrawing";
+import { FileTreeDrawing } from "./FileTreeDrawing";
 /**
  * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
@@ -815,6 +796,21 @@ export declare class FileTreeView extends FileTreeElement {
 
 ---
 
+## FilesTree/FileTreeWindowLayout.d.ts
+
+<FilesTree/FileTreeWindowLayout.d.ts>
+```typescript
+import { FeatureTypes } from "../Util";
+import { FileTreeElement } from "./FileTreeElement";
+export declare class FileTreeWindowLayout extends FileTreeElement {
+    constructor(id: number, name: string, type: FeatureTypes);
+}
+//# sourceMappingURL=FileTreeWindowLayout.d.ts.map
+```
+</FilesTree/FileTreeWindowLayout.d.ts>
+
+---
+
 ## FilesTree/index.d.ts
 
 <FilesTree/index.d.ts>
@@ -824,9 +820,9 @@ export * from "./FileTreeAnimation";
 export * from "./FileTreeAppControl";
 export * from "./FileTreeComment";
 export * from "./FileTreeCommentSVG";
-export * from "./FIleTreeDrawing";
+export * from "./FileTreeDrawing";
 export * from "./FileTreeFolder";
-export * from "./FIleTreeIntelliPIDLegendPosition";
+export * from "./FileTreeIntelliPIDLegendPosition";
 export * from "./FileTreeMarkup";
 export * from "./FileTreeModel";
 export * from "./FileTreePackage";
@@ -839,7 +835,7 @@ export * from "./FileTreeSketch";
 export * from "./FileTreeSpraying";
 export * from "./FileTreeTwoDToThreeD";
 export * from "./FileTreeView";
-export * from "./FIleTreeWindowLayout";
+export * from "./FileTreeWindowLayout";
 export * from "./FileTreeManager";
 //# sourceMappingURL=index.d.ts.map
 ```
@@ -4106,10 +4102,6 @@ export declare class Application {
      */
     Scenes3d: Get<Scene3d[]>;
     /**
-     * Contains all app control scenes
-     */
-    ScenesAppControls: Get<AppControlScene[]>;
-    /**
      * Contains all model loaded inside UPV
      */
     Models: Get<Model[]>;
@@ -4144,7 +4136,7 @@ export declare class Application {
     FileOperations: FileOperations;
     Settings: Settings;
     /**
-     * Return the Version and FIleVersion of the Viewer
+     * Return the Version and FileVersion of the Viewer
      */
     ViewerVersion: Get<GetViewerVersion>;
     /**
@@ -4970,7 +4962,7 @@ export declare class Application {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
-    export declare class FIleTreeIntelliPIDLegendPosition extends FileTreeElement {
+    export declare class FileTreeIntelliPIDLegendPosition extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
@@ -5287,7 +5279,7 @@ export declare class Application {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 
-    export declare class FIleTreeWindowLayout extends FileTreeElement {
+    export declare class FileTreeWindowLayout extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
     }
 

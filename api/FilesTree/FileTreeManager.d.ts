@@ -7,7 +7,7 @@ import { FileTreeFolder } from "./FileTreeFolder";
 import { FileTreeComment } from "./FileTreeComment";
 import { FileTreePIDSketch } from "./FileTreePIDSketch";
 import { FileTreeCommentSVG } from "./FileTreeCommentSVG";
-import { FileTreeDrawing } from "./FIleTreeDrawing";
+import { FileTreeDrawing } from "./FileTreeDrawing";
 /**
  * @deprecated
  * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
