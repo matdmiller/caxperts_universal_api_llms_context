@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - UMD Bundle
  * Version: ** 7.2.1
- * Bundled on: 2026-01-18
+ * Bundled on: 2026-01-25
  * This file was automatically generated from the TypeScript source.
  */
 
