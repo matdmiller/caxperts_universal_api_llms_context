@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - UMD Bundle
  * Version: ** 7.2.1
- * Bundled on: 2026-01-25
+ * Bundled on: 2026-02-01
  * This file was automatically generated from the TypeScript source.
  */
 
@@ -46,7 +46,7 @@
 		if (hasRequiredBaseDataTypes) return BaseDataTypes;
 		hasRequiredBaseDataTypes = 1;
 		Object.defineProperty(BaseDataTypes, "__esModule", { value: true });
-		BaseDataTypes.DrawingTemplate = BaseDataTypes.ViewerFileVersion = BaseDataTypes.ViewerVersion = BaseDataTypes.PdfDocument = BaseDataTypes.Intellipid = BaseDataTypes.PidLink = BaseDataTypes.UrlLink = BaseDataTypes.ElementLinks = BaseDataTypes.FileTreeState = BaseDataTypes.CatalogSymbol = BaseDataTypes.ProjectionSphere = BaseDataTypes.Quaternion = BaseDataTypes.AttributeTreeNodeType = BaseDataTypes.PdfInfo = BaseDataTypes.IntelliPidDrawingInfo = BaseDataTypes.CustomAttributeSourceDefinition = BaseDataTypes.Definition = BaseDataTypes.Change = BaseDataTypes.ExportCustomAttributes = BaseDataTypes.ChangeSetLine = BaseDataTypes.ChangeSet = BaseDataTypes.FilesTreeObject = BaseDataTypes.TakeScreenshot = BaseDataTypes.SnapCircle = BaseDataTypes.SnapInfo = BaseDataTypes.ProjectInfo = BaseDataTypes.ModelInfo = BaseDataTypes.Instance = BaseDataTypes.ClippingPlane = BaseDataTypes.Color = BaseDataTypes.ObjectColors = BaseDataTypes.BoundsInfo = BaseDataTypes.Bounds = BaseDataTypes.CameraView = BaseDataTypes.Vector4D = BaseDataTypes.Vector3D = BaseDataTypes.Vector2D = void 0;
+		BaseDataTypes.LayerSketchIdsPair = BaseDataTypes.DrawingTemplate = BaseDataTypes.ViewerFileVersion = BaseDataTypes.ViewerVersion = BaseDataTypes.PdfDocument = BaseDataTypes.Intellipid = BaseDataTypes.PidLink = BaseDataTypes.UrlLink = BaseDataTypes.ElementLinks = BaseDataTypes.FileTreeState = BaseDataTypes.CatalogSymbol = BaseDataTypes.ProjectionSphere = BaseDataTypes.Quaternion = BaseDataTypes.AttributeTreeNodeType = BaseDataTypes.PdfInfo = BaseDataTypes.IntelliPidDrawingInfo = BaseDataTypes.CustomAttributeSourceDefinition = BaseDataTypes.Definition = BaseDataTypes.Change = BaseDataTypes.ExportCustomAttributes = BaseDataTypes.ChangeSetLine = BaseDataTypes.ChangeSet = BaseDataTypes.FilesTreeObject = BaseDataTypes.TakeScreenshot = BaseDataTypes.SnapCircle = BaseDataTypes.SnapInfo = BaseDataTypes.ProjectInfo = BaseDataTypes.ModelInfo = BaseDataTypes.Instance = BaseDataTypes.ClippingPlane = BaseDataTypes.Color = BaseDataTypes.ObjectColors = BaseDataTypes.BoundsInfo = BaseDataTypes.Bounds = BaseDataTypes.CameraView = BaseDataTypes.Vector4D = BaseDataTypes.Vector3D = BaseDataTypes.Vector2D = void 0;
 		class Vector2D {
 		    constructor(X, Y) {
 		        this.X = X;
@@ -206,6 +206,9 @@
 		class DrawingTemplate {
 		}
 		BaseDataTypes.DrawingTemplate = DrawingTemplate;
+		class LayerSketchIdsPair {
+		}
+		BaseDataTypes.LayerSketchIdsPair = LayerSketchIdsPair;
 		return BaseDataTypes;
 	}
 
@@ -483,454 +486,501 @@
 	function requireEnums () {
 		if (hasRequiredEnums) return Enums;
 		hasRequiredEnums = 1;
-		(function (exports$1) {
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			exports$1.WindowLayoutFormat = exports$1.AnimationMessageTypes = exports$1.DrawingExportType = exports$1.ModelLoadMessageType = exports$1.QualityLevel = exports$1.TextureRenderMode = exports$1.ChangeableAttributeUnitType = exports$1.PdfTypes = exports$1.GenericLoadFromFileResponseResultType = exports$1.ClashMode = exports$1.FileDialogApiReturnType = exports$1.PrimitiveType = exports$1.ColorMode = exports$1.ExportableOptions = exports$1.PidSketchToolMode = exports$1.MarkupMode = exports$1.ClippingMode = exports$1.PointOfInterestType = exports$1.VolumeConditionMode = exports$1.AttributeConditionComparison = exports$1.ConsolidationMode = exports$1.PackageConditionTypes = exports$1.ApiCommands = exports$1.ProjectionSphereType = exports$1.FeatureTypes = exports$1.CustomAttributeDataType = exports$1.UpdateModes = exports$1.SceneType = exports$1.CombineModes = exports$1.TargetEnum = void 0;
-			(function (TargetEnum) {
-			    TargetEnum["Undefined"] = "0";
-			    TargetEnum["ThreeD"] = "1";
-			    TargetEnum["Intelli"] = "10";
-			})(exports$1.TargetEnum || (exports$1.TargetEnum = {}));
-			(function (CombineModes) {
-			    CombineModes["And"] = "AND";
-			    CombineModes["Or"] = "OR";
-			})(exports$1.CombineModes || (exports$1.CombineModes = {}));
-			(function (SceneType) {
-			    SceneType["Undefined"] = "0";
-			    SceneType["ThreeD"] = "1";
-			    SceneType["IntelliPid"] = "10";
-			    SceneType["Browser"] = "11";
-			})(exports$1.SceneType || (exports$1.SceneType = {}));
-			(function (UpdateModes) {
-			    UpdateModes[UpdateModes["Append"] = 0] = "Append";
-			    UpdateModes[UpdateModes["Full"] = 1] = "Full";
-			})(exports$1.UpdateModes || (exports$1.UpdateModes = {}));
-			(function (CustomAttributeDataType) {
-			    //Calculation = 0,
-			    CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
-			    CustomAttributeDataType[CustomAttributeDataType["FreeText"] = 2] = "FreeText";
-			    CustomAttributeDataType[CustomAttributeDataType["Numeric"] = 3] = "Numeric";
-			    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
-			    //Unknown = 5,
-			    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
-			})(exports$1.CustomAttributeDataType || (exports$1.CustomAttributeDataType = {}));
-			(function (FeatureTypes) {
-			    FeatureTypes["Unknown"] = "Unknown";
-			    FeatureTypes["Model"] = "Model";
-			    FeatureTypes["Sketch"] = "Sketch";
-			    FeatureTypes["Markup"] = "Markup";
-			    FeatureTypes["IntellipidSketch"] = "IntellipidSketch";
-			    FeatureTypes["AnimationConfiguration"] = "AnimationConfiguration";
-			    FeatureTypes["AnimationDefinition"] = "AnimationDefinition";
-			    FeatureTypes["Catalogue"] = "Catalogue";
-			    FeatureTypes["Symbol"] = "Symbol";
-			    FeatureTypes["MarkupContainer"] = "MarkupContainer";
-			    FeatureTypes["Orm"] = "Orm";
-			    FeatureTypes["Spraying"] = "Spraying";
-			    FeatureTypes["Comment"] = "Comment";
-			    FeatureTypes["View"] = "View";
-			    FeatureTypes["Package"] = "Package";
-			    FeatureTypes["Folder"] = "Folder";
-			    FeatureTypes["CommentSvg"] = "CommentSvg";
-			    FeatureTypes["Screenshot"] = "Screenshot";
-			    FeatureTypes["Photo"] = "Photo";
-			    FeatureTypes["TwoDToThreeD"] = "TwoDToThreeD";
-			    FeatureTypes["PointOfInterest"] = "PointOfInterest";
-			    FeatureTypes["Drawing"] = "Drawing";
-			    FeatureTypes["Files"] = "Files";
-			    FeatureTypes["MeasurementSnapshot"] = "MeasurementSnapshot";
-			    FeatureTypes["IntelliPidLegendPositions"] = "IntelliPidLegendPositions";
-			    FeatureTypes["IsolationPlan"] = "IsolationPlan";
-			    FeatureTypes["CataloguePlacement"] = "CataloguePlacement";
-			    FeatureTypes["DrawingComment"] = "DrawingComment";
-			    FeatureTypes["AppControl"] = "AppControl";
-			    FeatureTypes["Animation"] = "Animation";
-			    FeatureTypes["PIDSketch"] = "PIDSketch";
-			    FeatureTypes["Report"] = "Report";
-			    FeatureTypes["WindowLayout"] = "WindowLayout";
-			    FeatureTypes["IntelliPIDLegendPosition"] = "IntelliPIDLegendPosition";
-			})(exports$1.FeatureTypes || (exports$1.FeatureTypes = {}));
-			(function (ProjectionSphereType) {
-			    ProjectionSphereType[ProjectionSphereType["Picture"] = 0] = "Picture";
-			    ProjectionSphereType[ProjectionSphereType["Panorama"] = 1] = "Panorama";
-			})(exports$1.ProjectionSphereType || (exports$1.ProjectionSphereType = {}));
-			(function (ApiCommands) {
-			    //Camera
-			    ApiCommands["SetCameraView"] = "SetCameraView";
-			    ApiCommands["GetCameraView"] = "GetCameraView";
-			    ApiCommands["SetClippingPlane"] = "SetClippingPlane";
-			    ApiCommands["SetCameraViewLookAtTarget"] = "SetCameraViewLookAtTarget";
-			    ApiCommands["ResetView"] = "ResetView";
-			    //Filteroperation
-			    ApiCommands["GetObjects"] = "GetObjects";
-			    ApiCommands["GetSelectedObjects"] = "GetSelectedObjects";
-			    ApiCommands["GetObjectsAttributes"] = "GetObjectsAttributes";
-			    ApiCommands["GetObjectsBoundingBox"] = "GetObjectsBoundingBox";
-			    ApiCommands["GetObjectsColors"] = "GetObjectsColors";
-			    ApiCommands["GetObjectsSnapInfo"] = "GetObjectsSnapInfo";
-			    ApiCommands["GetObjectsChangeableAttributes"] = "GetObjectsChangeableAttributes";
-			    ApiCommands["SetAttribute"] = "SetAttribute";
-			    ApiCommands["AddChangeableAttribute"] = "AddChangeableAttribute";
-			    ApiCommands["DeleteChangeableAttribute"] = "DeleteChangeableAttribute";
-			    ApiCommands["Select"] = "Select";
-			    ApiCommands["ClearSelection"] = "ClearSelection";
-			    ApiCommands["Fit"] = "Fit";
-			    ApiCommands["Color"] = "Color";
-			    ApiCommands["ClearColor"] = "ClearColor";
-			    ApiCommands["Highlight"] = "Highlight";
-			    ApiCommands["ClearHighlight"] = "ClearHighlight";
-			    ApiCommands["ShowOnly"] = "ShowOnly";
-			    ApiCommands["SetVisibility"] = "SetVisibility";
-			    ApiCommands["GetClippingInfo"] = "GetClippingInfo";
-			    ApiCommands["VolumeClip"] = "VolumeClip";
-			    ApiCommands["VolumeClipByCoordinates"] = "VolumeClipByCoordinates";
-			    ApiCommands["IntelliClip"] = "IntelliClip";
-			    ApiCommands["ClearClipping"] = "ClearClipping";
-			    ApiCommands["SearchFallback"] = "SearchFallback";
-			    ApiCommands["GetIntelliPidRawSvgData"] = "GetIntelliPidRawSvgData";
-			    ApiCommands["GetLinkedElements"] = "GetLinkedElements";
-			    //Scene3d
-			    //Drawing
-			    ApiCommands["PlaceObj"] = "PlaceObj";
-			    ApiCommands["DrawLine"] = "DrawLine";
-			    ApiCommands["PlaceText"] = "PlaceText";
-			    ApiCommands["PlaceArc"] = "PlaceArc";
-			    ApiCommands["PlacePly"] = "PlacePly";
-			    ApiCommands["DestroyDrawing"] = "DestroyDrawing";
-			    //Model
-			    ApiCommands["GetModelInfo"] = "GetModelInfo";
-			    ApiCommands["GetProjectInfo"] = "GetProjectInfo";
-			    ApiCommands["LoadConfigFile"] = "LoadConfigFile";
-			    ApiCommands["ClearCustomAttributes"] = "ClearCustomAttributes";
-			    ApiCommands["ImportCustomAttributeChangeSet"] = "ImportCustomAttributeChangeset";
-			    ApiCommands["LoadCustomAttributeConfigurationFile"] = "LoadCustomAttributeConfigurationFile";
-			    ApiCommands["LoadCustomAttributeDataFile"] = "LoadCustomAttributeDataFile";
-			    ApiCommands["SetCustomAttributeConfiguration"] = "SetCustomAttributeConfiguration";
-			    ApiCommands["GetCustomAttributeConfiguration"] = "GetCustomAttributeConfiguration";
-			    ApiCommands["ExportCustomAttributes"] = "ExportCustomAttributes";
-			    ApiCommands["GetIntelliPidDrawings"] = "GetIntelliPidDrawings";
-			    ApiCommands["OpenIntelliPidDrawings"] = "OpenIntelliPidDrawings";
-			    ApiCommands["GetProjectionSpheres"] = "GetProjectionSpheres";
-			    ApiCommands["GetCurrentProjectionSphere"] = "GetCurrentProjectionSphere";
-			    ApiCommands["EnterProjectionSphere"] = "EnterProjectionSphere";
-			    ApiCommands["LeaveProjectionSphere"] = "LeaveProjectionSphere";
-			    ApiCommands["GetAllPids"] = "GetAllPids";
-			    ApiCommands["GetOpenPids"] = "GetOpenPids";
-			    ApiCommands["GetActivePid"] = "GetActivePid";
-			    ApiCommands["OpenPid"] = "OpenPid";
-			    ApiCommands["ClosePid"] = "ClosePid";
-			    ApiCommands["GetModelAttributeValues"] = "GetModelAttributeValues";
-			    ApiCommands["GetAllPdfs"] = "GetAllPdfs";
-			    ApiCommands["GetOpenPdfsTabs"] = "GetOpenPdfsTabs";
-			    ApiCommands["GetActivePdfTab"] = "GetActivePdfTab";
-			    ApiCommands["OpenPdf"] = "OpenPdf";
-			    ApiCommands["ClosePdf"] = "ClosePdf";
-			    ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
-			    //Scene
-			    ApiCommands["TakeScreenshot"] = "TakeScreenshot";
-			    ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
-			    ApiCommands["GetTreeConfiguration"] = "GetTreeConfiguration";
-			    ApiCommands["SetTreeConfiguration"] = "SetTreeConfiguration";
-			    ApiCommands["GetVisibleAspects"] = "GetVisibleAspects";
-			    ApiCommands["SetVisibleAspects"] = "SetVisibleAspects";
-			    ApiCommands["LoadColorFile"] = "LoadColorFile";
-			    ApiCommands["LoadLinkFile"] = "LoadLinkFile";
-			    ApiCommands["ClearLinks"] = "ClearLinks";
-			    //FilesTree
-			    ApiCommands["FilesTreeDeleteObject"] = "FilesTreeDeleteObject";
-			    ApiCommands["GetFilesTreeChildren"] = "GetFilesTreeChildren";
-			    ApiCommands["GetFilesTreeSiblings"] = "GetFilesTreeSiblings";
-			    ApiCommands["FilesTreeMoveObject"] = "FilesTreeMoveObject";
-			    ApiCommands["FilesTreeImportContainer"] = "FilesTreeImportContainer";
-			    ApiCommands["GetFilesTreeContent"] = "GetFilesTreeContent";
-			    ApiCommands["FilesTreeGetContainer"] = "FilesTreeGetContainer";
-			    ApiCommands["SetMarkupTool"] = "SetMarkupTool";
-			    ApiCommands["GetIntelliPidElementsHitByMarkup"] = "GetIntelliPidElementsHitByMarkup";
-			    ApiCommands["FilesTreeClose"] = "FilesTreeClose";
-			    ApiCommands["FilesTreeCreateMarkup"] = "FilesTreeCreateMarkup";
-			    ApiCommands["FilesTreeEdit"] = "FilesTreeEdit";
-			    ApiCommands["FilesTreeShow"] = "FilesTreeShow";
-			    ApiCommands["FilesTreeView"] = "FilesTreeView";
-			    ApiCommands["FilesTreeCreateSketch"] = "FilesTreeCreateSketch";
-			    ApiCommands["FilesTreeSetState"] = "FilesTreeSetState";
-			    ApiCommands["FilesTreeGetState"] = "FilesTreeGetState";
-			    ApiCommands["FilesTreeCreateComment"] = "FilesTreeCreateComment";
-			    ApiCommands["ExportSketchAsUpvc"] = "ExportSketchAsUpvc";
-			    ApiCommands["ExportSketchAsDgn"] = "ExportSketchAsDgn";
-			    ApiCommands["ExportSprayingAsUpvc"] = "ExportSprayingAsUpvc";
-			    ApiCommands["FilesTreeCreateDrawing"] = "FilesTreeCreateDrawing";
-			    ApiCommands["GetDrawingTemplates"] = "GetDrawingTemplates";
-			    ApiCommands["ExportDrawing"] = "ExportDrawing";
-			    //Folder
-			    ApiCommands["GetFilesTreeRoot"] = "GetFilesTreeRoot";
-			    ApiCommands["FilesTreeCreateFolder"] = "FilesTreeCreateFolder";
-			    //Poi
-			    ApiCommands["PlacePoi"] = "PlacePoi";
-			    ApiCommands["PlacePoiWithComment"] = "PlacePoiWithComment";
-			    // PidSketch
-			    ApiCommands["SetPidSketchTool"] = "SetPidSketchTool";
-			    //Events
-			    ApiCommands["AddEventCallback"] = "AddEventCallback";
-			    ApiCommands["RemoveEventCallback"] = "RemoveEventCallback";
-			    //Application
-			    ApiCommands["GetLifeCycleState"] = "GetLifeCycleState";
-			    ApiCommands["ShowMessage"] = "ShowMessage";
-			    ApiCommands["FocusViewer"] = "FocusViewer";
-			    ApiCommands["QuitApplication"] = "QuitApplication";
-			    ApiCommands["CacheModel"] = "CacheModel";
-			    ApiCommands["LoadModel"] = "LoadModel";
-			    ApiCommands["DeleteModel"] = "DeleteModel";
-			    ApiCommands["ActivateLicense"] = "ActivateLicense";
-			    ApiCommands["DeactivateLicense"] = "DeactivateLicense";
-			    ApiCommands["LoadFile"] = "LoadFile";
-			    ApiCommands["ProcessFile"] = "ProcessFile";
-			    ApiCommands["LoadSketch"] = "LoadSketch";
-			    ApiCommands["LoadPackageFile"] = "LoadPackageFile";
-			    ApiCommands["ExportPackageFile"] = "ExportPackageFile";
-			    ApiCommands["ClearAuthConfig"] = "ClearAuthConfig";
-			    ApiCommands["SetAuthConfig"] = "SetAuthConfig";
-			    ApiCommands["OpenPath"] = "OpenPath";
-			    ApiCommands["WaitForModelLoading"] = "WaitForModelLoading";
-			    ApiCommands["SetLanguage"] = "SetLanguage";
-			    ApiCommands["GetLanguage"] = "GetLanguage";
-			    ApiCommands["GetRenderMode"] = "GetRenderMode";
-			    ApiCommands["SetRenderMode"] = "SetRenderMode";
-			    ApiCommands["GetQualityLevel"] = "GetQualityLevel";
-			    ApiCommands["SetQualityLevel"] = "SetQualityLevel";
-			    ApiCommands["GetPanoramaCentresVisibility"] = "GetPanoramaCentresVisibility";
-			    ApiCommands["SetPanoramaCentresVisibility"] = "SetPanoramaCentresVisibility";
-			    ApiCommands["GetViewerVersion"] = "GetViewerVersion";
-			    //Attribute Tree
-			    ApiCommands["GetTreeRootNode"] = "GetTreeRootNode";
-			    ApiCommands["GetTreeFolderChildren"] = "GetTreeFolderChildren";
-			    ApiCommands["GetTreeFolderSiblings"] = "GetTreeFolderSiblings";
-			    ApiCommands["GetTreeNodesOfFolder"] = "GetTreeNodesOfFolder";
-			    ApiCommands["GetTreeStructure"] = "GetTreeStructure";
-			    //Remote
-			    ApiCommands["WfsLoadRemote"] = "WfsLoadRemote";
-			    ApiCommands["GetWfsRemoteContent"] = "GetWfsRemoteContent";
-			    ApiCommands["GetRenderStreamingInfo"] = "GetRenderStreamingInfo";
-			    ApiCommands["WfsClearAttached"] = "WfsClearAttached";
-			    //Authentication
-			    ApiCommands["OpenAuthenticationContext"] = "OpenAuthenticationContext";
-			    ApiCommands["CloseAuthenticationContext"] = "CloseAuthenticationContext";
-			    ApiCommands["StartLogoutAuthenticationContext"] = "StartLogoutAuthenticationContext";
-			    //(Pid)Sketch
-			    ApiCommands["SelectSymbolForPlacement"] = "SelectSymbolForPlacement";
-			    ApiCommands["GetCatalogSymbols"] = "GetCatalogSymbols";
-			    ApiCommands["PlacePrimitive"] = "PlacePrimitive";
-			    ApiCommands["PlaceSymbol"] = "PlaceSymbol";
-			    ApiCommands["DeleteSketchItem"] = "DeleteSketchItem";
-			    //Clash
-			    ApiCommands["StartClashComputation"] = "StartClashComputation";
-			    ApiCommands["GetClashCandidates"] = "GetClashCandidates";
-			    ApiCommands["GetClashResults"] = "GetClashResults";
-			    ApiCommands["CancelClashComputation"] = "CancelClashComputation";
-			    //PDF Printer
-			    ApiCommands["PdfPrinterCreate"] = "PdfPrinterCreate";
-			    ApiCommands["PdfPrinterDelete"] = "PdfPrinterDelete";
-			    ApiCommands["PdfPrinterPrintToBase64"] = "PdfPrinterPrintToBase64";
-			    ApiCommands["PdfPrinterAddIntelliPidPage"] = "PdfPrinterAddIntelliPidPage";
-			    //Localstorage
-			    ApiCommands["SetStorageVariable"] = "SetStorageVariable";
-			    ApiCommands["GetStorageVariable"] = "GetStorageVariable";
-			    ApiCommands["DeleteStorageVariable"] = "DeleteStorageVariable";
-			    ApiCommands["GetStorageVariablesList"] = "GetStorageVariablesList";
-			    // Settings
-			    ApiCommands["GetUiColors"] = "GetUiColors";
-			    ApiCommands["GetUiThemes"] = "GetUiThemes";
-			    ApiCommands["SetActiveUiTheme"] = "SetActiveUiTheme";
-			    ApiCommands["GetUiVariables"] = "GetUiVariables";
-			    // Fileoperations
-			    ApiCommands["SaveFileDialog"] = "SaveFileDialog";
-			    ApiCommands["LoadFileDialog"] = "LoadFileDialog";
-			    ApiCommands["GenericLoadFromFile"] = "GenericLoadFromFile";
-			    // Animation
-			    ApiCommands["GenerateAnimationKeyframe"] = "GenerateAnimationKeyframe";
-			    ApiCommands["SetAnimationCurrentTime"] = "SetAnimationCurrentTime";
-			    //    SetAnimationStart = "SetAnimationStart",
-			    //    GetAnimationStart = "GetAnimationStart",
-			    // Layout
-			    ApiCommands["GetWindowLayout"] = "GetWindowLayout";
-			    ApiCommands["SetWindowLayout"] = "SetWindowLayout";
-			})(exports$1.ApiCommands || (exports$1.ApiCommands = {}));
-			(function (PackageConditionTypes) {
-			    PackageConditionTypes["None"] = "None";
-			    PackageConditionTypes["IntelliVolume"] = "IntelliVolume";
-			    PackageConditionTypes["Group"] = "Group";
-			    PackageConditionTypes["Attribute"] = "Attribute";
-			    PackageConditionTypes["Volume"] = "Volume";
-			})(exports$1.PackageConditionTypes || (exports$1.PackageConditionTypes = {}));
-			(function (ConsolidationMode) {
-			    ConsolidationMode["Base"] = "Base";
-			    ConsolidationMode["AndNot"] = "AndNot";
-			    ConsolidationMode["Or"] = "Or";
-			    ConsolidationMode["And"] = "And";
-			})(exports$1.ConsolidationMode || (exports$1.ConsolidationMode = {}));
-			(function (AttributeConditionComparison) {
-			    AttributeConditionComparison["Equals"] = "==";
-			    AttributeConditionComparison["NotEquals"] = "!=";
-			    AttributeConditionComparison["Like"] = "Like";
-			    AttributeConditionComparison["NotLike"] = "Not Like";
-			})(exports$1.AttributeConditionComparison || (exports$1.AttributeConditionComparison = {}));
-			(function (VolumeConditionMode) {
-			    /// <summary>
-			    /// Inside
-			    /// </summary>
-			    VolumeConditionMode["Includes"] = "Includes";
-			    /// <summary>
-			    /// Overlap
-			    /// </summary>
-			    VolumeConditionMode["Overlaps"] = "Overlaps";
-			    /// <summary>
-			    /// Outside overlap
-			    /// </summary>
-			    VolumeConditionMode["NotIncludes"] = "Not Includes";
-			    /// <summary>
-			    /// Outside
-			    /// </summary>
-			    VolumeConditionMode["NotOverlaps"] = "Not Overlaps";
-			})(exports$1.VolumeConditionMode || (exports$1.VolumeConditionMode = {}));
-			(function (PointOfInterestType) {
-			    PointOfInterestType[PointOfInterestType["Sphere"] = 0] = "Sphere";
-			    PointOfInterestType[PointOfInterestType["CustomMesh"] = 1] = "CustomMesh";
-			})(exports$1.PointOfInterestType || (exports$1.PointOfInterestType = {}));
-			(function (ClippingMode) {
-			    ClippingMode[ClippingMode["None"] = 0] = "None";
-			    ClippingMode[ClippingMode["Volume"] = 1] = "Volume";
-			    ClippingMode[ClippingMode["GridMeasure"] = 2] = "GridMeasure";
-			    ClippingMode[ClippingMode["Intelli"] = 3] = "Intelli";
-			})(exports$1.ClippingMode || (exports$1.ClippingMode = {}));
-			(function (MarkupMode) {
-			    MarkupMode[MarkupMode["None"] = 0] = "None";
-			    MarkupMode[MarkupMode["Line"] = 1] = "Line";
-			    MarkupMode[MarkupMode["FreeHand"] = 2] = "FreeHand";
-			    MarkupMode[MarkupMode["Rectangle"] = 3] = "Rectangle";
-			    MarkupMode[MarkupMode["Oval"] = 4] = "Oval";
-			    MarkupMode[MarkupMode["Text"] = 5] = "Text";
-			    MarkupMode[MarkupMode["Erase"] = 6] = "Erase";
-			    MarkupMode[MarkupMode["OrthogonalLine"] = 7] = "OrthogonalLine";
-			    MarkupMode[MarkupMode["Move"] = 8] = "Move";
-			})(exports$1.MarkupMode || (exports$1.MarkupMode = {}));
-			(function (PidSketchToolMode) {
-			    // This reflects UPV
-			    PidSketchToolMode[PidSketchToolMode["None"] = 0] = "None";
-			    //Comment = 1,
-			    //BreakLine = 2,
-			    //TextMarker = 3,
-			    PidSketchToolMode[PidSketchToolMode["Routing"] = 4] = "Routing";
-			    PidSketchToolMode[PidSketchToolMode["Rectangle"] = 5] = "Rectangle";
-			    PidSketchToolMode[PidSketchToolMode["Circle"] = 6] = "Circle";
-			    PidSketchToolMode[PidSketchToolMode["Valve"] = 7] = "Valve";
-			    //CustomSymbol = 8,
-			    //IntelliPidLayer = 9,
-			    PidSketchToolMode[PidSketchToolMode["Text"] = 10] = "Text";
-			    //Copied = 11,
-			    //Legend = 12,
-			    PidSketchToolMode[PidSketchToolMode["Cloud"] = 13] = "Cloud";
-			    PidSketchToolMode[PidSketchToolMode["FreeHand"] = 15] = "FreeHand";
-			    PidSketchToolMode[PidSketchToolMode["PolyLine"] = 16] = "PolyLine";
-			    //
-			    // These are added extra 
-			    PidSketchToolMode[PidSketchToolMode["BreakLine"] = 99] = "BreakLine";
-			    PidSketchToolMode[PidSketchToolMode["UnBreakLine"] = 100] = "UnBreakLine";
-			    PidSketchToolMode[PidSketchToolMode["Copy"] = 101] = "Copy";
-			    PidSketchToolMode[PidSketchToolMode["Rotate"] = 102] = "Rotate";
-			    PidSketchToolMode[PidSketchToolMode["Undo"] = 103] = "Undo";
-			    PidSketchToolMode[PidSketchToolMode["Redo"] = 104] = "Redo";
-			    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
-			    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
-			    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
-			})(exports$1.PidSketchToolMode || (exports$1.PidSketchToolMode = {}));
-			(function (ExportableOptions) {
-			    ExportableOptions[ExportableOptions["Inherit"] = 0] = "Inherit";
-			    ExportableOptions[ExportableOptions["Export"] = 1] = "Export";
-			    ExportableOptions[ExportableOptions["Ignore"] = 2] = "Ignore";
-			})(exports$1.ExportableOptions || (exports$1.ExportableOptions = {}));
-			(function (ColorMode) {
-			    ColorMode[ColorMode["Default"] = 0] = "Default";
-			    ColorMode[ColorMode["AsModified"] = 1] = "AsModified";
-			    ColorMode[ColorMode["Original"] = 2] = "Original";
-			})(exports$1.ColorMode || (exports$1.ColorMode = {}));
-			(function (PrimitiveType) {
-			    PrimitiveType[PrimitiveType["GroundPlate"] = 300] = "GroundPlate";
-			    PrimitiveType[PrimitiveType["Column"] = 310] = "Column";
-			    PrimitiveType[PrimitiveType["Beam"] = 320] = "Beam";
-			    PrimitiveType[PrimitiveType["Slab"] = 340] = "Slab";
-			    PrimitiveType[PrimitiveType["Cube"] = 100] = "Cube";
-			    PrimitiveType[PrimitiveType["EquipmentVertical"] = 102] = "EquipmentVertical";
-			    PrimitiveType[PrimitiveType["EquipmentHorizontal"] = 101] = "EquipmentHorizontal";
-			    PrimitiveType[PrimitiveType["Sphere"] = 1050] = "Sphere";
-			    PrimitiveType[PrimitiveType["Platform"] = 200] = "Platform";
-			    PrimitiveType[PrimitiveType["CustomObj"] = 9999] = "CustomObj";
-			})(exports$1.PrimitiveType || (exports$1.PrimitiveType = {}));
-			(function (FileDialogApiReturnType) {
-			    FileDialogApiReturnType[FileDialogApiReturnType["Cancelled"] = 0] = "Cancelled";
-			    FileDialogApiReturnType[FileDialogApiReturnType["Ok"] = 1] = "Ok";
-			    FileDialogApiReturnType[FileDialogApiReturnType["Error"] = 2] = "Error";
-			})(exports$1.FileDialogApiReturnType || (exports$1.FileDialogApiReturnType = {}));
-			(function (ClashMode) {
-			    /**
-			     *
-			     */
-			    ClashMode[ClashMode["WithinQueryOnly"] = 0] = "WithinQueryOnly";
-			    /**
-			     *
-			     */
-			    ClashMode[ClashMode["QueryWithFullModel"] = 1] = "QueryWithFullModel";
-			    /**
-			     *
-			     */
-			    ClashMode[ClashMode["PackageAAgainstPackageBWithinQuery"] = 2] = "PackageAAgainstPackageBWithinQuery";
-			})(exports$1.ClashMode || (exports$1.ClashMode = {}));
-			(function (GenericLoadFromFileResponseResultType) {
-			    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Ok"] = 0] = "Ok";
-			    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotFound"] = 1] = "FileNotFound";
-			    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotAllowed"] = 2] = "FileNotAllowed";
-			    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["OtherError"] = 3] = "OtherError";
-			    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Undefined"] = 4] = "Undefined";
-			})(exports$1.GenericLoadFromFileResponseResultType || (exports$1.GenericLoadFromFileResponseResultType = {}));
-			(function (PdfTypes) {
-			    PdfTypes[PdfTypes["All"] = 0] = "All";
-			    PdfTypes[PdfTypes["Document"] = 1] = "Document";
-			    PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
-			})(exports$1.PdfTypes || (exports$1.PdfTypes = {}));
-			(function (ChangeableAttributeUnitType) {
-			    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
-			    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
-			    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
-			})(exports$1.ChangeableAttributeUnitType || (exports$1.ChangeableAttributeUnitType = {}));
-			(function (TextureRenderMode) {
-			    TextureRenderMode[TextureRenderMode["Normal"] = 0] = "Normal";
-			    TextureRenderMode[TextureRenderMode["HeightMap"] = 1] = "HeightMap";
-			    TextureRenderMode[TextureRenderMode["NoTexture"] = 2] = "NoTexture";
-			})(exports$1.TextureRenderMode || (exports$1.TextureRenderMode = {}));
-			(function (QualityLevel) {
-			    QualityLevel[QualityLevel["Low"] = 0] = "Low";
-			    QualityLevel[QualityLevel["Medium"] = 1] = "Medium";
-			    QualityLevel[QualityLevel["High"] = 2] = "High";
-			})(exports$1.QualityLevel || (exports$1.QualityLevel = {}));
-			(function (ModelLoadMessageType) {
-			    ModelLoadMessageType[ModelLoadMessageType["AlreadyLoaded"] = 0] = "AlreadyLoaded";
-			    ModelLoadMessageType[ModelLoadMessageType["FinishedLoading"] = 1] = "FinishedLoading";
-			})(exports$1.ModelLoadMessageType || (exports$1.ModelLoadMessageType = {}));
-			(function (DrawingExportType) {
-			    DrawingExportType[DrawingExportType["Svg"] = 0] = "Svg";
-			    DrawingExportType[DrawingExportType["Acadpdf"] = 1] = "Acadpdf";
-			    DrawingExportType[DrawingExportType["Pdf"] = 2] = "Pdf";
-			    DrawingExportType[DrawingExportType["Png"] = 3] = "Png";
-			    DrawingExportType[DrawingExportType["Dxf"] = 4] = "Dxf";
-			})(exports$1.DrawingExportType || (exports$1.DrawingExportType = {}));
-			(function (AnimationMessageTypes) {
-			    AnimationMessageTypes[AnimationMessageTypes["MissingParameters"] = 0] = "MissingParameters";
-			    AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
-			    AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
-			})(exports$1.AnimationMessageTypes || (exports$1.AnimationMessageTypes = {}));
-			(function (WindowLayoutFormat) {
-			    WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
-			    WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
-			})(exports$1.WindowLayoutFormat || (exports$1.WindowLayoutFormat = {})); 
-		} (Enums));
+		Object.defineProperty(Enums, "__esModule", { value: true });
+		Enums.FilesTreeImportBehaviour = Enums.WindowLayoutFormat = Enums.AnimationMessageTypes = Enums.DrawingExportType = Enums.ModelLoadMessageType = Enums.QualityLevel = Enums.TextureRenderMode = Enums.ChangeableAttributeUnitType = Enums.PdfTypes = Enums.GenericLoadFromFileResponseResultType = Enums.ClashMode = Enums.FileDialogApiReturnType = Enums.PrimitiveType = Enums.ColorMode = Enums.ExportableOptions = Enums.PidSketchToolMode = Enums.MarkupMode = Enums.ClippingMode = Enums.PointOfInterestType = Enums.VolumeConditionMode = Enums.AttributeConditionComparison = Enums.ConsolidationMode = Enums.PackageConditionTypes = Enums.ApiCommands = Enums.ProjectionSphereType = Enums.FeatureTypes = Enums.CustomAttributeDataType = Enums.UpdateModes = Enums.SceneType = Enums.CombineModes = Enums.TargetEnum = void 0;
+		/**
+		 * @deprecated
+		 * Old UPV Target codes
+		 */
+		var TargetEnum;
+		(function (TargetEnum) {
+		    TargetEnum["Undefined"] = "0";
+		    TargetEnum["ThreeD"] = "1";
+		    TargetEnum["Intelli"] = "10";
+		})(TargetEnum || (Enums.TargetEnum = TargetEnum = {}));
+		/**
+		 * how Queries will be combined
+		 */
+		var CombineModes;
+		(function (CombineModes) {
+		    CombineModes["And"] = "AND";
+		    CombineModes["Or"] = "OR";
+		})(CombineModes || (Enums.CombineModes = CombineModes = {}));
+		/**
+		 * The sceneType defines what this scene contains
+		 */
+		var SceneType;
+		(function (SceneType) {
+		    SceneType["Undefined"] = "0";
+		    SceneType["ThreeD"] = "1";
+		    SceneType["IntelliPid"] = "10";
+		    SceneType["Browser"] = "11";
+		})(SceneType || (Enums.SceneType = SceneType = {}));
+		var UpdateModes;
+		(function (UpdateModes) {
+		    UpdateModes[UpdateModes["Append"] = 0] = "Append";
+		    UpdateModes[UpdateModes["Full"] = 1] = "Full";
+		})(UpdateModes || (Enums.UpdateModes = UpdateModes = {}));
+		var CustomAttributeDataType;
+		(function (CustomAttributeDataType) {
+		    //Calculation = 0,
+		    CustomAttributeDataType[CustomAttributeDataType["CodeList"] = 1] = "CodeList";
+		    CustomAttributeDataType[CustomAttributeDataType["FreeText"] = 2] = "FreeText";
+		    CustomAttributeDataType[CustomAttributeDataType["Numeric"] = 3] = "Numeric";
+		    CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
+		    //Unknown = 5,
+		    CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
+		})(CustomAttributeDataType || (Enums.CustomAttributeDataType = CustomAttributeDataType = {}));
+		var FeatureTypes;
+		(function (FeatureTypes) {
+		    FeatureTypes["Unknown"] = "Unknown";
+		    FeatureTypes["Model"] = "Model";
+		    FeatureTypes["Sketch"] = "Sketch";
+		    FeatureTypes["Markup"] = "Markup";
+		    FeatureTypes["IntellipidSketch"] = "IntellipidSketch";
+		    FeatureTypes["AnimationConfiguration"] = "AnimationConfiguration";
+		    FeatureTypes["AnimationDefinition"] = "AnimationDefinition";
+		    FeatureTypes["Catalogue"] = "Catalogue";
+		    FeatureTypes["Symbol"] = "Symbol";
+		    FeatureTypes["MarkupContainer"] = "MarkupContainer";
+		    FeatureTypes["Orm"] = "Orm";
+		    FeatureTypes["Spraying"] = "Spraying";
+		    FeatureTypes["Comment"] = "Comment";
+		    FeatureTypes["View"] = "View";
+		    FeatureTypes["Package"] = "Package";
+		    FeatureTypes["Folder"] = "Folder";
+		    FeatureTypes["CommentSvg"] = "CommentSvg";
+		    FeatureTypes["Screenshot"] = "Screenshot";
+		    FeatureTypes["Photo"] = "Photo";
+		    FeatureTypes["TwoDToThreeD"] = "TwoDToThreeD";
+		    FeatureTypes["PointOfInterest"] = "PointOfInterest";
+		    FeatureTypes["Drawing"] = "Drawing";
+		    FeatureTypes["Files"] = "Files";
+		    FeatureTypes["MeasurementSnapshot"] = "MeasurementSnapshot";
+		    FeatureTypes["IntelliPidLegendPositions"] = "IntelliPidLegendPositions";
+		    FeatureTypes["IsolationPlan"] = "IsolationPlan";
+		    FeatureTypes["CataloguePlacement"] = "CataloguePlacement";
+		    FeatureTypes["DrawingComment"] = "DrawingComment";
+		    FeatureTypes["AppControl"] = "AppControl";
+		    FeatureTypes["Animation"] = "Animation";
+		    FeatureTypes["PIDSketch"] = "PIDSketch";
+		    FeatureTypes["Report"] = "Report";
+		    FeatureTypes["WindowLayout"] = "WindowLayout";
+		    FeatureTypes["IntelliPIDLegendPosition"] = "IntelliPIDLegendPosition";
+		})(FeatureTypes || (Enums.FeatureTypes = FeatureTypes = {}));
+		var ProjectionSphereType;
+		(function (ProjectionSphereType) {
+		    ProjectionSphereType[ProjectionSphereType["Picture"] = 0] = "Picture";
+		    ProjectionSphereType[ProjectionSphereType["Panorama"] = 1] = "Panorama";
+		})(ProjectionSphereType || (Enums.ProjectionSphereType = ProjectionSphereType = {}));
+		/**
+		 * @internal
+		 */
+		var ApiCommands;
+		(function (ApiCommands) {
+		    //Camera
+		    ApiCommands["SetCameraView"] = "SetCameraView";
+		    ApiCommands["GetCameraView"] = "GetCameraView";
+		    ApiCommands["SetClippingPlane"] = "SetClippingPlane";
+		    ApiCommands["SetCameraViewLookAtTarget"] = "SetCameraViewLookAtTarget";
+		    ApiCommands["ResetView"] = "ResetView";
+		    //Filteroperation
+		    ApiCommands["GetObjects"] = "GetObjects";
+		    ApiCommands["GetSelectedObjects"] = "GetSelectedObjects";
+		    ApiCommands["GetObjectsAttributes"] = "GetObjectsAttributes";
+		    ApiCommands["GetObjectsBoundingBox"] = "GetObjectsBoundingBox";
+		    ApiCommands["GetObjectsColors"] = "GetObjectsColors";
+		    ApiCommands["GetObjectsSnapInfo"] = "GetObjectsSnapInfo";
+		    ApiCommands["GetObjectsChangeableAttributes"] = "GetObjectsChangeableAttributes";
+		    ApiCommands["SetAttribute"] = "SetAttribute";
+		    ApiCommands["AddChangeableAttribute"] = "AddChangeableAttribute";
+		    ApiCommands["DeleteChangeableAttribute"] = "DeleteChangeableAttribute";
+		    ApiCommands["Select"] = "Select";
+		    ApiCommands["ClearSelection"] = "ClearSelection";
+		    ApiCommands["Fit"] = "Fit";
+		    ApiCommands["Color"] = "Color";
+		    ApiCommands["ClearColor"] = "ClearColor";
+		    ApiCommands["Highlight"] = "Highlight";
+		    ApiCommands["ClearHighlight"] = "ClearHighlight";
+		    ApiCommands["ShowOnly"] = "ShowOnly";
+		    ApiCommands["SetVisibility"] = "SetVisibility";
+		    ApiCommands["GetClippingInfo"] = "GetClippingInfo";
+		    ApiCommands["VolumeClip"] = "VolumeClip";
+		    ApiCommands["VolumeClipByCoordinates"] = "VolumeClipByCoordinates";
+		    ApiCommands["IntelliClip"] = "IntelliClip";
+		    ApiCommands["ClearClipping"] = "ClearClipping";
+		    ApiCommands["SearchFallback"] = "SearchFallback";
+		    ApiCommands["GetIntelliPidRawSvgData"] = "GetIntelliPidRawSvgData";
+		    ApiCommands["GetLinkedElements"] = "GetLinkedElements";
+		    //Scene3d
+		    //Drawing
+		    ApiCommands["PlaceObj"] = "PlaceObj";
+		    ApiCommands["DrawLine"] = "DrawLine";
+		    ApiCommands["PlaceText"] = "PlaceText";
+		    ApiCommands["PlaceArc"] = "PlaceArc";
+		    ApiCommands["PlacePly"] = "PlacePly";
+		    ApiCommands["DestroyDrawing"] = "DestroyDrawing";
+		    //Model
+		    ApiCommands["GetModelInfo"] = "GetModelInfo";
+		    ApiCommands["GetProjectInfo"] = "GetProjectInfo";
+		    ApiCommands["LoadConfigFile"] = "LoadConfigFile";
+		    ApiCommands["ClearCustomAttributes"] = "ClearCustomAttributes";
+		    ApiCommands["ImportCustomAttributeChangeSet"] = "ImportCustomAttributeChangeset";
+		    ApiCommands["LoadCustomAttributeConfigurationFile"] = "LoadCustomAttributeConfigurationFile";
+		    ApiCommands["LoadCustomAttributeDataFile"] = "LoadCustomAttributeDataFile";
+		    ApiCommands["SetCustomAttributeConfiguration"] = "SetCustomAttributeConfiguration";
+		    ApiCommands["GetCustomAttributeConfiguration"] = "GetCustomAttributeConfiguration";
+		    ApiCommands["ExportCustomAttributes"] = "ExportCustomAttributes";
+		    ApiCommands["GetIntelliPidDrawings"] = "GetIntelliPidDrawings";
+		    ApiCommands["OpenIntelliPidDrawings"] = "OpenIntelliPidDrawings";
+		    ApiCommands["GetProjectionSpheres"] = "GetProjectionSpheres";
+		    ApiCommands["GetCurrentProjectionSphere"] = "GetCurrentProjectionSphere";
+		    ApiCommands["EnterProjectionSphere"] = "EnterProjectionSphere";
+		    ApiCommands["LeaveProjectionSphere"] = "LeaveProjectionSphere";
+		    ApiCommands["GetAllPids"] = "GetAllPids";
+		    ApiCommands["GetOpenPids"] = "GetOpenPids";
+		    ApiCommands["GetActivePid"] = "GetActivePid";
+		    ApiCommands["OpenPid"] = "OpenPid";
+		    ApiCommands["ClosePid"] = "ClosePid";
+		    ApiCommands["GetModelAttributeValues"] = "GetModelAttributeValues";
+		    ApiCommands["GetAllPdfs"] = "GetAllPdfs";
+		    ApiCommands["GetOpenPdfsTabs"] = "GetOpenPdfsTabs";
+		    ApiCommands["GetActivePdfTab"] = "GetActivePdfTab";
+		    ApiCommands["OpenPdf"] = "OpenPdf";
+		    ApiCommands["ClosePdf"] = "ClosePdf";
+		    ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
+		    //Scene
+		    ApiCommands["TakeScreenshot"] = "TakeScreenshot";
+		    ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
+		    ApiCommands["GetTreeConfiguration"] = "GetTreeConfiguration";
+		    ApiCommands["SetTreeConfiguration"] = "SetTreeConfiguration";
+		    ApiCommands["GetVisibleAspects"] = "GetVisibleAspects";
+		    ApiCommands["SetVisibleAspects"] = "SetVisibleAspects";
+		    ApiCommands["LoadColorFile"] = "LoadColorFile";
+		    ApiCommands["LoadLinkFile"] = "LoadLinkFile";
+		    ApiCommands["ClearLinks"] = "ClearLinks";
+		    //FilesTree
+		    ApiCommands["FilesTreeDeleteObject"] = "FilesTreeDeleteObject";
+		    ApiCommands["GetFilesTreeChildren"] = "GetFilesTreeChildren";
+		    ApiCommands["GetFilesTreeSiblings"] = "GetFilesTreeSiblings";
+		    ApiCommands["FilesTreeMoveObject"] = "FilesTreeMoveObject";
+		    ApiCommands["FilesTreeImportContainer"] = "FilesTreeImportContainer";
+		    ApiCommands["GetFilesTreeContent"] = "GetFilesTreeContent";
+		    ApiCommands["FilesTreeGetContainer"] = "FilesTreeGetContainer";
+		    ApiCommands["SetMarkupTool"] = "SetMarkupTool";
+		    ApiCommands["GetIntelliPidElementsHitByMarkup"] = "GetIntelliPidElementsHitByMarkup";
+		    ApiCommands["FilesTreeClose"] = "FilesTreeClose";
+		    ApiCommands["FilesTreeCreateMarkup"] = "FilesTreeCreateMarkup";
+		    ApiCommands["FilesTreeEdit"] = "FilesTreeEdit";
+		    ApiCommands["FilesTreeShow"] = "FilesTreeShow";
+		    ApiCommands["FilesTreeView"] = "FilesTreeView";
+		    ApiCommands["FilesTreeCreateSketch"] = "FilesTreeCreateSketch";
+		    ApiCommands["FilesTreeSetState"] = "FilesTreeSetState";
+		    ApiCommands["FilesTreeGetState"] = "FilesTreeGetState";
+		    ApiCommands["FilesTreeCreateComment"] = "FilesTreeCreateComment";
+		    ApiCommands["ExportSketchAsUpvc"] = "ExportSketchAsUpvc";
+		    ApiCommands["ExportSketchAsDgn"] = "ExportSketchAsDgn";
+		    ApiCommands["ExportSprayingAsUpvc"] = "ExportSprayingAsUpvc";
+		    ApiCommands["FilesTreeCreateDrawing"] = "FilesTreeCreateDrawing";
+		    ApiCommands["GetDrawingTemplates"] = "GetDrawingTemplates";
+		    ApiCommands["ExportDrawing"] = "ExportDrawing";
+		    //Folder
+		    ApiCommands["GetFilesTreeRoot"] = "GetFilesTreeRoot";
+		    ApiCommands["FilesTreeCreateFolder"] = "FilesTreeCreateFolder";
+		    //Poi
+		    ApiCommands["PlacePoi"] = "PlacePoi";
+		    ApiCommands["PlacePoiWithComment"] = "PlacePoiWithComment";
+		    // PidSketch
+		    ApiCommands["SetPidSketchTool"] = "SetPidSketchTool";
+		    //Events
+		    ApiCommands["AddEventCallback"] = "AddEventCallback";
+		    ApiCommands["RemoveEventCallback"] = "RemoveEventCallback";
+		    //Application
+		    ApiCommands["GetLifeCycleState"] = "GetLifeCycleState";
+		    ApiCommands["ShowMessage"] = "ShowMessage";
+		    ApiCommands["FocusViewer"] = "FocusViewer";
+		    ApiCommands["QuitApplication"] = "QuitApplication";
+		    ApiCommands["CacheModel"] = "CacheModel";
+		    ApiCommands["LoadModel"] = "LoadModel";
+		    ApiCommands["DeleteModel"] = "DeleteModel";
+		    ApiCommands["ActivateLicense"] = "ActivateLicense";
+		    ApiCommands["DeactivateLicense"] = "DeactivateLicense";
+		    ApiCommands["LoadFile"] = "LoadFile";
+		    ApiCommands["ProcessFile"] = "ProcessFile";
+		    ApiCommands["LoadSketch"] = "LoadSketch";
+		    ApiCommands["LoadPackageFile"] = "LoadPackageFile";
+		    ApiCommands["ExportPackageFile"] = "ExportPackageFile";
+		    ApiCommands["ClearAuthConfig"] = "ClearAuthConfig";
+		    ApiCommands["SetAuthConfig"] = "SetAuthConfig";
+		    ApiCommands["OpenPath"] = "OpenPath";
+		    ApiCommands["WaitForModelLoading"] = "WaitForModelLoading";
+		    ApiCommands["SetLanguage"] = "SetLanguage";
+		    ApiCommands["GetLanguage"] = "GetLanguage";
+		    ApiCommands["GetRenderMode"] = "GetRenderMode";
+		    ApiCommands["SetRenderMode"] = "SetRenderMode";
+		    ApiCommands["GetQualityLevel"] = "GetQualityLevel";
+		    ApiCommands["SetQualityLevel"] = "SetQualityLevel";
+		    ApiCommands["GetPanoramaCentresVisibility"] = "GetPanoramaCentresVisibility";
+		    ApiCommands["SetPanoramaCentresVisibility"] = "SetPanoramaCentresVisibility";
+		    ApiCommands["GetViewerVersion"] = "GetViewerVersion";
+		    //Attribute Tree
+		    ApiCommands["GetTreeRootNode"] = "GetTreeRootNode";
+		    ApiCommands["GetTreeFolderChildren"] = "GetTreeFolderChildren";
+		    ApiCommands["GetTreeFolderSiblings"] = "GetTreeFolderSiblings";
+		    ApiCommands["GetTreeNodesOfFolder"] = "GetTreeNodesOfFolder";
+		    ApiCommands["GetTreeStructure"] = "GetTreeStructure";
+		    //Remote
+		    ApiCommands["WfsLoadRemote"] = "WfsLoadRemote";
+		    ApiCommands["GetWfsRemoteContent"] = "GetWfsRemoteContent";
+		    ApiCommands["GetRenderStreamingInfo"] = "GetRenderStreamingInfo";
+		    ApiCommands["WfsClearAttached"] = "WfsClearAttached";
+		    //Authentication
+		    ApiCommands["OpenAuthenticationContext"] = "OpenAuthenticationContext";
+		    ApiCommands["CloseAuthenticationContext"] = "CloseAuthenticationContext";
+		    ApiCommands["StartLogoutAuthenticationContext"] = "StartLogoutAuthenticationContext";
+		    //(Pid)Sketch
+		    ApiCommands["SelectSymbolForPlacement"] = "SelectSymbolForPlacement";
+		    ApiCommands["GetCatalogSymbols"] = "GetCatalogSymbols";
+		    ApiCommands["PlacePrimitive"] = "PlacePrimitive";
+		    ApiCommands["PlaceSymbol"] = "PlaceSymbol";
+		    ApiCommands["DeleteSketchItem"] = "DeleteSketchItem";
+		    //Clash
+		    ApiCommands["StartClashComputation"] = "StartClashComputation";
+		    ApiCommands["GetClashCandidates"] = "GetClashCandidates";
+		    ApiCommands["GetClashResults"] = "GetClashResults";
+		    ApiCommands["CancelClashComputation"] = "CancelClashComputation";
+		    //PDF Printer
+		    ApiCommands["PdfPrinterCreate"] = "PdfPrinterCreate";
+		    ApiCommands["PdfPrinterDelete"] = "PdfPrinterDelete";
+		    ApiCommands["PdfPrinterPrintToBase64"] = "PdfPrinterPrintToBase64";
+		    ApiCommands["PdfPrinterAddIntelliPidPage"] = "PdfPrinterAddIntelliPidPage";
+		    //Localstorage
+		    ApiCommands["SetStorageVariable"] = "SetStorageVariable";
+		    ApiCommands["GetStorageVariable"] = "GetStorageVariable";
+		    ApiCommands["DeleteStorageVariable"] = "DeleteStorageVariable";
+		    ApiCommands["GetStorageVariablesList"] = "GetStorageVariablesList";
+		    // Settings
+		    ApiCommands["GetUiColors"] = "GetUiColors";
+		    ApiCommands["GetUiThemes"] = "GetUiThemes";
+		    ApiCommands["SetActiveUiTheme"] = "SetActiveUiTheme";
+		    ApiCommands["GetUiVariables"] = "GetUiVariables";
+		    // Fileoperations
+		    ApiCommands["SaveFileDialog"] = "SaveFileDialog";
+		    ApiCommands["LoadFileDialog"] = "LoadFileDialog";
+		    ApiCommands["GenericLoadFromFile"] = "GenericLoadFromFile";
+		    // Animation
+		    ApiCommands["GenerateAnimationKeyframe"] = "GenerateAnimationKeyframe";
+		    ApiCommands["SetAnimationCurrentTime"] = "SetAnimationCurrentTime";
+		    //    SetAnimationStart = "SetAnimationStart",
+		    //    GetAnimationStart = "GetAnimationStart",
+		    // Layout
+		    ApiCommands["GetWindowLayout"] = "GetWindowLayout";
+		    ApiCommands["SetWindowLayout"] = "SetWindowLayout";
+		})(ApiCommands || (Enums.ApiCommands = ApiCommands = {}));
+		var PackageConditionTypes;
+		(function (PackageConditionTypes) {
+		    PackageConditionTypes["None"] = "None";
+		    PackageConditionTypes["IntelliVolume"] = "IntelliVolume";
+		    PackageConditionTypes["Group"] = "Group";
+		    PackageConditionTypes["Attribute"] = "Attribute";
+		    PackageConditionTypes["Volume"] = "Volume";
+		})(PackageConditionTypes || (Enums.PackageConditionTypes = PackageConditionTypes = {}));
+		var ConsolidationMode;
+		(function (ConsolidationMode) {
+		    ConsolidationMode["Base"] = "Base";
+		    ConsolidationMode["AndNot"] = "AndNot";
+		    ConsolidationMode["Or"] = "Or";
+		    ConsolidationMode["And"] = "And";
+		})(ConsolidationMode || (Enums.ConsolidationMode = ConsolidationMode = {}));
+		var AttributeConditionComparison;
+		(function (AttributeConditionComparison) {
+		    AttributeConditionComparison["Equals"] = "==";
+		    AttributeConditionComparison["NotEquals"] = "!=";
+		    AttributeConditionComparison["Like"] = "Like";
+		    AttributeConditionComparison["NotLike"] = "Not Like";
+		})(AttributeConditionComparison || (Enums.AttributeConditionComparison = AttributeConditionComparison = {}));
+		var VolumeConditionMode;
+		(function (VolumeConditionMode) {
+		    /// <summary>
+		    /// Inside
+		    /// </summary>
+		    VolumeConditionMode["Includes"] = "Includes";
+		    /// <summary>
+		    /// Overlap
+		    /// </summary>
+		    VolumeConditionMode["Overlaps"] = "Overlaps";
+		    /// <summary>
+		    /// Outside overlap
+		    /// </summary>
+		    VolumeConditionMode["NotIncludes"] = "Not Includes";
+		    /// <summary>
+		    /// Outside
+		    /// </summary>
+		    VolumeConditionMode["NotOverlaps"] = "Not Overlaps";
+		})(VolumeConditionMode || (Enums.VolumeConditionMode = VolumeConditionMode = {}));
+		var PointOfInterestType;
+		(function (PointOfInterestType) {
+		    PointOfInterestType[PointOfInterestType["Sphere"] = 0] = "Sphere";
+		    PointOfInterestType[PointOfInterestType["CustomMesh"] = 1] = "CustomMesh";
+		})(PointOfInterestType || (Enums.PointOfInterestType = PointOfInterestType = {}));
+		var ClippingMode;
+		(function (ClippingMode) {
+		    ClippingMode[ClippingMode["None"] = 0] = "None";
+		    ClippingMode[ClippingMode["Volume"] = 1] = "Volume";
+		    ClippingMode[ClippingMode["GridMeasure"] = 2] = "GridMeasure";
+		    ClippingMode[ClippingMode["Intelli"] = 3] = "Intelli";
+		})(ClippingMode || (Enums.ClippingMode = ClippingMode = {}));
+		var MarkupMode;
+		(function (MarkupMode) {
+		    MarkupMode[MarkupMode["None"] = 0] = "None";
+		    MarkupMode[MarkupMode["Line"] = 1] = "Line";
+		    MarkupMode[MarkupMode["FreeHand"] = 2] = "FreeHand";
+		    MarkupMode[MarkupMode["Rectangle"] = 3] = "Rectangle";
+		    MarkupMode[MarkupMode["Oval"] = 4] = "Oval";
+		    MarkupMode[MarkupMode["Text"] = 5] = "Text";
+		    MarkupMode[MarkupMode["Erase"] = 6] = "Erase";
+		    MarkupMode[MarkupMode["OrthogonalLine"] = 7] = "OrthogonalLine";
+		    MarkupMode[MarkupMode["Move"] = 8] = "Move";
+		})(MarkupMode || (Enums.MarkupMode = MarkupMode = {}));
+		var PidSketchToolMode;
+		(function (PidSketchToolMode) {
+		    // This reflects UPV
+		    PidSketchToolMode[PidSketchToolMode["None"] = 0] = "None";
+		    //Comment = 1,
+		    //BreakLine = 2,
+		    //TextMarker = 3,
+		    PidSketchToolMode[PidSketchToolMode["Routing"] = 4] = "Routing";
+		    PidSketchToolMode[PidSketchToolMode["Rectangle"] = 5] = "Rectangle";
+		    PidSketchToolMode[PidSketchToolMode["Circle"] = 6] = "Circle";
+		    PidSketchToolMode[PidSketchToolMode["Valve"] = 7] = "Valve";
+		    //CustomSymbol = 8,
+		    //IntelliPidLayer = 9,
+		    PidSketchToolMode[PidSketchToolMode["Text"] = 10] = "Text";
+		    //Copied = 11,
+		    //Legend = 12,
+		    PidSketchToolMode[PidSketchToolMode["Cloud"] = 13] = "Cloud";
+		    PidSketchToolMode[PidSketchToolMode["FreeHand"] = 15] = "FreeHand";
+		    PidSketchToolMode[PidSketchToolMode["PolyLine"] = 16] = "PolyLine";
+		    //
+		    // These are added extra 
+		    PidSketchToolMode[PidSketchToolMode["BreakLine"] = 99] = "BreakLine";
+		    PidSketchToolMode[PidSketchToolMode["UnBreakLine"] = 100] = "UnBreakLine";
+		    PidSketchToolMode[PidSketchToolMode["Copy"] = 101] = "Copy";
+		    PidSketchToolMode[PidSketchToolMode["Rotate"] = 102] = "Rotate";
+		    PidSketchToolMode[PidSketchToolMode["Undo"] = 103] = "Undo";
+		    PidSketchToolMode[PidSketchToolMode["Redo"] = 104] = "Redo";
+		    PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
+		    PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
+		    PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
+		})(PidSketchToolMode || (Enums.PidSketchToolMode = PidSketchToolMode = {}));
+		var ExportableOptions;
+		(function (ExportableOptions) {
+		    ExportableOptions[ExportableOptions["Inherit"] = 0] = "Inherit";
+		    ExportableOptions[ExportableOptions["Export"] = 1] = "Export";
+		    ExportableOptions[ExportableOptions["Ignore"] = 2] = "Ignore";
+		})(ExportableOptions || (Enums.ExportableOptions = ExportableOptions = {}));
+		var ColorMode;
+		(function (ColorMode) {
+		    ColorMode[ColorMode["Default"] = 0] = "Default";
+		    ColorMode[ColorMode["AsModified"] = 1] = "AsModified";
+		    ColorMode[ColorMode["Original"] = 2] = "Original";
+		})(ColorMode || (Enums.ColorMode = ColorMode = {}));
+		var PrimitiveType;
+		(function (PrimitiveType) {
+		    PrimitiveType[PrimitiveType["GroundPlate"] = 300] = "GroundPlate";
+		    PrimitiveType[PrimitiveType["Column"] = 310] = "Column";
+		    PrimitiveType[PrimitiveType["Beam"] = 320] = "Beam";
+		    PrimitiveType[PrimitiveType["Slab"] = 340] = "Slab";
+		    PrimitiveType[PrimitiveType["Cube"] = 100] = "Cube";
+		    PrimitiveType[PrimitiveType["EquipmentVertical"] = 102] = "EquipmentVertical";
+		    PrimitiveType[PrimitiveType["EquipmentHorizontal"] = 101] = "EquipmentHorizontal";
+		    PrimitiveType[PrimitiveType["Sphere"] = 1050] = "Sphere";
+		    PrimitiveType[PrimitiveType["Platform"] = 200] = "Platform";
+		    PrimitiveType[PrimitiveType["CustomObj"] = 9999] = "CustomObj";
+		})(PrimitiveType || (Enums.PrimitiveType = PrimitiveType = {}));
+		var FileDialogApiReturnType;
+		(function (FileDialogApiReturnType) {
+		    FileDialogApiReturnType[FileDialogApiReturnType["Cancelled"] = 0] = "Cancelled";
+		    FileDialogApiReturnType[FileDialogApiReturnType["Ok"] = 1] = "Ok";
+		    FileDialogApiReturnType[FileDialogApiReturnType["Error"] = 2] = "Error";
+		})(FileDialogApiReturnType || (Enums.FileDialogApiReturnType = FileDialogApiReturnType = {}));
+		var ClashMode;
+		(function (ClashMode) {
+		    /**
+		     *
+		     */
+		    ClashMode[ClashMode["WithinQueryOnly"] = 0] = "WithinQueryOnly";
+		    /**
+		     *
+		     */
+		    ClashMode[ClashMode["QueryWithFullModel"] = 1] = "QueryWithFullModel";
+		    /**
+		     *
+		     */
+		    ClashMode[ClashMode["PackageAAgainstPackageBWithinQuery"] = 2] = "PackageAAgainstPackageBWithinQuery";
+		})(ClashMode || (Enums.ClashMode = ClashMode = {}));
+		var GenericLoadFromFileResponseResultType;
+		(function (GenericLoadFromFileResponseResultType) {
+		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Ok"] = 0] = "Ok";
+		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotFound"] = 1] = "FileNotFound";
+		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotAllowed"] = 2] = "FileNotAllowed";
+		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["OtherError"] = 3] = "OtherError";
+		    GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Undefined"] = 4] = "Undefined";
+		})(GenericLoadFromFileResponseResultType || (Enums.GenericLoadFromFileResponseResultType = GenericLoadFromFileResponseResultType = {}));
+		var PdfTypes;
+		(function (PdfTypes) {
+		    PdfTypes[PdfTypes["All"] = 0] = "All";
+		    PdfTypes[PdfTypes["Document"] = 1] = "Document";
+		    PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
+		})(PdfTypes || (Enums.PdfTypes = PdfTypes = {}));
+		var ChangeableAttributeUnitType;
+		(function (ChangeableAttributeUnitType) {
+		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
+		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
+		    ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
+		})(ChangeableAttributeUnitType || (Enums.ChangeableAttributeUnitType = ChangeableAttributeUnitType = {}));
+		var TextureRenderMode;
+		(function (TextureRenderMode) {
+		    TextureRenderMode[TextureRenderMode["Normal"] = 0] = "Normal";
+		    TextureRenderMode[TextureRenderMode["HeightMap"] = 1] = "HeightMap";
+		    TextureRenderMode[TextureRenderMode["NoTexture"] = 2] = "NoTexture";
+		})(TextureRenderMode || (Enums.TextureRenderMode = TextureRenderMode = {}));
+		var QualityLevel;
+		(function (QualityLevel) {
+		    QualityLevel[QualityLevel["Low"] = 0] = "Low";
+		    QualityLevel[QualityLevel["Medium"] = 1] = "Medium";
+		    QualityLevel[QualityLevel["High"] = 2] = "High";
+		})(QualityLevel || (Enums.QualityLevel = QualityLevel = {}));
+		var ModelLoadMessageType;
+		(function (ModelLoadMessageType) {
+		    ModelLoadMessageType[ModelLoadMessageType["AlreadyLoaded"] = 0] = "AlreadyLoaded";
+		    ModelLoadMessageType[ModelLoadMessageType["FinishedLoading"] = 1] = "FinishedLoading";
+		})(ModelLoadMessageType || (Enums.ModelLoadMessageType = ModelLoadMessageType = {}));
+		var DrawingExportType;
+		(function (DrawingExportType) {
+		    DrawingExportType[DrawingExportType["Svg"] = 0] = "Svg";
+		    DrawingExportType[DrawingExportType["Acadpdf"] = 1] = "Acadpdf";
+		    DrawingExportType[DrawingExportType["Pdf"] = 2] = "Pdf";
+		    DrawingExportType[DrawingExportType["Png"] = 3] = "Png";
+		    DrawingExportType[DrawingExportType["Dxf"] = 4] = "Dxf";
+		})(DrawingExportType || (Enums.DrawingExportType = DrawingExportType = {}));
+		var AnimationMessageTypes;
+		(function (AnimationMessageTypes) {
+		    AnimationMessageTypes[AnimationMessageTypes["MissingParameters"] = 0] = "MissingParameters";
+		    AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
+		    AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
+		})(AnimationMessageTypes || (Enums.AnimationMessageTypes = AnimationMessageTypes = {}));
+		var WindowLayoutFormat;
+		(function (WindowLayoutFormat) {
+		    WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
+		    WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
+		})(WindowLayoutFormat || (Enums.WindowLayoutFormat = WindowLayoutFormat = {}));
+		var FilesTreeImportBehaviour;
+		(function (FilesTreeImportBehaviour) {
+		    FilesTreeImportBehaviour[FilesTreeImportBehaviour["KeepBoth"] = 0] = "KeepBoth";
+		    FilesTreeImportBehaviour[FilesTreeImportBehaviour["Replace"] = 1] = "Replace";
+		    FilesTreeImportBehaviour[FilesTreeImportBehaviour["Skip"] = 2] = "Skip";
+		})(FilesTreeImportBehaviour || (Enums.FilesTreeImportBehaviour = FilesTreeImportBehaviour = {}));
 		return Enums;
 	}
 
@@ -1162,6 +1212,126 @@
 		return APIConnectorVuplex;
 	}
 
+	var APIConnectorBrowser = {};
+
+	var hasRequiredAPIConnectorBrowser;
+
+	function requireAPIConnectorBrowser () {
+		if (hasRequiredAPIConnectorBrowser) return APIConnectorBrowser;
+		hasRequiredAPIConnectorBrowser = 1;
+		Object.defineProperty(APIConnectorBrowser, "__esModule", { value: true });
+		APIConnectorBrowser.ApiConnectorBrowser = void 0;
+		const APIConnector_1 = requireAPIConnector();
+		/**
+		 * @internal
+		 */
+		class ApiConnectorBrowser {
+		    constructor() {
+		        this.webSocket = null;
+		        this.reconnectAttempts = 0;
+		        this.maxReconnectAttempts = 5;
+		        this.reconnectDelay = 2000;
+		        this.port = 45123;
+		        this.userRejected = false;
+		        this.connected = false;
+		        this.wsUrl = `ws://127.0.0.1:${this.port}`;
+		    }
+		    get available() {
+		        return this.connected;
+		    }
+		    initialize() {
+		        if (!window.vuplex && 'WebSocket' in window) {
+		            this.connectWebSocket();
+		        }
+		    }
+		    connectWebSocket() {
+		        try {
+		            this.webSocket = new WebSocket(this.wsUrl);
+		            this.webSocket.onopen = () => {
+		                console.log('WebSocket connection established');
+		                this.connected = true;
+		            };
+		            this.webSocket.onmessage = (event) => {
+		                try {
+		                    const json = JSON.parse(event.data);
+		                    if (json.type === "ApiResponse") {
+		                        // check if the response contains Rejected error message
+		                        if (json.message && json.message.ErrorCode != 0 && json.message.ErrorMessage.startsWith("Rejected")) {
+		                            console.error("API Response Error:", json.message.ErrorMessage);
+		                            this.userRejected = true;
+		                        }
+		                        else {
+		                            APIConnector_1.Api.get().handleEvent(json.message);
+		                        }
+		                    }
+		                }
+		                catch (error) {
+		                    console.error('Error parsing message:', error);
+		                }
+		            };
+		            this.webSocket.onclose = () => {
+		                this.connected = false;
+		                if (this.userRejected) {
+		                    return;
+		                }
+		                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+		                    this.reconnectAttempts++;
+		                    console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+		                    setTimeout(() => this.connectWebSocket(), this.reconnectDelay);
+		                }
+		                else {
+		                    console.error('Connection failed after maximum retry attempts');
+		                }
+		            };
+		            this.webSocket.onerror = (error) => {
+		                console.error('Error:', error);
+		            };
+		        }
+		        catch (error) {
+		            console.error('Error creating connection:', error);
+		        }
+		    }
+		    async sendCommand(command) {
+		        // Wait for WebSocket connection to be ready
+		        await this.waitForConnection();
+		        if (!this.webSocket || this.webSocket.readyState !== WebSocket.OPEN) {
+		            throw new Error('WebSocket is not connected');
+		        }
+		        this.webSocket.send(JSON.stringify({
+		            type: 'Command',
+		            message: JSON.stringify(command)
+		        }));
+		    }
+		    waitForConnection(timeoutMs = 5000) {
+		        return new Promise((resolve, reject) => {
+		            if (!this.webSocket) {
+		                return reject(new Error('No WebSocket instance available'));
+		            }
+		            const timeout = setTimeout(() => {
+		                reject(new Error('WebSocket connection timeout'));
+		            }, timeoutMs);
+		            const checkConnection = () => {
+		                var _a, _b;
+		                if (((_a = this.webSocket) === null || _a === void 0 ? void 0 : _a.readyState) === WebSocket.OPEN) {
+		                    clearTimeout(timeout);
+		                    resolve();
+		                }
+		                else if (((_b = this.webSocket) === null || _b === void 0 ? void 0 : _b.readyState) === WebSocket.CONNECTING) {
+		                    setTimeout(checkConnection, 100);
+		                }
+		                else {
+		                    clearTimeout(timeout);
+		                    reject(new Error('WebSocket connection failed'));
+		                }
+		            };
+		            checkConnection();
+		        });
+		    }
+		}
+		APIConnectorBrowser.ApiConnectorBrowser = ApiConnectorBrowser;
+		return APIConnectorBrowser;
+	}
+
 	var hasRequiredAPIConnector;
 
 	function requireAPIConnector () {
@@ -1171,8 +1341,8 @@
 		APIConnector.Api = APIConnector.ApiResponseContainer = APIConnector.CoverageTracker = void 0;
 		const Util_1 = requireUtil();
 		const APIConnectorVuplex_1 = requireAPIConnectorVuplex();
+		const APIConnectorBrowser_1 = requireAPIConnectorBrowser();
 		const CaxApiCommand_1 = requireCaxApiCommand();
-		/* eslint-disable  @typescript-eslint/no-explicit-any */
 		APIConnector.CoverageTracker = {};
 		class ApiResponseContainer {
 		}
@@ -1236,8 +1406,16 @@
 		        }
 		    }
 		    initialize() {
-		        this.apiConnector = new APIConnectorVuplex_1.ApiConnectorVuplex();
-		        this.apiConnector.initialize();
+		        var _a;
+		        // Check if running in Vuplex environment
+		        if (typeof window !== 'undefined' && window.vuplex) {
+		            this.apiConnector = new APIConnectorVuplex_1.ApiConnectorVuplex();
+		        }
+		        // Otherwise use WebSocket connector
+		        else if (!Api.disableWebsocketApi) {
+		            this.apiConnector = new APIConnectorBrowser_1.ApiConnectorBrowser();
+		        }
+		        (_a = this.apiConnector) === null || _a === void 0 ? void 0 : _a.initialize();
 		    }
 		    constructor() {
 		        this.waiting = {};
@@ -1289,6 +1467,7 @@
 		}
 		APIConnector.Api = Api;
 		Api.instance = undefined;
+		Api.disableWebsocketApi = false;
 		return APIConnector;
 	}
 
@@ -2091,88 +2270,90 @@
 	function requireEvents$1 () {
 		if (hasRequiredEvents$1) return Events;
 		hasRequiredEvents$1 = 1;
-		(function (exports$1) {
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			exports$1.StorageVariableChangedEvent = exports$1.AuthenticationContextChangedEvent = exports$1.IntelliPidSelectionChanged = exports$1.IntelliPidSelectionChangedEvent = exports$1.AnimationTimestamp = exports$1.AnimationTimestampChangedObject = exports$1.LinkClicked = exports$1.LifeCycleEvent = exports$1.SelectionChanged = exports$1.PointerClicked = exports$1.ClashComputationProgressChangedEvent = exports$1.CustomAttributeValueChanged = exports$1.AnimationTimestampChangedEvent = exports$1.CustomAttributeValueChangedEvent = exports$1.LinkClickedEvent = exports$1.SelectionChangedEvent = exports$1.PointerClickedEvent = exports$1.ApiEvents = void 0;
-			(function (ApiEvents) {
-			    ApiEvents["SelectionChanged"] = "SelectionChanged";
-			    ApiEvents["PointerClicked"] = "PointerClicked";
-			    ApiEvents["LinkClicked"] = "LinkClicked";
-			    ApiEvents["LifeCycle"] = "LifeCycle";
-			    ApiEvents["CustomAttributeValueChanged"] = "CustomAttributeValueChanged";
-			    ApiEvents["AnimationTimestampChanged"] = "AnimationTimestampChanged";
-			    ApiEvents["IntellipidSelectionChanged"] = "IntellipidSelectionChanged";
-			    ApiEvents["AuthenticationContextChanged"] = "AuthenticationContextChanged";
-			    ApiEvents["ClashComputationProgressChanged"] = "ClashComputationProgressChanged";
-			    ApiEvents["StorageVariableChanged"] = "StorageVariableChanged";
-			})(exports$1.ApiEvents || (exports$1.ApiEvents = {}));
-			/**
-			 * @internal
-			 */
-			class PointerClickedEvent {
-			}
-			exports$1.PointerClickedEvent = PointerClickedEvent;
-			/**
-			 * @internal
-			 */
-			class SelectionChangedEvent {
-			}
-			exports$1.SelectionChangedEvent = SelectionChangedEvent;
-			/**
-			 * @internal
-			 */
-			class LinkClickedEvent {
-			}
-			exports$1.LinkClickedEvent = LinkClickedEvent;
-			/**
-			 * @internal
-			 */
-			class CustomAttributeValueChangedEvent {
-			}
-			exports$1.CustomAttributeValueChangedEvent = CustomAttributeValueChangedEvent;
-			/**
-			 * @internal
-			 */
-			class AnimationTimestampChangedEvent {
-			}
-			exports$1.AnimationTimestampChangedEvent = AnimationTimestampChangedEvent;
-			class CustomAttributeValueChanged {
-			}
-			exports$1.CustomAttributeValueChanged = CustomAttributeValueChanged;
-			class ClashComputationProgressChangedEvent {
-			}
-			exports$1.ClashComputationProgressChangedEvent = ClashComputationProgressChangedEvent;
-			class PointerClicked {
-			}
-			exports$1.PointerClicked = PointerClicked;
-			class SelectionChanged {
-			}
-			exports$1.SelectionChanged = SelectionChanged;
-			class LifeCycleEvent {
-			}
-			exports$1.LifeCycleEvent = LifeCycleEvent;
-			class LinkClicked {
-			}
-			exports$1.LinkClicked = LinkClicked;
-			class AnimationTimestampChangedObject {
-			}
-			exports$1.AnimationTimestampChangedObject = AnimationTimestampChangedObject;
-			class AnimationTimestamp {
-			}
-			exports$1.AnimationTimestamp = AnimationTimestamp;
-			class IntelliPidSelectionChangedEvent {
-			}
-			exports$1.IntelliPidSelectionChangedEvent = IntelliPidSelectionChangedEvent;
-			class IntelliPidSelectionChanged {
-			}
-			exports$1.IntelliPidSelectionChanged = IntelliPidSelectionChanged;
-			class AuthenticationContextChangedEvent {
-			}
-			exports$1.AuthenticationContextChangedEvent = AuthenticationContextChangedEvent;
-			class StorageVariableChangedEvent {
-			}
-			exports$1.StorageVariableChangedEvent = StorageVariableChangedEvent; 
-		} (Events));
+		Object.defineProperty(Events, "__esModule", { value: true });
+		Events.StorageVariableChangedEvent = Events.AuthenticationContextChangedEvent = Events.IntelliPidSelectionChanged = Events.IntelliPidSelectionChangedEvent = Events.AnimationTimestamp = Events.AnimationTimestampChangedObject = Events.LinkClicked = Events.LifeCycleEvent = Events.SelectionChanged = Events.PointerClicked = Events.ClashComputationProgressChangedEvent = Events.CustomAttributeValueChanged = Events.AnimationTimestampChangedEvent = Events.CustomAttributeValueChangedEvent = Events.LinkClickedEvent = Events.SelectionChangedEvent = Events.PointerClickedEvent = Events.ApiEvents = void 0;
+		/**
+		 * @internal
+		 */
+		var ApiEvents;
+		(function (ApiEvents) {
+		    ApiEvents["SelectionChanged"] = "SelectionChanged";
+		    ApiEvents["PointerClicked"] = "PointerClicked";
+		    ApiEvents["LinkClicked"] = "LinkClicked";
+		    ApiEvents["LifeCycle"] = "LifeCycle";
+		    ApiEvents["CustomAttributeValueChanged"] = "CustomAttributeValueChanged";
+		    ApiEvents["AnimationTimestampChanged"] = "AnimationTimestampChanged";
+		    ApiEvents["IntellipidSelectionChanged"] = "IntellipidSelectionChanged";
+		    ApiEvents["AuthenticationContextChanged"] = "AuthenticationContextChanged";
+		    ApiEvents["ClashComputationProgressChanged"] = "ClashComputationProgressChanged";
+		    ApiEvents["StorageVariableChanged"] = "StorageVariableChanged";
+		})(ApiEvents || (Events.ApiEvents = ApiEvents = {}));
+		/**
+		 * @internal
+		 */
+		class PointerClickedEvent {
+		}
+		Events.PointerClickedEvent = PointerClickedEvent;
+		/**
+		 * @internal
+		 */
+		class SelectionChangedEvent {
+		}
+		Events.SelectionChangedEvent = SelectionChangedEvent;
+		/**
+		 * @internal
+		 */
+		class LinkClickedEvent {
+		}
+		Events.LinkClickedEvent = LinkClickedEvent;
+		/**
+		 * @internal
+		 */
+		class CustomAttributeValueChangedEvent {
+		}
+		Events.CustomAttributeValueChangedEvent = CustomAttributeValueChangedEvent;
+		/**
+		 * @internal
+		 */
+		class AnimationTimestampChangedEvent {
+		}
+		Events.AnimationTimestampChangedEvent = AnimationTimestampChangedEvent;
+		class CustomAttributeValueChanged {
+		}
+		Events.CustomAttributeValueChanged = CustomAttributeValueChanged;
+		class ClashComputationProgressChangedEvent {
+		}
+		Events.ClashComputationProgressChangedEvent = ClashComputationProgressChangedEvent;
+		class PointerClicked {
+		}
+		Events.PointerClicked = PointerClicked;
+		class SelectionChanged {
+		}
+		Events.SelectionChanged = SelectionChanged;
+		class LifeCycleEvent {
+		}
+		Events.LifeCycleEvent = LifeCycleEvent;
+		class LinkClicked {
+		}
+		Events.LinkClicked = LinkClicked;
+		class AnimationTimestampChangedObject {
+		}
+		Events.AnimationTimestampChangedObject = AnimationTimestampChangedObject;
+		class AnimationTimestamp {
+		}
+		Events.AnimationTimestamp = AnimationTimestamp;
+		class IntelliPidSelectionChangedEvent {
+		}
+		Events.IntelliPidSelectionChangedEvent = IntelliPidSelectionChangedEvent;
+		class IntelliPidSelectionChanged {
+		}
+		Events.IntelliPidSelectionChanged = IntelliPidSelectionChanged;
+		class AuthenticationContextChangedEvent {
+		}
+		Events.AuthenticationContextChangedEvent = AuthenticationContextChangedEvent;
+		class StorageVariableChangedEvent {
+		}
+		Events.StorageVariableChangedEvent = StorageVariableChangedEvent;
 		return Events;
 	}
 
@@ -3176,7 +3357,7 @@
 		if (hasRequiredPrinter) return Printer;
 		hasRequiredPrinter = 1;
 		Object.defineProperty(Printer, "__esModule", { value: true });
-		Printer.Printer = void 0;
+		Printer.LayerSketchPairWrapper = Printer.Printer = void 0;
 		const APIConnector_1 = requireAPIConnector();
 		const CaxApiCommand_1 = requireCaxApiCommand();
 		const Util_1 = requireUtil();
@@ -3184,33 +3365,61 @@
 		    constructor(printerId) {
 		        this.printerId = printerId;
 		    }
+		    /**
+		     * Creates a new PDF printer instance always call delete once no longer required
+		     * @returns
+		     */
 		    static async create() {
 		        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterCreate);
 		        return new Printer((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.PrinterId);
 		    }
+		    /**
+		     * Deletes an PDF printer instance
+		     * @returns
+		     */
 		    async delete() {
 		        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterDelete);
 		        command.commandParameters.push(this.printerId.toString());
 		        return await APIConnector_1.Api.get().sendCommand(command);
 		    }
+		    /**
+		     * Returns the PDF as a base64 string
+		     * @returns
+		     */
 		    async getPdf() {
 		        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterPrintToBase64);
 		        command.commandParameters.push(this.printerId.toString());
 		        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Pdf;
 		    }
-		    async addIntellipidPage(drawing, printMode) {
+		    /**
+		     * Add in Intellipid to the PDF
+		     * @param drawing PID to add
+		     * @param printMode what mode should be used
+		     * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+		     * @returns
+		     */
+		    async addIntellipidPage(drawing, printMode, sketchLayers = []) {
+		        const sketchlayers = sketchLayers.map(x => ({
+		            Name: x.Name,
+		            Visible: x.Visible,
+		            SketchIds: x.Sketches.map(s => s.Id)
+		        }));
 		        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterAddIntelliPidPage);
 		        command.commandParameters.push(this.printerId.toString());
 		        command.additionalParameters = {
 		            AddPidToPdfPrinter: {
 		                DrawingPath: drawing.Identifier,
-		                PrintMode: printMode
+		                PrintMode: printMode,
+		                LayerSketches: sketchlayers
 		            }
 		        };
 		        return (await APIConnector_1.Api.get().sendCommand(command));
 		    }
 		};
 		Printer.Printer = Printer$1;
+		class LayerSketchPairWrapper {
+		}
+		Printer.LayerSketchPairWrapper = LayerSketchPairWrapper;
 		return Printer;
 	}
 
@@ -4199,9 +4408,37 @@
 		Object.defineProperty(FileTreeFolder, "__esModule", { value: true });
 		FileTreeFolder.FileTreeFolder = void 0;
 		const FileTreeElement_1 = requireFileTreeElement();
+		const Util_1 = requireUtil();
+		const APIConnector_1 = requireAPIConnector();
+		const CaxApiCommand_1 = requireCaxApiCommand();
 		let FileTreeFolder$1 = class FileTreeFolder extends FileTreeElement_1.FileTreeElement {
 		    constructor(id, name, type) {
 		        super(id, name, type);
+		    }
+		    /***
+		     * Load UPVF file from a base64 string into UPV under the curent folder
+		     * @param upfvBase64 base64 upvf content to load
+		     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+		     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+		     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+		     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+		     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+		     * @returns
+		     */
+		    async loadUPVF(upfvBase64, suppressDefaultAction = true, overwriteFoldersBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, overwriteNodesBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, keepFolderExpandStates = false, overwriteEnableUi = false) {
+		        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ProcessFile);
+		        command.additionalParameters = {
+		            ProcessFile: {
+		                ContentBase64: upfvBase64,
+		                SuppressDefaultAction: suppressDefaultAction,
+		                OverwriteFoldersBehavior: overwriteFoldersBehavior,
+		                OverwriteNodesBehavior: overwriteNodesBehavior,
+		                KeepFolderExpandStates: keepFolderExpandStates,
+		                OverwriteEnableUi: overwriteEnableUi,
+		                InsertNodeId: this.Id
+		            }
+		        };
+		        return await APIConnector_1.Api.get().sendCommand(command);
 		    }
 		};
 		FileTreeFolder.FileTreeFolder = FileTreeFolder$1;
@@ -5011,18 +5248,27 @@
 		                return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);
 		        }
 		    }
-		    /**
+		    /***
 		     * Load UPVF file from a base64 string into UPV
 		     * @param upfvBase64 base64 upvf content to load
-		     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true)
+		     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+		     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+		     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+		     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+		     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+		     * @returns
 		     * @returns
 		     */
-		    async loadUPVF(upfvBase64, suppressDefaultAction = true) {
+		    async loadUPVF(upfvBase64, suppressDefaultAction = true, overwriteFoldersBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, overwriteNodesBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, keepFolderExpandStates = false, overwriteEnableUi = false) {
 		        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ProcessFile);
 		        command.additionalParameters = {
 		            ProcessFile: {
 		                ContentBase64: upfvBase64,
-		                SuppressDefaultAction: suppressDefaultAction
+		                SuppressDefaultAction: suppressDefaultAction,
+		                OverwriteFoldersBehavior: overwriteFoldersBehavior,
+		                OverwriteNodesBehavior: overwriteNodesBehavior,
+		                KeepFolderExpandStates: keepFolderExpandStates,
+		                OverwriteEnableUi: overwriteEnableUi
 		            }
 		        };
 		        return await APIConnector_1.Api.get().sendCommand(command);
@@ -5301,7 +5547,6 @@
 	function requireTheme () {
 		if (hasRequiredTheme) return Theme;
 		hasRequiredTheme = 1;
-		/* eslint-disable  @typescript-eslint/no-explicit-any */
 		Object.defineProperty(Theme, "__esModule", { value: true });
 		Theme.Theme = void 0;
 		/**
