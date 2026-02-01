@@ -63,7 +63,7 @@ export declare class Instance {
     Rotation: Vector3D;
 }
 export declare class ModelInfo {
-    Uri: string;
+    URI: string;
     AvailableAttributes: string[];
     AvailableAspects: string[];
 }
@@ -228,5 +228,10 @@ export declare class ViewerFileVersion {
 }
 export declare class DrawingTemplate {
     Name: string;
+}
+export declare class LayerSketchIdsPair {
+    Name: string;
+    Visible: boolean;
+    SketchIds: number[];
 }
 //# sourceMappingURL=BaseDataTypes.d.ts.map

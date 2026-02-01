@@ -171,7 +171,7 @@ export declare class GetStorageVariable {
     Value: string;
 }
 export declare class GetStorageVariablesList {
-    Variables: string[];
+    Keys: string[];
 }
 export declare class GetUiColors {
     UiColors: {

@@ -191,7 +191,7 @@ class Application {
 }
 exports.Application = Application;
 
-},{"./FilesTree":24,"./Internal/APIConnector":25,"./Internal/CaxApiCommand":27,"./Objects":47,"./Objects/AuthenticationManager":29,"./Scenes":56,"./Util":63}],2:[function(require,module,exports){
+},{"./FilesTree":24,"./Internal/APIConnector":25,"./Internal/CaxApiCommand":28,"./Objects":48,"./Objects/AuthenticationManager":30,"./Scenes":57,"./Util":64}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAnimation = void 0;
@@ -228,7 +228,7 @@ class FileTreeAnimation extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeAnimation = FileTreeAnimation;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],3:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeAppControl = void 0;
@@ -292,7 +292,7 @@ class FileTreeDrawing extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeDrawing = FileTreeDrawing;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],7:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],7:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeElement = void 0;
@@ -424,19 +424,47 @@ class FileTreeElement {
 }
 exports.FileTreeElement = FileTreeElement;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],8:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],8:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeFolder = void 0;
 const FileTreeElement_1 = require("./FileTreeElement");
+const Util_1 = require("../Util");
+const APIConnector_1 = require("../Internal/APIConnector");
+const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
 class FileTreeFolder extends FileTreeElement_1.FileTreeElement {
     constructor(id, name, type) {
         super(id, name, type);
     }
+    /***
+     * Load UPVF file from a base64 string into UPV under the curent folder
+     * @param upfvBase64 base64 upvf content to load
+     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+     * @returns
+     */
+    async loadUPVF(upfvBase64, suppressDefaultAction = true, overwriteFoldersBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, overwriteNodesBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, keepFolderExpandStates = false, overwriteEnableUi = false) {
+        const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ProcessFile);
+        command.additionalParameters = {
+            ProcessFile: {
+                ContentBase64: upfvBase64,
+                SuppressDefaultAction: suppressDefaultAction,
+                OverwriteFoldersBehavior: overwriteFoldersBehavior,
+                OverwriteNodesBehavior: overwriteNodesBehavior,
+                KeepFolderExpandStates: keepFolderExpandStates,
+                OverwriteEnableUi: overwriteEnableUi,
+                InsertNodeId: this.Id
+            }
+        };
+        return await APIConnector_1.Api.get().sendCommand(command);
+    }
 }
 exports.FileTreeFolder = FileTreeFolder;
 
-},{"./FileTreeElement":7}],9:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],9:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeIntelliPIDLegendPosition = void 0;
@@ -765,18 +793,27 @@ class FileTreeManager {
                 return new FileTreeElement_1.FileTreeElement(element.Id, element.Name, element.Type);
         }
     }
-    /**
+    /***
      * Load UPVF file from a base64 string into UPV
      * @param upfvBase64 base64 upvf content to load
-     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true)
+     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+     * @returns
      * @returns
      */
-    async loadUPVF(upfvBase64, suppressDefaultAction = true) {
+    async loadUPVF(upfvBase64, suppressDefaultAction = true, overwriteFoldersBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, overwriteNodesBehavior = Util_1.FilesTreeImportBehaviour.KeepBoth, keepFolderExpandStates = false, overwriteEnableUi = false) {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ProcessFile);
         command.additionalParameters = {
             ProcessFile: {
                 ContentBase64: upfvBase64,
-                SuppressDefaultAction: suppressDefaultAction
+                SuppressDefaultAction: suppressDefaultAction,
+                OverwriteFoldersBehavior: overwriteFoldersBehavior,
+                OverwriteNodesBehavior: overwriteNodesBehavior,
+                KeepFolderExpandStates: keepFolderExpandStates,
+                OverwriteEnableUi: overwriteEnableUi
             }
         };
         return await APIConnector_1.Api.get().sendCommand(command);
@@ -801,7 +838,7 @@ class FileTreeManager {
 }
 exports.FileTreeManager = FileTreeManager;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeDrawing":6,"./FileTreeElement":7,"./FileTreeFolder":8,"./FileTreeIntelliPIDLegendPosition":9,"./FileTreeMarkup":11,"./FileTreeModel":12,"./FileTreePIDSketch":13,"./FileTreePackage":14,"./FileTreePhoto":15,"./FileTreePointOfInterest":16,"./FileTreeReport":17,"./FileTreeScreenshot":18,"./FileTreeSketch":19,"./FileTreeSpraying":20,"./FileTreeTwoDToThreeD":21,"./FileTreeView":22,"./FileTreeWindowLayout":23}],11:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeAnimation":2,"./FileTreeAppControl":3,"./FileTreeComment":4,"./FileTreeCommentSVG":5,"./FileTreeDrawing":6,"./FileTreeElement":7,"./FileTreeFolder":8,"./FileTreeIntelliPIDLegendPosition":9,"./FileTreeMarkup":11,"./FileTreeModel":12,"./FileTreePIDSketch":13,"./FileTreePackage":14,"./FileTreePhoto":15,"./FileTreePointOfInterest":16,"./FileTreeReport":17,"./FileTreeScreenshot":18,"./FileTreeSketch":19,"./FileTreeSpraying":20,"./FileTreeTwoDToThreeD":21,"./FileTreeView":22,"./FileTreeWindowLayout":23}],11:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeMarkup = void 0;
@@ -842,7 +879,7 @@ class FileTreeMarkup extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeMarkup = FileTreeMarkup;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],12:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],12:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeModel = void 0;
@@ -934,7 +971,7 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreePIDSketch = FileTreePIDSketch;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],14:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreePackage = void 0;
@@ -1111,7 +1148,7 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeSketch = FileTreeSketch;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],20:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],20:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeSpraying = void 0;
@@ -1136,7 +1173,7 @@ class FileTreeSpraying extends FileTreeElement_1.FileTreeElement {
 }
 exports.FileTreeSpraying = FileTreeSpraying;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"./FileTreeElement":7}],21:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"./FileTreeElement":7}],21:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileTreeTwoDToThreeD = void 0;
@@ -1218,8 +1255,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = exports.ApiResponseContainer = exports.CoverageTracker = void 0;
 const Util_1 = require("../Util");
 const APIConnectorVuplex_1 = require("./APIConnectorVuplex");
+const APIConnectorBrowser_1 = require("./APIConnectorBrowser");
 const CaxApiCommand_1 = require("./CaxApiCommand");
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 exports.CoverageTracker = {};
 class ApiResponseContainer {
 }
@@ -1283,8 +1320,16 @@ class Api {
         }
     }
     initialize() {
-        this.apiConnector = new APIConnectorVuplex_1.ApiConnectorVuplex();
-        this.apiConnector.initialize();
+        var _a;
+        // Check if running in Vuplex environment
+        if (typeof window !== 'undefined' && window.vuplex) {
+            this.apiConnector = new APIConnectorVuplex_1.ApiConnectorVuplex();
+        }
+        // Otherwise use WebSocket connector
+        else if (!Api.disableWebsocketApi) {
+            this.apiConnector = new APIConnectorBrowser_1.ApiConnectorBrowser();
+        }
+        (_a = this.apiConnector) === null || _a === void 0 ? void 0 : _a.initialize();
     }
     constructor() {
         this.waiting = {};
@@ -1336,8 +1381,122 @@ class Api {
 }
 exports.Api = Api;
 Api.instance = undefined;
+Api.disableWebsocketApi = false;
 
-},{"../Util":63,"./APIConnectorVuplex":26,"./CaxApiCommand":27}],26:[function(require,module,exports){
+},{"../Util":64,"./APIConnectorBrowser":26,"./APIConnectorVuplex":27,"./CaxApiCommand":28}],26:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ApiConnectorBrowser = void 0;
+const APIConnector_1 = require("./APIConnector");
+/**
+ * @internal
+ */
+class ApiConnectorBrowser {
+    constructor() {
+        this.webSocket = null;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.reconnectDelay = 2000;
+        this.port = 45123;
+        this.userRejected = false;
+        this.connected = false;
+        this.wsUrl = `ws://127.0.0.1:${this.port}`;
+    }
+    get available() {
+        return this.connected;
+    }
+    initialize() {
+        if (!window.vuplex && 'WebSocket' in window) {
+            this.connectWebSocket();
+        }
+    }
+    connectWebSocket() {
+        try {
+            this.webSocket = new WebSocket(this.wsUrl);
+            this.webSocket.onopen = () => {
+                console.log('WebSocket connection established');
+                this.connected = true;
+            };
+            this.webSocket.onmessage = (event) => {
+                try {
+                    const json = JSON.parse(event.data);
+                    if (json.type === "ApiResponse") {
+                        // check if the response contains Rejected error message
+                        if (json.message && json.message.ErrorCode != 0 && json.message.ErrorMessage.startsWith("Rejected")) {
+                            console.error("API Response Error:", json.message.ErrorMessage);
+                            this.userRejected = true;
+                        }
+                        else {
+                            APIConnector_1.Api.get().handleEvent(json.message);
+                        }
+                    }
+                }
+                catch (error) {
+                    console.error('Error parsing message:', error);
+                }
+            };
+            this.webSocket.onclose = () => {
+                this.connected = false;
+                if (this.userRejected) {
+                    return;
+                }
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+                    setTimeout(() => this.connectWebSocket(), this.reconnectDelay);
+                }
+                else {
+                    console.error('Connection failed after maximum retry attempts');
+                }
+            };
+            this.webSocket.onerror = (error) => {
+                console.error('Error:', error);
+            };
+        }
+        catch (error) {
+            console.error('Error creating connection:', error);
+        }
+    }
+    async sendCommand(command) {
+        // Wait for WebSocket connection to be ready
+        await this.waitForConnection();
+        if (!this.webSocket || this.webSocket.readyState !== WebSocket.OPEN) {
+            throw new Error('WebSocket is not connected');
+        }
+        this.webSocket.send(JSON.stringify({
+            type: 'Command',
+            message: JSON.stringify(command)
+        }));
+    }
+    waitForConnection(timeoutMs = 5000) {
+        return new Promise((resolve, reject) => {
+            if (!this.webSocket) {
+                return reject(new Error('No WebSocket instance available'));
+            }
+            const timeout = setTimeout(() => {
+                reject(new Error('WebSocket connection timeout'));
+            }, timeoutMs);
+            const checkConnection = () => {
+                var _a, _b;
+                if (((_a = this.webSocket) === null || _a === void 0 ? void 0 : _a.readyState) === WebSocket.OPEN) {
+                    clearTimeout(timeout);
+                    resolve();
+                }
+                else if (((_b = this.webSocket) === null || _b === void 0 ? void 0 : _b.readyState) === WebSocket.CONNECTING) {
+                    setTimeout(checkConnection, 100);
+                }
+                else {
+                    clearTimeout(timeout);
+                    reject(new Error('WebSocket connection failed'));
+                }
+            };
+            checkConnection();
+        });
+    }
+}
+exports.ApiConnectorBrowser = ApiConnectorBrowser;
+
+},{"./APIConnector":25}],27:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiConnectorVuplex = void 0;
@@ -1392,7 +1551,7 @@ class ApiConnectorVuplex {
 }
 exports.ApiConnectorVuplex = ApiConnectorVuplex;
 
-},{"./APIConnector":25}],27:[function(require,module,exports){
+},{"./APIConnector":25}],28:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaxApiCommand = void 0;
@@ -1412,7 +1571,7 @@ class CaxApiCommand {
 }
 exports.CaxApiCommand = CaxApiCommand;
 
-},{"../Util/Enums":60}],28:[function(require,module,exports){
+},{"../Util/Enums":61}],29:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AttributeTreeNode = void 0;
@@ -1477,7 +1636,7 @@ class AttributeTreeNode {
 }
 exports.AttributeTreeNode = AttributeTreeNode;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],29:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],30:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationContext = exports.AuthenticationManager = void 0;
@@ -1559,7 +1718,7 @@ class AuthenticationContext {
 }
 exports.AuthenticationContext = AuthenticationContext;
 
-},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],30:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],31:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Camera = void 0;
@@ -1647,7 +1806,7 @@ class Camera {
 }
 exports.Camera = Camera;
 
-},{"../Internal/APIConnector":25,"../Util":63}],31:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64}],32:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClashContext = void 0;
@@ -1694,7 +1853,7 @@ class ClashContext {
 }
 exports.ClashContext = ClashContext;
 
-},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],32:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],33:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Events = void 0;
@@ -1844,7 +2003,7 @@ class Events {
 }
 exports.Events = Events;
 
-},{"../Internal/APIConnector":25,"../ResponseTypes":51}],33:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../ResponseTypes":52}],34:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileOperations = void 0;
@@ -1901,7 +2060,7 @@ class FileOperations {
 }
 exports.FileOperations = FileOperations;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],34:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],35:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation = void 0;
@@ -2081,7 +2240,7 @@ class FilterOperation {
 }
 exports.FilterOperation = FilterOperation;
 
-},{"../Internal/APIConnector":25,"../Util":63,"./ModelObject":42}],35:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64,"./ModelObject":43}],36:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperation3d = void 0;
@@ -2243,7 +2402,7 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperation3d = FilterOperation3d;
 
-},{"../Internal/APIConnector":25,"../Util":63,"./AttributeTree":28,"./ClashContext":31,"./FilterOperation":34}],36:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64,"./AttributeTree":29,"./ClashContext":32,"./FilterOperation":35}],37:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilterOperationPid = void 0;
@@ -2302,7 +2461,7 @@ class FilterOperationPid extends FilterOperation_1.FilterOperation {
 }
 exports.FilterOperationPid = FilterOperationPid;
 
-},{"../Internal/APIConnector":25,"../Util":63,"./FilterOperation":34}],37:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64,"./FilterOperation":35}],38:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.IntelliPidDrawing = void 0;
@@ -2337,7 +2496,7 @@ class IntelliPidDrawing {
 }
 exports.IntelliPidDrawing = IntelliPidDrawing;
 
-},{"../Internal/APIConnector":25,"../Util":63}],38:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64}],39:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer2D = void 0;
@@ -2430,7 +2589,7 @@ class Layer2D {
 }
 exports.Layer2D = Layer2D;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],39:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],40:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Layer3D = void 0;
@@ -2557,7 +2716,7 @@ class Layer3D {
 }
 exports.Layer3D = Layer3D;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],40:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],41:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LocalStorage = void 0;
@@ -2622,7 +2781,7 @@ class LocalStorage {
 }
 exports.LocalStorage = LocalStorage;
 
-},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],41:[function(require,module,exports){
+},{"../Application":1,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],42:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = exports.ModelLegacy = void 0;
@@ -2760,7 +2919,7 @@ class Model {
 }
 exports.Model = Model;
 
-},{".":47,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63,"../Util/Enums":60,"../Util/GetSet":61}],42:[function(require,module,exports){
+},{".":48,"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64,"../Util/Enums":61,"../Util/GetSet":62}],43:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Attribute = exports.ModelObject = void 0;
@@ -2969,7 +3128,7 @@ class Attribute {
 }
 exports.Attribute = Attribute;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],43:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],44:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Pdf = void 0;
@@ -3016,10 +3175,10 @@ class Pdf {
 }
 exports.Pdf = Pdf;
 
-},{"../Internal/APIConnector":25,"../Util":63}],44:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64}],45:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Printer = void 0;
+exports.LayerSketchPairWrapper = exports.Printer = void 0;
 const APIConnector_1 = require("../Internal/APIConnector");
 const CaxApiCommand_1 = require("../Internal/CaxApiCommand");
 const Util_1 = require("../Util");
@@ -3027,35 +3186,63 @@ class Printer {
     constructor(printerId) {
         this.printerId = printerId;
     }
+    /**
+     * Creates a new PDF printer instance always call delete once no longer required
+     * @returns
+     */
     static async create() {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterCreate);
         return new Printer((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.PrinterId);
     }
+    /**
+     * Deletes an PDF printer instance
+     * @returns
+     */
     async delete() {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterDelete);
         command.commandParameters.push(this.printerId.toString());
         return await APIConnector_1.Api.get().sendCommand(command);
     }
+    /**
+     * Returns the PDF as a base64 string
+     * @returns
+     */
     async getPdf() {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterPrintToBase64);
         command.commandParameters.push(this.printerId.toString());
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Pdf;
     }
-    async addIntellipidPage(drawing, printMode) {
+    /**
+     * Add in Intellipid to the PDF
+     * @param drawing PID to add
+     * @param printMode what mode should be used
+     * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+     * @returns
+     */
+    async addIntellipidPage(drawing, printMode, sketchLayers = []) {
+        const sketchlayers = sketchLayers.map(x => ({
+            Name: x.Name,
+            Visible: x.Visible,
+            SketchIds: x.Sketches.map(s => s.Id)
+        }));
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterAddIntelliPidPage);
         command.commandParameters.push(this.printerId.toString());
         command.additionalParameters = {
             AddPidToPdfPrinter: {
                 DrawingPath: drawing.Identifier,
-                PrintMode: printMode
+                PrintMode: printMode,
+                LayerSketches: sketchlayers
             }
         };
         return (await APIConnector_1.Api.get().sendCommand(command));
     }
 }
 exports.Printer = Printer;
+class LayerSketchPairWrapper {
+}
+exports.LayerSketchPairWrapper = LayerSketchPairWrapper;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],45:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],46:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProjectionSphereElement = void 0;
@@ -3094,7 +3281,7 @@ class ProjectionSphereElement {
 }
 exports.ProjectionSphereElement = ProjectionSphereElement;
 
-},{"../Internal/APIConnector":25,"../Util":63}],46:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Util":64}],47:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Settings = void 0;
@@ -3200,7 +3387,7 @@ class Settings {
 }
 exports.Settings = Settings;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util/Enums":60,"../Util/GetSet":61}],47:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util/Enums":61,"../Util/GetSet":62}],48:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3238,7 +3425,7 @@ __exportStar(require("./Settings"), exports);
 __exportStar(require("./FileOperations"), exports);
 __exportStar(require("./Pdf"), exports);
 
-},{"./AttributeTree":28,"./AuthenticationManager":29,"./Camera":30,"./ClashContext":31,"./Events":32,"./FileOperations":33,"./FilterOperation3D":35,"./FilterOperationPid":36,"./IntelliPidDrawing":37,"./Layer2D":38,"./Layer3D":39,"./LocalStorage":40,"./Model":41,"./ModelObject":42,"./Pdf":43,"./Printer":44,"./ProjectionSphereElement":45,"./Settings":46}],48:[function(require,module,exports){
+},{"./AttributeTree":29,"./AuthenticationManager":30,"./Camera":31,"./ClashContext":32,"./Events":33,"./FileOperations":34,"./FilterOperation3D":36,"./FilterOperationPid":37,"./IntelliPidDrawing":38,"./Layer2D":39,"./Layer3D":40,"./LocalStorage":41,"./Model":42,"./ModelObject":43,"./Pdf":44,"./Printer":45,"./ProjectionSphereElement":46,"./Settings":47}],49:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiResponseWithType = exports.ApiResponse = void 0;
@@ -3255,7 +3442,7 @@ class ApiResponseWithType extends ApiResponse {
 }
 exports.ApiResponseWithType = ApiResponseWithType;
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StorageVariableChangedEvent = exports.AuthenticationContextChangedEvent = exports.IntelliPidSelectionChanged = exports.IntelliPidSelectionChangedEvent = exports.AnimationTimestamp = exports.AnimationTimestampChangedObject = exports.LinkClicked = exports.LifeCycleEvent = exports.SelectionChanged = exports.PointerClicked = exports.ClashComputationProgressChangedEvent = exports.CustomAttributeValueChanged = exports.AnimationTimestampChangedEvent = exports.CustomAttributeValueChangedEvent = exports.LinkClickedEvent = exports.SelectionChangedEvent = exports.PointerClickedEvent = exports.ApiEvents = void 0;
@@ -3274,7 +3461,7 @@ var ApiEvents;
     ApiEvents["AuthenticationContextChanged"] = "AuthenticationContextChanged";
     ApiEvents["ClashComputationProgressChanged"] = "ClashComputationProgressChanged";
     ApiEvents["StorageVariableChanged"] = "StorageVariableChanged";
-})(ApiEvents = exports.ApiEvents || (exports.ApiEvents = {}));
+})(ApiEvents || (exports.ApiEvents = ApiEvents = {}));
 /**
  * @internal
  */
@@ -3342,7 +3529,7 @@ class StorageVariableChangedEvent {
 }
 exports.StorageVariableChangedEvent = StorageVariableChangedEvent;
 
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
@@ -3582,7 +3769,7 @@ class GetWindowLayoutResponse {
 }
 exports.GetWindowLayoutResponse = GetWindowLayoutResponse;
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3603,7 +3790,7 @@ __exportStar(require("./ApiResponse"), exports);
 __exportStar(require("./GetObjects"), exports);
 __exportStar(require("./Events"), exports);
 
-},{"./ApiResponse":48,"./Events":49,"./GetObjects":50}],52:[function(require,module,exports){
+},{"./ApiResponse":49,"./Events":50,"./GetObjects":51}],53:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppControlScene = void 0;
@@ -3623,7 +3810,7 @@ class AppControlScene extends Scene_1.Scene {
 }
 exports.AppControlScene = AppControlScene;
 
-},{"./Scene":53}],53:[function(require,module,exports){
+},{"./Scene":54}],54:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene = void 0;
@@ -3704,7 +3891,7 @@ class Scene {
 }
 exports.Scene = Scene;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util":63}],54:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util":64}],55:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Scene3d = void 0;
@@ -3781,7 +3968,7 @@ class Scene3d extends Scene_1.Scene {
 }
 exports.Scene3d = Scene3d;
 
-},{"../Internal/APIConnector":25,"../Objects":47,"../Util":63,"./Scene":53}],55:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Objects":48,"../Util":64,"./Scene":54}],56:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ScenePid = void 0;
@@ -3805,7 +3992,7 @@ class ScenePid extends Scene_1.Scene {
 }
 exports.ScenePid = ScenePid;
 
-},{"../Objects":47,"./Scene":53}],56:[function(require,module,exports){
+},{"../Objects":48,"./Scene":54}],57:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -3827,9 +4014,8 @@ __exportStar(require("./Scene3d"), exports);
 __exportStar(require("./ScenePid"), exports);
 __exportStar(require("./AppControlScene"), exports);
 
-},{"./AppControlScene":52,"./Scene":53,"./Scene3d":54,"./ScenePid":55}],57:[function(require,module,exports){
+},{"./AppControlScene":53,"./Scene":54,"./Scene3d":55,"./ScenePid":56}],58:[function(require,module,exports){
 "use strict";
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Theme = void 0;
 /**
@@ -3867,10 +4053,10 @@ class Theme {
 }
 exports.Theme = Theme;
 
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
+exports.LayerSketchIdsPair = exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
 class Vector2D {
     constructor(X, Y) {
         this.X = X;
@@ -4030,8 +4216,11 @@ exports.ViewerFileVersion = ViewerFileVersion;
 class DrawingTemplate {
 }
 exports.DrawingTemplate = DrawingTemplate;
+class LayerSketchIdsPair {
+}
+exports.LayerSketchIdsPair = LayerSketchIdsPair;
 
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomAttributes = exports.CustomAttributeLegacy = void 0;
@@ -4133,10 +4322,10 @@ class CustomAttributes {
 }
 exports.CustomAttributes = CustomAttributes;
 
-},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":27,"../Util/Enums":60}],60:[function(require,module,exports){
+},{"../Internal/APIConnector":25,"../Internal/CaxApiCommand":28,"../Util/Enums":61}],61:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+exports.FilesTreeImportBehaviour = exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 /**
  * @deprecated
  * Old UPV Target codes
@@ -4146,7 +4335,7 @@ var TargetEnum;
     TargetEnum["Undefined"] = "0";
     TargetEnum["ThreeD"] = "1";
     TargetEnum["Intelli"] = "10";
-})(TargetEnum = exports.TargetEnum || (exports.TargetEnum = {}));
+})(TargetEnum || (exports.TargetEnum = TargetEnum = {}));
 /**
  * how Queries will be combined
  */
@@ -4154,7 +4343,7 @@ var CombineModes;
 (function (CombineModes) {
     CombineModes["And"] = "AND";
     CombineModes["Or"] = "OR";
-})(CombineModes = exports.CombineModes || (exports.CombineModes = {}));
+})(CombineModes || (exports.CombineModes = CombineModes = {}));
 /**
  * The sceneType defines what this scene contains
  */
@@ -4164,12 +4353,12 @@ var SceneType;
     SceneType["ThreeD"] = "1";
     SceneType["IntelliPid"] = "10";
     SceneType["Browser"] = "11";
-})(SceneType = exports.SceneType || (exports.SceneType = {}));
+})(SceneType || (exports.SceneType = SceneType = {}));
 var UpdateModes;
 (function (UpdateModes) {
     UpdateModes[UpdateModes["Append"] = 0] = "Append";
     UpdateModes[UpdateModes["Full"] = 1] = "Full";
-})(UpdateModes = exports.UpdateModes || (exports.UpdateModes = {}));
+})(UpdateModes || (exports.UpdateModes = UpdateModes = {}));
 var CustomAttributeDataType;
 (function (CustomAttributeDataType) {
     //Calculation = 0,
@@ -4179,7 +4368,7 @@ var CustomAttributeDataType;
     CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
     //Unknown = 5,
     CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
-})(CustomAttributeDataType = exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
+})(CustomAttributeDataType || (exports.CustomAttributeDataType = CustomAttributeDataType = {}));
 var FeatureTypes;
 (function (FeatureTypes) {
     FeatureTypes["Unknown"] = "Unknown";
@@ -4216,12 +4405,12 @@ var FeatureTypes;
     FeatureTypes["Report"] = "Report";
     FeatureTypes["WindowLayout"] = "WindowLayout";
     FeatureTypes["IntelliPIDLegendPosition"] = "IntelliPIDLegendPosition";
-})(FeatureTypes = exports.FeatureTypes || (exports.FeatureTypes = {}));
+})(FeatureTypes || (exports.FeatureTypes = FeatureTypes = {}));
 var ProjectionSphereType;
 (function (ProjectionSphereType) {
     ProjectionSphereType[ProjectionSphereType["Picture"] = 0] = "Picture";
     ProjectionSphereType[ProjectionSphereType["Panorama"] = 1] = "Panorama";
-})(ProjectionSphereType = exports.ProjectionSphereType || (exports.ProjectionSphereType = {}));
+})(ProjectionSphereType || (exports.ProjectionSphereType = ProjectionSphereType = {}));
 /**
  * @internal
  */
@@ -4425,7 +4614,7 @@ var ApiCommands;
     // Layout
     ApiCommands["GetWindowLayout"] = "GetWindowLayout";
     ApiCommands["SetWindowLayout"] = "SetWindowLayout";
-})(ApiCommands = exports.ApiCommands || (exports.ApiCommands = {}));
+})(ApiCommands || (exports.ApiCommands = ApiCommands = {}));
 var PackageConditionTypes;
 (function (PackageConditionTypes) {
     PackageConditionTypes["None"] = "None";
@@ -4433,21 +4622,21 @@ var PackageConditionTypes;
     PackageConditionTypes["Group"] = "Group";
     PackageConditionTypes["Attribute"] = "Attribute";
     PackageConditionTypes["Volume"] = "Volume";
-})(PackageConditionTypes = exports.PackageConditionTypes || (exports.PackageConditionTypes = {}));
+})(PackageConditionTypes || (exports.PackageConditionTypes = PackageConditionTypes = {}));
 var ConsolidationMode;
 (function (ConsolidationMode) {
     ConsolidationMode["Base"] = "Base";
     ConsolidationMode["AndNot"] = "AndNot";
     ConsolidationMode["Or"] = "Or";
     ConsolidationMode["And"] = "And";
-})(ConsolidationMode = exports.ConsolidationMode || (exports.ConsolidationMode = {}));
+})(ConsolidationMode || (exports.ConsolidationMode = ConsolidationMode = {}));
 var AttributeConditionComparison;
 (function (AttributeConditionComparison) {
     AttributeConditionComparison["Equals"] = "==";
     AttributeConditionComparison["NotEquals"] = "!=";
     AttributeConditionComparison["Like"] = "Like";
     AttributeConditionComparison["NotLike"] = "Not Like";
-})(AttributeConditionComparison = exports.AttributeConditionComparison || (exports.AttributeConditionComparison = {}));
+})(AttributeConditionComparison || (exports.AttributeConditionComparison = AttributeConditionComparison = {}));
 var VolumeConditionMode;
 (function (VolumeConditionMode) {
     /// <summary>
@@ -4466,19 +4655,19 @@ var VolumeConditionMode;
     /// Outside
     /// </summary>
     VolumeConditionMode["NotOverlaps"] = "Not Overlaps";
-})(VolumeConditionMode = exports.VolumeConditionMode || (exports.VolumeConditionMode = {}));
+})(VolumeConditionMode || (exports.VolumeConditionMode = VolumeConditionMode = {}));
 var PointOfInterestType;
 (function (PointOfInterestType) {
     PointOfInterestType[PointOfInterestType["Sphere"] = 0] = "Sphere";
     PointOfInterestType[PointOfInterestType["CustomMesh"] = 1] = "CustomMesh";
-})(PointOfInterestType = exports.PointOfInterestType || (exports.PointOfInterestType = {}));
+})(PointOfInterestType || (exports.PointOfInterestType = PointOfInterestType = {}));
 var ClippingMode;
 (function (ClippingMode) {
     ClippingMode[ClippingMode["None"] = 0] = "None";
     ClippingMode[ClippingMode["Volume"] = 1] = "Volume";
     ClippingMode[ClippingMode["GridMeasure"] = 2] = "GridMeasure";
     ClippingMode[ClippingMode["Intelli"] = 3] = "Intelli";
-})(ClippingMode = exports.ClippingMode || (exports.ClippingMode = {}));
+})(ClippingMode || (exports.ClippingMode = ClippingMode = {}));
 var MarkupMode;
 (function (MarkupMode) {
     MarkupMode[MarkupMode["None"] = 0] = "None";
@@ -4490,7 +4679,7 @@ var MarkupMode;
     MarkupMode[MarkupMode["Erase"] = 6] = "Erase";
     MarkupMode[MarkupMode["OrthogonalLine"] = 7] = "OrthogonalLine";
     MarkupMode[MarkupMode["Move"] = 8] = "Move";
-})(MarkupMode = exports.MarkupMode || (exports.MarkupMode = {}));
+})(MarkupMode || (exports.MarkupMode = MarkupMode = {}));
 var PidSketchToolMode;
 (function (PidSketchToolMode) {
     // This reflects UPV
@@ -4521,19 +4710,19 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
     PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
     PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
-})(PidSketchToolMode = exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
+})(PidSketchToolMode || (exports.PidSketchToolMode = PidSketchToolMode = {}));
 var ExportableOptions;
 (function (ExportableOptions) {
     ExportableOptions[ExportableOptions["Inherit"] = 0] = "Inherit";
     ExportableOptions[ExportableOptions["Export"] = 1] = "Export";
     ExportableOptions[ExportableOptions["Ignore"] = 2] = "Ignore";
-})(ExportableOptions = exports.ExportableOptions || (exports.ExportableOptions = {}));
+})(ExportableOptions || (exports.ExportableOptions = ExportableOptions = {}));
 var ColorMode;
 (function (ColorMode) {
     ColorMode[ColorMode["Default"] = 0] = "Default";
     ColorMode[ColorMode["AsModified"] = 1] = "AsModified";
     ColorMode[ColorMode["Original"] = 2] = "Original";
-})(ColorMode = exports.ColorMode || (exports.ColorMode = {}));
+})(ColorMode || (exports.ColorMode = ColorMode = {}));
 var PrimitiveType;
 (function (PrimitiveType) {
     PrimitiveType[PrimitiveType["GroundPlate"] = 300] = "GroundPlate";
@@ -4546,13 +4735,13 @@ var PrimitiveType;
     PrimitiveType[PrimitiveType["Sphere"] = 1050] = "Sphere";
     PrimitiveType[PrimitiveType["Platform"] = 200] = "Platform";
     PrimitiveType[PrimitiveType["CustomObj"] = 9999] = "CustomObj";
-})(PrimitiveType = exports.PrimitiveType || (exports.PrimitiveType = {}));
+})(PrimitiveType || (exports.PrimitiveType = PrimitiveType = {}));
 var FileDialogApiReturnType;
 (function (FileDialogApiReturnType) {
     FileDialogApiReturnType[FileDialogApiReturnType["Cancelled"] = 0] = "Cancelled";
     FileDialogApiReturnType[FileDialogApiReturnType["Ok"] = 1] = "Ok";
     FileDialogApiReturnType[FileDialogApiReturnType["Error"] = 2] = "Error";
-})(FileDialogApiReturnType = exports.FileDialogApiReturnType || (exports.FileDialogApiReturnType = {}));
+})(FileDialogApiReturnType || (exports.FileDialogApiReturnType = FileDialogApiReturnType = {}));
 var ClashMode;
 (function (ClashMode) {
     /**
@@ -4567,7 +4756,7 @@ var ClashMode;
      *
      */
     ClashMode[ClashMode["PackageAAgainstPackageBWithinQuery"] = 2] = "PackageAAgainstPackageBWithinQuery";
-})(ClashMode = exports.ClashMode || (exports.ClashMode = {}));
+})(ClashMode || (exports.ClashMode = ClashMode = {}));
 var GenericLoadFromFileResponseResultType;
 (function (GenericLoadFromFileResponseResultType) {
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Ok"] = 0] = "Ok";
@@ -4575,36 +4764,36 @@ var GenericLoadFromFileResponseResultType;
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotAllowed"] = 2] = "FileNotAllowed";
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["OtherError"] = 3] = "OtherError";
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Undefined"] = 4] = "Undefined";
-})(GenericLoadFromFileResponseResultType = exports.GenericLoadFromFileResponseResultType || (exports.GenericLoadFromFileResponseResultType = {}));
+})(GenericLoadFromFileResponseResultType || (exports.GenericLoadFromFileResponseResultType = GenericLoadFromFileResponseResultType = {}));
 var PdfTypes;
 (function (PdfTypes) {
     PdfTypes[PdfTypes["All"] = 0] = "All";
     PdfTypes[PdfTypes["Document"] = 1] = "Document";
     PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
-})(PdfTypes = exports.PdfTypes || (exports.PdfTypes = {}));
+})(PdfTypes || (exports.PdfTypes = PdfTypes = {}));
 var ChangeableAttributeUnitType;
 (function (ChangeableAttributeUnitType) {
     ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
     ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
     ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
-})(ChangeableAttributeUnitType = exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {}));
+})(ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = ChangeableAttributeUnitType = {}));
 var TextureRenderMode;
 (function (TextureRenderMode) {
     TextureRenderMode[TextureRenderMode["Normal"] = 0] = "Normal";
     TextureRenderMode[TextureRenderMode["HeightMap"] = 1] = "HeightMap";
     TextureRenderMode[TextureRenderMode["NoTexture"] = 2] = "NoTexture";
-})(TextureRenderMode = exports.TextureRenderMode || (exports.TextureRenderMode = {}));
+})(TextureRenderMode || (exports.TextureRenderMode = TextureRenderMode = {}));
 var QualityLevel;
 (function (QualityLevel) {
     QualityLevel[QualityLevel["Low"] = 0] = "Low";
     QualityLevel[QualityLevel["Medium"] = 1] = "Medium";
     QualityLevel[QualityLevel["High"] = 2] = "High";
-})(QualityLevel = exports.QualityLevel || (exports.QualityLevel = {}));
+})(QualityLevel || (exports.QualityLevel = QualityLevel = {}));
 var ModelLoadMessageType;
 (function (ModelLoadMessageType) {
     ModelLoadMessageType[ModelLoadMessageType["AlreadyLoaded"] = 0] = "AlreadyLoaded";
     ModelLoadMessageType[ModelLoadMessageType["FinishedLoading"] = 1] = "FinishedLoading";
-})(ModelLoadMessageType = exports.ModelLoadMessageType || (exports.ModelLoadMessageType = {}));
+})(ModelLoadMessageType || (exports.ModelLoadMessageType = ModelLoadMessageType = {}));
 var DrawingExportType;
 (function (DrawingExportType) {
     DrawingExportType[DrawingExportType["Svg"] = 0] = "Svg";
@@ -4612,20 +4801,26 @@ var DrawingExportType;
     DrawingExportType[DrawingExportType["Pdf"] = 2] = "Pdf";
     DrawingExportType[DrawingExportType["Png"] = 3] = "Png";
     DrawingExportType[DrawingExportType["Dxf"] = 4] = "Dxf";
-})(DrawingExportType = exports.DrawingExportType || (exports.DrawingExportType = {}));
+})(DrawingExportType || (exports.DrawingExportType = DrawingExportType = {}));
 var AnimationMessageTypes;
 (function (AnimationMessageTypes) {
     AnimationMessageTypes[AnimationMessageTypes["MissingParameters"] = 0] = "MissingParameters";
     AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
     AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
-})(AnimationMessageTypes = exports.AnimationMessageTypes || (exports.AnimationMessageTypes = {}));
+})(AnimationMessageTypes || (exports.AnimationMessageTypes = AnimationMessageTypes = {}));
 var WindowLayoutFormat;
 (function (WindowLayoutFormat) {
     WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
     WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
-})(WindowLayoutFormat = exports.WindowLayoutFormat || (exports.WindowLayoutFormat = {}));
+})(WindowLayoutFormat || (exports.WindowLayoutFormat = WindowLayoutFormat = {}));
+var FilesTreeImportBehaviour;
+(function (FilesTreeImportBehaviour) {
+    FilesTreeImportBehaviour[FilesTreeImportBehaviour["KeepBoth"] = 0] = "KeepBoth";
+    FilesTreeImportBehaviour[FilesTreeImportBehaviour["Replace"] = 1] = "Replace";
+    FilesTreeImportBehaviour[FilesTreeImportBehaviour["Skip"] = 2] = "Skip";
+})(FilesTreeImportBehaviour || (exports.FilesTreeImportBehaviour = FilesTreeImportBehaviour = {}));
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetSet = exports.Set = exports.Get = void 0;
@@ -4679,7 +4874,7 @@ class GetSet {
 }
 exports.GetSet = GetSet;
 
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SetAnimationCurrentTimeParameters = exports.SetWindowLayoutParameter = exports.GetWindowLayoutParameter = exports.SetAnimationStartParameters = exports.AnimationKeyframeParameters = exports.FilesTreeCreateDrawingParameter = exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
@@ -4878,7 +5073,7 @@ class SetAnimationCurrentTimeParameters {
 }
 exports.SetAnimationCurrentTimeParameters = SetAnimationCurrentTimeParameters;
 
-},{".":63}],63:[function(require,module,exports){
+},{".":64}],64:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4901,7 +5096,7 @@ __exportStar(require("./GetSet"), exports);
 __exportStar(require("./Enums"), exports);
 __exportStar(require("./CustomAttributes"), exports);
 
-},{"./BaseDataTypes":58,"./CustomAttributes":59,"./Enums":60,"./GetSet":61,"./ParameterBase":62}],64:[function(require,module,exports){
+},{"./BaseDataTypes":59,"./CustomAttributes":60,"./Enums":61,"./GetSet":62,"./ParameterBase":63}],65:[function(require,module,exports){
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -4926,5 +5121,5 @@ __exportStar(require("./Util"), exports);
 __exportStar(require("./ResponseTypes"), exports);
 __exportStar(require("./Objects"), exports);
 
-},{"./Application":1,"./FilesTree":24,"./Objects":47,"./ResponseTypes":51,"./Scenes":56,"./Theme":57,"./Util":63}]},{},[64])(64)
+},{"./Application":1,"./FilesTree":24,"./Objects":48,"./ResponseTypes":52,"./Scenes":57,"./Theme":58,"./Util":64}]},{},[65])(65)
 });

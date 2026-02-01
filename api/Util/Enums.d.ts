@@ -406,4 +406,9 @@ export declare enum WindowLayoutFormat {
     Xml = 1,
     Json = 2
 }
+export declare enum FilesTreeImportBehaviour {
+    KeepBoth = 0,
+    Replace = 1,
+    Skip = 2
+}
 //# sourceMappingURL=Enums.d.ts.map

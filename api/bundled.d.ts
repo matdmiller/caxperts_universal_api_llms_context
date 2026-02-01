@@ -16,6 +16,7 @@ export declare class AddChangeableAttributeParameter {
 export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
+    LayerSketches?: LayerSketchIdsPair[];
 }
 
 export declare class AnimationKeyframeParameters {
@@ -1039,6 +1040,12 @@ export declare class Application {
         Exportable: ExportableOptions;
     }
 
+    export declare enum FilesTreeImportBehaviour {
+        KeepBoth = 0,
+        Replace = 1,
+        Skip = 2
+    }
+
     export declare class FilesTreeImportContainerParameter {
         Container: ApiSerializationContainer;
         ParentId: number;
@@ -1162,6 +1169,17 @@ export declare class Application {
 
     export declare class FileTreeFolder extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
+        /***
+         * Load UPVF file from a base64 string into UPV under the curent folder
+         * @param upfvBase64 base64 upvf content to load
+         * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+         * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+         * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+         * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+         * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+         * @returns
+         */
+        loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<ApiResponse>;
     }
 
     export declare class FileTreeIntelliPIDLegendPosition extends FileTreeElement {
@@ -1258,13 +1276,18 @@ export declare class Application {
          */
         createDrawing(parent: FileTreeFolder, name: string, templateName: string, useColors: boolean, useSelectedObjectsOnly: boolean): Promise<FileTreeDrawing>;
         private resolveElement;
-        /**
+        /***
          * Load UPVF file from a base64 string into UPV
          * @param upfvBase64 base64 upvf content to load
-         * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true)
+         * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+         * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+         * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+         * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+         * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+         * @returns
          * @returns
          */
-        loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean): Promise<ApiResponse>;
+        loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<ApiResponse>;
         /**
          * This functions returns a base64 UPVF file of the tree.
          * Can be loaded again using loadUPVF
@@ -1937,7 +1960,7 @@ export declare class Application {
     }
 
     export declare class GetStorageVariablesList {
-        Variables: string[];
+        Keys: string[];
     }
 
     export declare class GetTreeConfiguration {
@@ -2159,6 +2182,18 @@ export declare class Application {
         private createCommand;
     }
 
+    export declare class LayerSketchIdsPair {
+        Name: string;
+        Visible: boolean;
+        SketchIds: number[];
+    }
+
+    export declare class LayerSketchPairWrapper {
+        Name: string;
+        Visible: boolean;
+        Sketches: FileTreePIDSketch[];
+    }
+
     export declare class LifeCycleEvent {
         LifeCycle: string;
         Source: TargetEnum;
@@ -2323,7 +2358,7 @@ export declare class Application {
     }
 
     export declare class ModelInfo {
-        Uri: string;
+        URI: string;
         AvailableAttributes: string[];
         AvailableAspects: string[];
     }
@@ -2728,15 +2763,39 @@ export declare class Application {
     export declare class Printer {
         private printerId;
         private constructor();
+        /**
+         * Creates a new PDF printer instance always call delete once no longer required
+         * @returns
+         */
         static create(): Promise<Printer>;
+        /**
+         * Deletes an PDF printer instance
+         * @returns
+         */
         delete(): Promise<ApiResponse>;
+        /**
+         * Returns the PDF as a base64 string
+         * @returns
+         */
         getPdf(): Promise<string>;
-        addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode): Promise<ApiResponse>;
+        /**
+         * Add in Intellipid to the PDF
+         * @param drawing PID to add
+         * @param printMode what mode should be used
+         * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+         * @returns
+         */
+        addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[]): Promise<ApiResponse>;
     }
 
     export declare class ProcessFileParameter {
         ContentBase64: string;
         SuppressDefaultAction: boolean;
+        InsertNodeId?: number;
+        OverwriteFoldersBehavior?: FilesTreeImportBehaviour;
+        OverwriteNodesBehavior?: FilesTreeImportBehaviour;
+        OverwriteEnableUi?: boolean;
+        KeepFolderExpandStates?: boolean;
     }
 
     export declare class ProjectInfo {

@@ -336,9 +336,20 @@ export declare class FileTreeElement {
 <FilesTree/FileTreeFolder.d.ts>
 ```typescript
 import { FileTreeElement } from "./FileTreeElement";
-import { FeatureTypes } from "../Util";
+import { FeatureTypes, FilesTreeImportBehaviour } from "../Util";
 export declare class FileTreeFolder extends FileTreeElement {
     constructor(id: number, name: string, type: FeatureTypes);
+    /***
+     * Load UPVF file from a base64 string into UPV under the curent folder
+     * @param upfvBase64 base64 upvf content to load
+     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+     * @returns
+     */
+    loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<import("..").ApiResponse>;
 }
 //# sourceMappingURL=FileTreeFolder.d.ts.map
 ```
@@ -366,7 +377,7 @@ export declare class FileTreeIntelliPIDLegendPosition extends FileTreeElement {
 <FilesTree/FileTreeManager.d.ts>
 ```typescript
 import { FileTreeElement } from "./FileTreeElement";
-import { Color, FeatureTypes, FilesTreeImportContainerParameter, PointOfInterestType, Vector3D } from "../Util";
+import { Color, FeatureTypes, FilesTreeImportBehaviour, FilesTreeImportContainerParameter, PointOfInterestType, Vector3D } from "../Util";
 import { FileTreePointOfInterest } from "./FileTreePointOfInterest";
 import { FileTreeSketch } from "./FileTreeSketch";
 import { FileTreeModel } from "./FileTreeModel";
@@ -496,13 +507,18 @@ export declare class FileTreeManager {
      */
     createDrawing(parent: FileTreeFolder, name: string, templateName: string, useColors: boolean, useSelectedObjectsOnly: boolean): Promise<FileTreeDrawing>;
     private resolveElement;
-    /**
+    /***
      * Load UPVF file from a base64 string into UPV
      * @param upfvBase64 base64 upvf content to load
-     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true)
+     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+     * @returns
      * @returns
      */
-    loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean): Promise<import("../ResponseTypes").ApiResponse>;
+    loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<import("../ResponseTypes").ApiResponse>;
     /**
      * This functions returns a base64 UPVF file of the tree.
      * Can be loaded again using loadUPVF
@@ -882,6 +898,7 @@ export declare class ApiResponseContainer {
  */
 export declare class Api {
     private static instance;
+    static disableWebsocketApi: boolean;
     debug: boolean;
     private apiConnector;
     private waiting;
@@ -909,6 +926,37 @@ export declare class Api {
 //# sourceMappingURL=APIConnector.d.ts.map
 ```
 </Internal/APIConnector.d.ts>
+
+---
+
+## Internal/APIConnectorBrowser.d.ts
+
+<Internal/APIConnectorBrowser.d.ts>
+```typescript
+import { ApiConnector } from './APIConnector';
+import { CaxApiCommand } from "./CaxApiCommand";
+/**
+ * @internal
+ */
+export declare class ApiConnectorBrowser implements ApiConnector {
+    private webSocket;
+    private readonly wsUrl;
+    private reconnectAttempts;
+    private readonly maxReconnectAttempts;
+    private readonly reconnectDelay;
+    private readonly port;
+    private userRejected;
+    private connected;
+    constructor();
+    get available(): boolean;
+    initialize(): void;
+    private connectWebSocket;
+    sendCommand(command: CaxApiCommand): Promise<void>;
+    private waitForConnection;
+}
+//# sourceMappingURL=APIConnectorBrowser.d.ts.map
+```
+</Internal/APIConnectorBrowser.d.ts>
 
 ---
 
@@ -1922,13 +1970,38 @@ export declare class Pdf {
 import { ColorMode } from "../Util";
 import { ApiResponse } from "../ResponseTypes";
 import { IntelliPidDrawing } from "./IntelliPidDrawing";
+import { FileTreePIDSketch } from "../FilesTree";
 export declare class Printer {
     private printerId;
     private constructor();
+    /**
+     * Creates a new PDF printer instance always call delete once no longer required
+     * @returns
+     */
     static create(): Promise<Printer>;
+    /**
+     * Deletes an PDF printer instance
+     * @returns
+     */
     delete(): Promise<ApiResponse>;
+    /**
+     * Returns the PDF as a base64 string
+     * @returns
+     */
     getPdf(): Promise<string>;
-    addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode): Promise<ApiResponse>;
+    /**
+     * Add in Intellipid to the PDF
+     * @param drawing PID to add
+     * @param printMode what mode should be used
+     * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+     * @returns
+     */
+    addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[]): Promise<ApiResponse>;
+}
+export declare class LayerSketchPairWrapper {
+    Name: string;
+    Visible: boolean;
+    Sketches: FileTreePIDSketch[];
 }
 //# sourceMappingURL=Printer.d.ts.map
 ```
@@ -2370,7 +2443,7 @@ export declare class GetStorageVariable {
     Value: string;
 }
 export declare class GetStorageVariablesList {
-    Variables: string[];
+    Keys: string[];
 }
 export declare class GetUiColors {
     UiColors: {
@@ -2737,7 +2810,7 @@ export declare class Instance {
     Rotation: Vector3D;
 }
 export declare class ModelInfo {
-    Uri: string;
+    URI: string;
     AvailableAttributes: string[];
     AvailableAspects: string[];
 }
@@ -2902,6 +2975,11 @@ export declare class ViewerFileVersion {
 }
 export declare class DrawingTemplate {
     Name: string;
+}
+export declare class LayerSketchIdsPair {
+    Name: string;
+    Visible: boolean;
+    SketchIds: number[];
 }
 //# sourceMappingURL=BaseDataTypes.d.ts.map
 ```
@@ -3361,6 +3439,11 @@ export declare enum WindowLayoutFormat {
     Xml = 1,
     Json = 2
 }
+export declare enum FilesTreeImportBehaviour {
+    KeepBoth = 0,
+    Replace = 1,
+    Skip = 2
+}
 //# sourceMappingURL=Enums.d.ts.map
 ```
 </Util/Enums.d.ts>
@@ -3416,7 +3499,7 @@ export declare class GetSet<T> {
 
 <Util/ParameterBase.d.ts>
 ```typescript
-import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -3547,6 +3630,11 @@ export declare class ExportCustomAttributesParameter {
 export declare class ProcessFileParameter {
     ContentBase64: string;
     SuppressDefaultAction: boolean;
+    InsertNodeId?: number;
+    OverwriteFoldersBehavior?: FilesTreeImportBehaviour;
+    OverwriteNodesBehavior?: FilesTreeImportBehaviour;
+    OverwriteEnableUi?: boolean;
+    KeepFolderExpandStates?: boolean;
 }
 export declare class FilesTreeImportContainerParameter {
     Container: ApiSerializationContainer;
@@ -3688,6 +3776,7 @@ export declare class GetClashesParameter {
 export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
+    LayerSketches?: LayerSketchIdsPair[];
 }
 export declare class PlaceSymbolParameter {
     Path: string;
@@ -3814,6 +3903,7 @@ export declare class AddChangeableAttributeParameter {
 export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
+    LayerSketches?: LayerSketchIdsPair[];
 }
 
 export declare class AnimationKeyframeParameters {
@@ -4837,6 +4927,12 @@ export declare class Application {
         Exportable: ExportableOptions;
     }
 
+    export declare enum FilesTreeImportBehaviour {
+        KeepBoth = 0,
+        Replace = 1,
+        Skip = 2
+    }
+
     export declare class FilesTreeImportContainerParameter {
         Container: ApiSerializationContainer;
         ParentId: number;
@@ -4960,6 +5056,17 @@ export declare class Application {
 
     export declare class FileTreeFolder extends FileTreeElement {
         constructor(id: number, name: string, type: FeatureTypes);
+        /***
+         * Load UPVF file from a base64 string into UPV under the curent folder
+         * @param upfvBase64 base64 upvf content to load
+         * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+         * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+         * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+         * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+         * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+         * @returns
+         */
+        loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<ApiResponse>;
     }
 
     export declare class FileTreeIntelliPIDLegendPosition extends FileTreeElement {
@@ -5056,13 +5163,18 @@ export declare class Application {
          */
         createDrawing(parent: FileTreeFolder, name: string, templateName: string, useColors: boolean, useSelectedObjectsOnly: boolean): Promise<FileTreeDrawing>;
         private resolveElement;
-        /**
+        /***
          * Load UPVF file from a base64 string into UPV
          * @param upfvBase64 base64 upvf content to load
-         * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true)
+         * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+         * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+         * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+         * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+         * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+         * @returns
          * @returns
          */
-        loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean): Promise<ApiResponse>;
+        loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<ApiResponse>;
         /**
          * This functions returns a base64 UPVF file of the tree.
          * Can be loaded again using loadUPVF
@@ -5735,7 +5847,7 @@ export declare class Application {
     }
 
     export declare class GetStorageVariablesList {
-        Variables: string[];
+        Keys: string[];
     }
 
     export declare class GetTreeConfiguration {
@@ -5957,6 +6069,18 @@ export declare class Application {
         private createCommand;
     }
 
+    export declare class LayerSketchIdsPair {
+        Name: string;
+        Visible: boolean;
+        SketchIds: number[];
+    }
+
+    export declare class LayerSketchPairWrapper {
+        Name: string;
+        Visible: boolean;
+        Sketches: FileTreePIDSketch[];
+    }
+
     export declare class LifeCycleEvent {
         LifeCycle: string;
         Source: TargetEnum;
@@ -6121,7 +6245,7 @@ export declare class Application {
     }
 
     export declare class ModelInfo {
-        Uri: string;
+        URI: string;
         AvailableAttributes: string[];
         AvailableAspects: string[];
     }
@@ -6526,15 +6650,39 @@ export declare class Application {
     export declare class Printer {
         private printerId;
         private constructor();
+        /**
+         * Creates a new PDF printer instance always call delete once no longer required
+         * @returns
+         */
         static create(): Promise<Printer>;
+        /**
+         * Deletes an PDF printer instance
+         * @returns
+         */
         delete(): Promise<ApiResponse>;
+        /**
+         * Returns the PDF as a base64 string
+         * @returns
+         */
         getPdf(): Promise<string>;
-        addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode): Promise<ApiResponse>;
+        /**
+         * Add in Intellipid to the PDF
+         * @param drawing PID to add
+         * @param printMode what mode should be used
+         * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+         * @returns
+         */
+        addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[]): Promise<ApiResponse>;
     }
 
     export declare class ProcessFileParameter {
         ContentBase64: string;
         SuppressDefaultAction: boolean;
+        InsertNodeId?: number;
+        OverwriteFoldersBehavior?: FilesTreeImportBehaviour;
+        OverwriteNodesBehavior?: FilesTreeImportBehaviour;
+        OverwriteEnableUi?: boolean;
+        KeepFolderExpandStates?: boolean;
     }
 
     export declare class ProjectInfo {

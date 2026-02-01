@@ -33,6 +33,7 @@ export declare class ApiResponseContainer {
  */
 export declare class Api {
     private static instance;
+    static disableWebsocketApi: boolean;
     debug: boolean;
     private apiConnector;
     private waiting;

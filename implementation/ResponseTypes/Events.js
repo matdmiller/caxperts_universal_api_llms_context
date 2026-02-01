@@ -16,7 +16,7 @@ var ApiEvents;
     ApiEvents["AuthenticationContextChanged"] = "AuthenticationContextChanged";
     ApiEvents["ClashComputationProgressChanged"] = "ClashComputationProgressChanged";
     ApiEvents["StorageVariableChanged"] = "StorageVariableChanged";
-})(ApiEvents = exports.ApiEvents || (exports.ApiEvents = {}));
+})(ApiEvents || (exports.ApiEvents = ApiEvents = {}));
 /**
  * @internal
  */

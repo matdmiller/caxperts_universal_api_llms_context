@@ -1,4 +1,4 @@
-import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FileTreeState, Instance, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -129,6 +129,11 @@ export declare class ExportCustomAttributesParameter {
 export declare class ProcessFileParameter {
     ContentBase64: string;
     SuppressDefaultAction: boolean;
+    InsertNodeId?: number;
+    OverwriteFoldersBehavior?: FilesTreeImportBehaviour;
+    OverwriteNodesBehavior?: FilesTreeImportBehaviour;
+    OverwriteEnableUi?: boolean;
+    KeepFolderExpandStates?: boolean;
 }
 export declare class FilesTreeImportContainerParameter {
     Container: ApiSerializationContainer;
@@ -270,6 +275,7 @@ export declare class GetClashesParameter {
 export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
+    LayerSketches?: LayerSketchIdsPair[];
 }
 export declare class PlaceSymbolParameter {
     Path: string;

@@ -1,5 +1,5 @@
 import { FileTreeElement } from "./FileTreeElement";
-import { Color, FeatureTypes, FilesTreeImportContainerParameter, PointOfInterestType, Vector3D } from "../Util";
+import { Color, FeatureTypes, FilesTreeImportBehaviour, FilesTreeImportContainerParameter, PointOfInterestType, Vector3D } from "../Util";
 import { FileTreePointOfInterest } from "./FileTreePointOfInterest";
 import { FileTreeSketch } from "./FileTreeSketch";
 import { FileTreeModel } from "./FileTreeModel";
@@ -129,13 +129,18 @@ export declare class FileTreeManager {
      */
     createDrawing(parent: FileTreeFolder, name: string, templateName: string, useColors: boolean, useSelectedObjectsOnly: boolean): Promise<FileTreeDrawing>;
     private resolveElement;
-    /**
+    /***
      * Load UPVF file from a base64 string into UPV
      * @param upfvBase64 base64 upvf content to load
-     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true)
+     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
+     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
+     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+     * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
+     * @returns
      * @returns
      */
-    loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean): Promise<import("../ResponseTypes").ApiResponse>;
+    loadUPVF(upfvBase64: string, suppressDefaultAction?: boolean, overwriteFoldersBehavior?: FilesTreeImportBehaviour, overwriteNodesBehavior?: FilesTreeImportBehaviour, keepFolderExpandStates?: boolean, overwriteEnableUi?: boolean): Promise<import("../ResponseTypes").ApiResponse>;
     /**
      * This functions returns a base64 UPVF file of the tree.
      * Can be loaded again using loadUPVF

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+exports.FilesTreeImportBehaviour = exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 /**
  * @deprecated
  * Old UPV Target codes
@@ -10,7 +10,7 @@ var TargetEnum;
     TargetEnum["Undefined"] = "0";
     TargetEnum["ThreeD"] = "1";
     TargetEnum["Intelli"] = "10";
-})(TargetEnum = exports.TargetEnum || (exports.TargetEnum = {}));
+})(TargetEnum || (exports.TargetEnum = TargetEnum = {}));
 /**
  * how Queries will be combined
  */
@@ -18,7 +18,7 @@ var CombineModes;
 (function (CombineModes) {
     CombineModes["And"] = "AND";
     CombineModes["Or"] = "OR";
-})(CombineModes = exports.CombineModes || (exports.CombineModes = {}));
+})(CombineModes || (exports.CombineModes = CombineModes = {}));
 /**
  * The sceneType defines what this scene contains
  */
@@ -28,12 +28,12 @@ var SceneType;
     SceneType["ThreeD"] = "1";
     SceneType["IntelliPid"] = "10";
     SceneType["Browser"] = "11";
-})(SceneType = exports.SceneType || (exports.SceneType = {}));
+})(SceneType || (exports.SceneType = SceneType = {}));
 var UpdateModes;
 (function (UpdateModes) {
     UpdateModes[UpdateModes["Append"] = 0] = "Append";
     UpdateModes[UpdateModes["Full"] = 1] = "Full";
-})(UpdateModes = exports.UpdateModes || (exports.UpdateModes = {}));
+})(UpdateModes || (exports.UpdateModes = UpdateModes = {}));
 var CustomAttributeDataType;
 (function (CustomAttributeDataType) {
     //Calculation = 0,
@@ -43,7 +43,7 @@ var CustomAttributeDataType;
     CustomAttributeDataType[CustomAttributeDataType["NumericWithUnit"] = 4] = "NumericWithUnit";
     //Unknown = 5,
     CustomAttributeDataType[CustomAttributeDataType["Color"] = 6] = "Color";
-})(CustomAttributeDataType = exports.CustomAttributeDataType || (exports.CustomAttributeDataType = {}));
+})(CustomAttributeDataType || (exports.CustomAttributeDataType = CustomAttributeDataType = {}));
 var FeatureTypes;
 (function (FeatureTypes) {
     FeatureTypes["Unknown"] = "Unknown";
@@ -80,12 +80,12 @@ var FeatureTypes;
     FeatureTypes["Report"] = "Report";
     FeatureTypes["WindowLayout"] = "WindowLayout";
     FeatureTypes["IntelliPIDLegendPosition"] = "IntelliPIDLegendPosition";
-})(FeatureTypes = exports.FeatureTypes || (exports.FeatureTypes = {}));
+})(FeatureTypes || (exports.FeatureTypes = FeatureTypes = {}));
 var ProjectionSphereType;
 (function (ProjectionSphereType) {
     ProjectionSphereType[ProjectionSphereType["Picture"] = 0] = "Picture";
     ProjectionSphereType[ProjectionSphereType["Panorama"] = 1] = "Panorama";
-})(ProjectionSphereType = exports.ProjectionSphereType || (exports.ProjectionSphereType = {}));
+})(ProjectionSphereType || (exports.ProjectionSphereType = ProjectionSphereType = {}));
 /**
  * @internal
  */
@@ -289,7 +289,7 @@ var ApiCommands;
     // Layout
     ApiCommands["GetWindowLayout"] = "GetWindowLayout";
     ApiCommands["SetWindowLayout"] = "SetWindowLayout";
-})(ApiCommands = exports.ApiCommands || (exports.ApiCommands = {}));
+})(ApiCommands || (exports.ApiCommands = ApiCommands = {}));
 var PackageConditionTypes;
 (function (PackageConditionTypes) {
     PackageConditionTypes["None"] = "None";
@@ -297,21 +297,21 @@ var PackageConditionTypes;
     PackageConditionTypes["Group"] = "Group";
     PackageConditionTypes["Attribute"] = "Attribute";
     PackageConditionTypes["Volume"] = "Volume";
-})(PackageConditionTypes = exports.PackageConditionTypes || (exports.PackageConditionTypes = {}));
+})(PackageConditionTypes || (exports.PackageConditionTypes = PackageConditionTypes = {}));
 var ConsolidationMode;
 (function (ConsolidationMode) {
     ConsolidationMode["Base"] = "Base";
     ConsolidationMode["AndNot"] = "AndNot";
     ConsolidationMode["Or"] = "Or";
     ConsolidationMode["And"] = "And";
-})(ConsolidationMode = exports.ConsolidationMode || (exports.ConsolidationMode = {}));
+})(ConsolidationMode || (exports.ConsolidationMode = ConsolidationMode = {}));
 var AttributeConditionComparison;
 (function (AttributeConditionComparison) {
     AttributeConditionComparison["Equals"] = "==";
     AttributeConditionComparison["NotEquals"] = "!=";
     AttributeConditionComparison["Like"] = "Like";
     AttributeConditionComparison["NotLike"] = "Not Like";
-})(AttributeConditionComparison = exports.AttributeConditionComparison || (exports.AttributeConditionComparison = {}));
+})(AttributeConditionComparison || (exports.AttributeConditionComparison = AttributeConditionComparison = {}));
 var VolumeConditionMode;
 (function (VolumeConditionMode) {
     /// <summary>
@@ -330,19 +330,19 @@ var VolumeConditionMode;
     /// Outside
     /// </summary>
     VolumeConditionMode["NotOverlaps"] = "Not Overlaps";
-})(VolumeConditionMode = exports.VolumeConditionMode || (exports.VolumeConditionMode = {}));
+})(VolumeConditionMode || (exports.VolumeConditionMode = VolumeConditionMode = {}));
 var PointOfInterestType;
 (function (PointOfInterestType) {
     PointOfInterestType[PointOfInterestType["Sphere"] = 0] = "Sphere";
     PointOfInterestType[PointOfInterestType["CustomMesh"] = 1] = "CustomMesh";
-})(PointOfInterestType = exports.PointOfInterestType || (exports.PointOfInterestType = {}));
+})(PointOfInterestType || (exports.PointOfInterestType = PointOfInterestType = {}));
 var ClippingMode;
 (function (ClippingMode) {
     ClippingMode[ClippingMode["None"] = 0] = "None";
     ClippingMode[ClippingMode["Volume"] = 1] = "Volume";
     ClippingMode[ClippingMode["GridMeasure"] = 2] = "GridMeasure";
     ClippingMode[ClippingMode["Intelli"] = 3] = "Intelli";
-})(ClippingMode = exports.ClippingMode || (exports.ClippingMode = {}));
+})(ClippingMode || (exports.ClippingMode = ClippingMode = {}));
 var MarkupMode;
 (function (MarkupMode) {
     MarkupMode[MarkupMode["None"] = 0] = "None";
@@ -354,7 +354,7 @@ var MarkupMode;
     MarkupMode[MarkupMode["Erase"] = 6] = "Erase";
     MarkupMode[MarkupMode["OrthogonalLine"] = 7] = "OrthogonalLine";
     MarkupMode[MarkupMode["Move"] = 8] = "Move";
-})(MarkupMode = exports.MarkupMode || (exports.MarkupMode = {}));
+})(MarkupMode || (exports.MarkupMode = MarkupMode = {}));
 var PidSketchToolMode;
 (function (PidSketchToolMode) {
     // This reflects UPV
@@ -385,19 +385,19 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["HideObjects"] = 105] = "HideObjects";
     PidSketchToolMode[PidSketchToolMode["ShowHiddenObjects"] = 106] = "ShowHiddenObjects";
     PidSketchToolMode[PidSketchToolMode["UnhideObjects"] = 107] = "UnhideObjects";
-})(PidSketchToolMode = exports.PidSketchToolMode || (exports.PidSketchToolMode = {}));
+})(PidSketchToolMode || (exports.PidSketchToolMode = PidSketchToolMode = {}));
 var ExportableOptions;
 (function (ExportableOptions) {
     ExportableOptions[ExportableOptions["Inherit"] = 0] = "Inherit";
     ExportableOptions[ExportableOptions["Export"] = 1] = "Export";
     ExportableOptions[ExportableOptions["Ignore"] = 2] = "Ignore";
-})(ExportableOptions = exports.ExportableOptions || (exports.ExportableOptions = {}));
+})(ExportableOptions || (exports.ExportableOptions = ExportableOptions = {}));
 var ColorMode;
 (function (ColorMode) {
     ColorMode[ColorMode["Default"] = 0] = "Default";
     ColorMode[ColorMode["AsModified"] = 1] = "AsModified";
     ColorMode[ColorMode["Original"] = 2] = "Original";
-})(ColorMode = exports.ColorMode || (exports.ColorMode = {}));
+})(ColorMode || (exports.ColorMode = ColorMode = {}));
 var PrimitiveType;
 (function (PrimitiveType) {
     PrimitiveType[PrimitiveType["GroundPlate"] = 300] = "GroundPlate";
@@ -410,13 +410,13 @@ var PrimitiveType;
     PrimitiveType[PrimitiveType["Sphere"] = 1050] = "Sphere";
     PrimitiveType[PrimitiveType["Platform"] = 200] = "Platform";
     PrimitiveType[PrimitiveType["CustomObj"] = 9999] = "CustomObj";
-})(PrimitiveType = exports.PrimitiveType || (exports.PrimitiveType = {}));
+})(PrimitiveType || (exports.PrimitiveType = PrimitiveType = {}));
 var FileDialogApiReturnType;
 (function (FileDialogApiReturnType) {
     FileDialogApiReturnType[FileDialogApiReturnType["Cancelled"] = 0] = "Cancelled";
     FileDialogApiReturnType[FileDialogApiReturnType["Ok"] = 1] = "Ok";
     FileDialogApiReturnType[FileDialogApiReturnType["Error"] = 2] = "Error";
-})(FileDialogApiReturnType = exports.FileDialogApiReturnType || (exports.FileDialogApiReturnType = {}));
+})(FileDialogApiReturnType || (exports.FileDialogApiReturnType = FileDialogApiReturnType = {}));
 var ClashMode;
 (function (ClashMode) {
     /**
@@ -431,7 +431,7 @@ var ClashMode;
      *
      */
     ClashMode[ClashMode["PackageAAgainstPackageBWithinQuery"] = 2] = "PackageAAgainstPackageBWithinQuery";
-})(ClashMode = exports.ClashMode || (exports.ClashMode = {}));
+})(ClashMode || (exports.ClashMode = ClashMode = {}));
 var GenericLoadFromFileResponseResultType;
 (function (GenericLoadFromFileResponseResultType) {
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Ok"] = 0] = "Ok";
@@ -439,36 +439,36 @@ var GenericLoadFromFileResponseResultType;
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["FileNotAllowed"] = 2] = "FileNotAllowed";
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["OtherError"] = 3] = "OtherError";
     GenericLoadFromFileResponseResultType[GenericLoadFromFileResponseResultType["Undefined"] = 4] = "Undefined";
-})(GenericLoadFromFileResponseResultType = exports.GenericLoadFromFileResponseResultType || (exports.GenericLoadFromFileResponseResultType = {}));
+})(GenericLoadFromFileResponseResultType || (exports.GenericLoadFromFileResponseResultType = GenericLoadFromFileResponseResultType = {}));
 var PdfTypes;
 (function (PdfTypes) {
     PdfTypes[PdfTypes["All"] = 0] = "All";
     PdfTypes[PdfTypes["Document"] = 1] = "Document";
     PdfTypes[PdfTypes["Drawing"] = 2] = "Drawing";
-})(PdfTypes = exports.PdfTypes || (exports.PdfTypes = {}));
+})(PdfTypes || (exports.PdfTypes = PdfTypes = {}));
 var ChangeableAttributeUnitType;
 (function (ChangeableAttributeUnitType) {
     ChangeableAttributeUnitType[ChangeableAttributeUnitType["None"] = 0] = "None";
     ChangeableAttributeUnitType[ChangeableAttributeUnitType["Length"] = 1] = "Length";
     ChangeableAttributeUnitType[ChangeableAttributeUnitType["Angle"] = 2] = "Angle";
-})(ChangeableAttributeUnitType = exports.ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = {}));
+})(ChangeableAttributeUnitType || (exports.ChangeableAttributeUnitType = ChangeableAttributeUnitType = {}));
 var TextureRenderMode;
 (function (TextureRenderMode) {
     TextureRenderMode[TextureRenderMode["Normal"] = 0] = "Normal";
     TextureRenderMode[TextureRenderMode["HeightMap"] = 1] = "HeightMap";
     TextureRenderMode[TextureRenderMode["NoTexture"] = 2] = "NoTexture";
-})(TextureRenderMode = exports.TextureRenderMode || (exports.TextureRenderMode = {}));
+})(TextureRenderMode || (exports.TextureRenderMode = TextureRenderMode = {}));
 var QualityLevel;
 (function (QualityLevel) {
     QualityLevel[QualityLevel["Low"] = 0] = "Low";
     QualityLevel[QualityLevel["Medium"] = 1] = "Medium";
     QualityLevel[QualityLevel["High"] = 2] = "High";
-})(QualityLevel = exports.QualityLevel || (exports.QualityLevel = {}));
+})(QualityLevel || (exports.QualityLevel = QualityLevel = {}));
 var ModelLoadMessageType;
 (function (ModelLoadMessageType) {
     ModelLoadMessageType[ModelLoadMessageType["AlreadyLoaded"] = 0] = "AlreadyLoaded";
     ModelLoadMessageType[ModelLoadMessageType["FinishedLoading"] = 1] = "FinishedLoading";
-})(ModelLoadMessageType = exports.ModelLoadMessageType || (exports.ModelLoadMessageType = {}));
+})(ModelLoadMessageType || (exports.ModelLoadMessageType = ModelLoadMessageType = {}));
 var DrawingExportType;
 (function (DrawingExportType) {
     DrawingExportType[DrawingExportType["Svg"] = 0] = "Svg";
@@ -476,15 +476,21 @@ var DrawingExportType;
     DrawingExportType[DrawingExportType["Pdf"] = 2] = "Pdf";
     DrawingExportType[DrawingExportType["Png"] = 3] = "Png";
     DrawingExportType[DrawingExportType["Dxf"] = 4] = "Dxf";
-})(DrawingExportType = exports.DrawingExportType || (exports.DrawingExportType = {}));
+})(DrawingExportType || (exports.DrawingExportType = DrawingExportType = {}));
 var AnimationMessageTypes;
 (function (AnimationMessageTypes) {
     AnimationMessageTypes[AnimationMessageTypes["MissingParameters"] = 0] = "MissingParameters";
     AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
     AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
-})(AnimationMessageTypes = exports.AnimationMessageTypes || (exports.AnimationMessageTypes = {}));
+})(AnimationMessageTypes || (exports.AnimationMessageTypes = AnimationMessageTypes = {}));
 var WindowLayoutFormat;
 (function (WindowLayoutFormat) {
     WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
     WindowLayoutFormat[WindowLayoutFormat["Json"] = 2] = "Json";
-})(WindowLayoutFormat = exports.WindowLayoutFormat || (exports.WindowLayoutFormat = {}));
+})(WindowLayoutFormat || (exports.WindowLayoutFormat = WindowLayoutFormat = {}));
+var FilesTreeImportBehaviour;
+(function (FilesTreeImportBehaviour) {
+    FilesTreeImportBehaviour[FilesTreeImportBehaviour["KeepBoth"] = 0] = "KeepBoth";
+    FilesTreeImportBehaviour[FilesTreeImportBehaviour["Replace"] = 1] = "Replace";
+    FilesTreeImportBehaviour[FilesTreeImportBehaviour["Skip"] = 2] = "Skip";
+})(FilesTreeImportBehaviour || (exports.FilesTreeImportBehaviour = FilesTreeImportBehaviour = {}));

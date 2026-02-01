@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = exports.ApiResponseContainer = exports.CoverageTracker = void 0;
 const Util_1 = require("../Util");
 const APIConnectorVuplex_1 = require("./APIConnectorVuplex");
+const APIConnectorBrowser_1 = require("./APIConnectorBrowser");
 const CaxApiCommand_1 = require("./CaxApiCommand");
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 exports.CoverageTracker = {};
 class ApiResponseContainer {
 }
@@ -68,8 +68,16 @@ class Api {
         }
     }
     initialize() {
-        this.apiConnector = new APIConnectorVuplex_1.ApiConnectorVuplex();
-        this.apiConnector.initialize();
+        var _a;
+        // Check if running in Vuplex environment
+        if (typeof window !== 'undefined' && window.vuplex) {
+            this.apiConnector = new APIConnectorVuplex_1.ApiConnectorVuplex();
+        }
+        // Otherwise use WebSocket connector
+        else if (!Api.disableWebsocketApi) {
+            this.apiConnector = new APIConnectorBrowser_1.ApiConnectorBrowser();
+        }
+        (_a = this.apiConnector) === null || _a === void 0 ? void 0 : _a.initialize();
     }
     constructor() {
         this.waiting = {};
@@ -121,3 +129,4 @@ class Api {
 }
 exports.Api = Api;
 Api.instance = undefined;
+Api.disableWebsocketApi = false;
