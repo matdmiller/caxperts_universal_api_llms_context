@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - UMD Bundle
  * Version: ** 7.2.1
- * Bundled on: 2026-03-15
+ * Bundled on: 2026-03-22
  * This file was automatically generated from the TypeScript source.
  */
 
@@ -1293,14 +1293,17 @@
 		    }
 		    async sendCommand(command) {
 		        // Wait for WebSocket connection to be ready
+		        const message = JSON.stringify({
+		            type: 'Command',
+		            message: JSON.stringify(command)
+		        });
+		        //This causes a race condition with the current optimisations in for example FilterOperation
+		        //The Command can be already reused in which case the second command is send twice and the first one zero times
 		        await this.waitForConnection();
 		        if (!this.webSocket || this.webSocket.readyState !== WebSocket.OPEN) {
 		            throw new Error('WebSocket is not connected');
 		        }
-		        this.webSocket.send(JSON.stringify({
-		            type: 'Command',
-		            message: JSON.stringify(command)
-		        }));
+		        this.webSocket.send(message);
 		    }
 		    waitForConnection(timeoutMs = 5000) {
 		        return new Promise((resolve, reject) => {
