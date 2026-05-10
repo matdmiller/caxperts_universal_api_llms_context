@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - UMD Bundle
  * Version: ** 7.2.1
- * Bundled on: 2026-05-03
+ * Bundled on: 2026-05-10
  * This file was automatically generated from the TypeScript source.
  */
 
@@ -46,7 +46,7 @@
 		if (hasRequiredBaseDataTypes) return BaseDataTypes;
 		hasRequiredBaseDataTypes = 1;
 		Object.defineProperty(BaseDataTypes, "__esModule", { value: true });
-		BaseDataTypes.LayerSketchIdsPair = BaseDataTypes.DrawingTemplate = BaseDataTypes.ViewerFileVersion = BaseDataTypes.ViewerVersion = BaseDataTypes.PdfDocument = BaseDataTypes.Intellipid = BaseDataTypes.PidLink = BaseDataTypes.UrlLink = BaseDataTypes.ElementLinks = BaseDataTypes.FileTreeState = BaseDataTypes.CatalogSymbol = BaseDataTypes.ProjectionSphere = BaseDataTypes.Quaternion = BaseDataTypes.AttributeTreeNodeType = BaseDataTypes.PdfInfo = BaseDataTypes.IntelliPidDrawingInfo = BaseDataTypes.CustomAttributeSourceDefinition = BaseDataTypes.Definition = BaseDataTypes.Change = BaseDataTypes.ExportCustomAttributes = BaseDataTypes.ChangeSetLine = BaseDataTypes.ChangeSet = BaseDataTypes.FilesTreeObject = BaseDataTypes.TakeScreenshot = BaseDataTypes.SnapCircle = BaseDataTypes.SnapInfo = BaseDataTypes.ProjectInfo = BaseDataTypes.ModelInfo = BaseDataTypes.Instance = BaseDataTypes.ClippingPlane = BaseDataTypes.Color = BaseDataTypes.ObjectColors = BaseDataTypes.BoundsInfo = BaseDataTypes.Bounds = BaseDataTypes.CameraView = BaseDataTypes.Vector4D = BaseDataTypes.Vector3D = BaseDataTypes.Vector2D = void 0;
+		BaseDataTypes.LayerDisplayStyle = BaseDataTypes.LayerSketchIdsPair = BaseDataTypes.DrawingTemplate = BaseDataTypes.ViewerFileVersion = BaseDataTypes.ViewerVersion = BaseDataTypes.PdfDocument = BaseDataTypes.Intellipid = BaseDataTypes.PidLink = BaseDataTypes.UrlLink = BaseDataTypes.ElementLinks = BaseDataTypes.FileTreeState = BaseDataTypes.CatalogSymbol = BaseDataTypes.ProjectionSphere = BaseDataTypes.Quaternion = BaseDataTypes.AttributeTreeNodeType = BaseDataTypes.PdfInfo = BaseDataTypes.IntelliPidDrawingInfo = BaseDataTypes.CustomAttributeSourceDefinition = BaseDataTypes.Definition = BaseDataTypes.Change = BaseDataTypes.ExportCustomAttributes = BaseDataTypes.ChangeSetLine = BaseDataTypes.ChangeSet = BaseDataTypes.FilesTreeObject = BaseDataTypes.TakeScreenshot = BaseDataTypes.SnapCircle = BaseDataTypes.SnapInfo = BaseDataTypes.ProjectInfo = BaseDataTypes.ModelInfo = BaseDataTypes.Instance = BaseDataTypes.ClippingPlane = BaseDataTypes.Color = BaseDataTypes.ObjectColors = BaseDataTypes.BoundsInfo = BaseDataTypes.Bounds = BaseDataTypes.CameraView = BaseDataTypes.Vector4D = BaseDataTypes.Vector3D = BaseDataTypes.Vector2D = void 0;
 		class Vector2D {
 		    constructor(X, Y) {
 		        this.X = X;
@@ -209,6 +209,9 @@
 		class LayerSketchIdsPair {
 		}
 		BaseDataTypes.LayerSketchIdsPair = LayerSketchIdsPair;
+		class LayerDisplayStyle {
+		}
+		BaseDataTypes.LayerDisplayStyle = LayerDisplayStyle;
 		return BaseDataTypes;
 	}
 
@@ -1125,7 +1128,7 @@
 	function requireUtil () {
 		if (hasRequiredUtil) return Util;
 		hasRequiredUtil = 1;
-		(function (exports$1) {
+		(function (exports) {
 			var __createBinding = (Util && Util.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 			    if (k2 === undefined) k2 = k;
 			    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -1137,15 +1140,15 @@
 			    if (k2 === undefined) k2 = k;
 			    o[k2] = m[k];
 			}));
-			var __exportStar = (Util && Util.__exportStar) || function(m, exports$1) {
-			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
+			var __exportStar = (Util && Util.__exportStar) || function(m, exports) {
+			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 			};
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			__exportStar(requireBaseDataTypes(), exports$1);
-			__exportStar(requireParameterBase(), exports$1);
-			__exportStar(requireGetSet(), exports$1);
-			__exportStar(requireEnums(), exports$1);
-			__exportStar(requireCustomAttributes(), exports$1); 
+			Object.defineProperty(exports, "__esModule", { value: true });
+			__exportStar(requireBaseDataTypes(), exports);
+			__exportStar(requireParameterBase(), exports);
+			__exportStar(requireGetSet(), exports);
+			__exportStar(requireEnums(), exports);
+			__exportStar(requireCustomAttributes(), exports); 
 		} (Util));
 		return Util;
 	}
@@ -2365,7 +2368,7 @@
 	function requireResponseTypes () {
 		if (hasRequiredResponseTypes) return ResponseTypes;
 		hasRequiredResponseTypes = 1;
-		(function (exports$1) {
+		(function (exports) {
 			var __createBinding = (ResponseTypes && ResponseTypes.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 			    if (k2 === undefined) k2 = k;
 			    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -2377,13 +2380,13 @@
 			    if (k2 === undefined) k2 = k;
 			    o[k2] = m[k];
 			}));
-			var __exportStar = (ResponseTypes && ResponseTypes.__exportStar) || function(m, exports$1) {
-			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
+			var __exportStar = (ResponseTypes && ResponseTypes.__exportStar) || function(m, exports) {
+			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 			};
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			__exportStar(requireApiResponse(), exports$1);
-			__exportStar(requireGetObjects(), exports$1);
-			__exportStar(requireEvents$1(), exports$1); 
+			Object.defineProperty(exports, "__esModule", { value: true });
+			__exportStar(requireApiResponse(), exports);
+			__exportStar(requireGetObjects(), exports);
+			__exportStar(requireEvents$1(), exports); 
 		} (ResponseTypes));
 		return ResponseTypes;
 	}
@@ -3399,9 +3402,10 @@
 		     * @param drawing PID to add
 		     * @param printMode what mode should be used
 		     * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+		     * @param displayStyles (optional) can be used to create PDF layers based of color files
 		     * @returns
 		     */
-		    async addIntellipidPage(drawing, printMode, sketchLayers = []) {
+		    async addIntellipidPage(drawing, printMode, sketchLayers = [], displayStyles = []) {
 		        const sketchlayers = sketchLayers.map(x => ({
 		            Name: x.Name,
 		            Visible: x.Visible,
@@ -3413,7 +3417,8 @@
 		            AddPidToPdfPrinter: {
 		                DrawingPath: drawing.Identifier,
 		                PrintMode: printMode,
-		                LayerSketches: sketchlayers
+		                LayerSketches: sketchlayers,
+		                DisplayStyles: displayStyles
 		            }
 		        };
 		        return (await APIConnector_1.Api.get().sendCommand(command));
@@ -3823,7 +3828,7 @@
 	function requireObjects () {
 		if (hasRequiredObjects) return Objects;
 		hasRequiredObjects = 1;
-		(function (exports$1) {
+		(function (exports) {
 			var __createBinding = (Objects && Objects.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 			    if (k2 === undefined) k2 = k;
 			    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -3835,30 +3840,30 @@
 			    if (k2 === undefined) k2 = k;
 			    o[k2] = m[k];
 			}));
-			var __exportStar = (Objects && Objects.__exportStar) || function(m, exports$1) {
-			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
+			var __exportStar = (Objects && Objects.__exportStar) || function(m, exports) {
+			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 			};
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			__exportStar(requireCamera(), exports$1);
-			__exportStar(requireLayer2D(), exports$1);
-			__exportStar(requireLayer3D(), exports$1);
-			__exportStar(requireModel(), exports$1);
-			__exportStar(requireIntelliPidDrawing(), exports$1);
-			__exportStar(requireEvents(), exports$1);
-			__exportStar(requireProjectionSphereElement(), exports$1);
-			__exportStar(requireClashContext(), exports$1);
-			__exportStar(requireFilterOperation3D(), exports$1);
-			__exportStar(requireFilterOperationPid(), exports$1);
-			__exportStar(requireModelObject(), exports$1);
-			__exportStar(requirePrinter(), exports$1);
-			__exportStar(requireLocalStorage(), exports$1);
-			__exportStar(requireAttributeTree(), exports$1);
-			__exportStar(requireAuthenticationManager(), exports$1);
-			__exportStar(requireEvents(), exports$1);
-			__exportStar(requireModel(), exports$1);
-			__exportStar(requireSettings(), exports$1);
-			__exportStar(requireFileOperations(), exports$1);
-			__exportStar(requirePdf(), exports$1); 
+			Object.defineProperty(exports, "__esModule", { value: true });
+			__exportStar(requireCamera(), exports);
+			__exportStar(requireLayer2D(), exports);
+			__exportStar(requireLayer3D(), exports);
+			__exportStar(requireModel(), exports);
+			__exportStar(requireIntelliPidDrawing(), exports);
+			__exportStar(requireEvents(), exports);
+			__exportStar(requireProjectionSphereElement(), exports);
+			__exportStar(requireClashContext(), exports);
+			__exportStar(requireFilterOperation3D(), exports);
+			__exportStar(requireFilterOperationPid(), exports);
+			__exportStar(requireModelObject(), exports);
+			__exportStar(requirePrinter(), exports);
+			__exportStar(requireLocalStorage(), exports);
+			__exportStar(requireAttributeTree(), exports);
+			__exportStar(requireAuthenticationManager(), exports);
+			__exportStar(requireEvents(), exports);
+			__exportStar(requireModel(), exports);
+			__exportStar(requireSettings(), exports);
+			__exportStar(requireFileOperations(), exports);
+			__exportStar(requirePdf(), exports); 
 		} (Objects));
 		return Objects;
 	}
@@ -4100,7 +4105,7 @@
 	function requireScenes () {
 		if (hasRequiredScenes) return Scenes;
 		hasRequiredScenes = 1;
-		(function (exports$1) {
+		(function (exports) {
 			var __createBinding = (Scenes && Scenes.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 			    if (k2 === undefined) k2 = k;
 			    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -4112,14 +4117,14 @@
 			    if (k2 === undefined) k2 = k;
 			    o[k2] = m[k];
 			}));
-			var __exportStar = (Scenes && Scenes.__exportStar) || function(m, exports$1) {
-			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
+			var __exportStar = (Scenes && Scenes.__exportStar) || function(m, exports) {
+			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 			};
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			__exportStar(requireScene(), exports$1);
-			__exportStar(requireScene3d(), exports$1);
-			__exportStar(requireScenePid(), exports$1);
-			__exportStar(requireAppControlScene(), exports$1); 
+			Object.defineProperty(exports, "__esModule", { value: true });
+			__exportStar(requireScene(), exports);
+			__exportStar(requireScene3d(), exports);
+			__exportStar(requireScenePid(), exports);
+			__exportStar(requireAppControlScene(), exports); 
 		} (Scenes));
 		return Scenes;
 	}
@@ -5303,7 +5308,7 @@
 	function requireFilesTree () {
 		if (hasRequiredFilesTree) return FilesTree;
 		hasRequiredFilesTree = 1;
-		(function (exports$1) {
+		(function (exports) {
 			var __createBinding = (FilesTree && FilesTree.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 			    if (k2 === undefined) k2 = k;
 			    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5315,32 +5320,32 @@
 			    if (k2 === undefined) k2 = k;
 			    o[k2] = m[k];
 			}));
-			var __exportStar = (FilesTree && FilesTree.__exportStar) || function(m, exports$1) {
-			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
+			var __exportStar = (FilesTree && FilesTree.__exportStar) || function(m, exports) {
+			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 			};
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			__exportStar(requireFileTreeElement(), exports$1);
-			__exportStar(requireFileTreeAnimation(), exports$1);
-			__exportStar(requireFileTreeAppControl(), exports$1);
-			__exportStar(requireFileTreeComment(), exports$1);
-			__exportStar(requireFileTreeCommentSVG(), exports$1);
-			__exportStar(requireFileTreeDrawing(), exports$1);
-			__exportStar(requireFileTreeFolder(), exports$1);
-			__exportStar(requireFileTreeIntelliPIDLegendPosition(), exports$1);
-			__exportStar(requireFileTreeMarkup(), exports$1);
-			__exportStar(requireFileTreeModel(), exports$1);
-			__exportStar(requireFileTreePackage(), exports$1);
-			__exportStar(requireFileTreePhoto(), exports$1);
-			__exportStar(requireFileTreePIDSketch(), exports$1);
-			__exportStar(requireFileTreePointOfInterest(), exports$1);
-			__exportStar(requireFileTreeReport(), exports$1);
-			__exportStar(requireFileTreeScreenshot(), exports$1);
-			__exportStar(requireFileTreeSketch(), exports$1);
-			__exportStar(requireFileTreeSpraying(), exports$1);
-			__exportStar(requireFileTreeTwoDToThreeD(), exports$1);
-			__exportStar(requireFileTreeView(), exports$1);
-			__exportStar(requireFileTreeWindowLayout(), exports$1);
-			__exportStar(requireFileTreeManager(), exports$1); 
+			Object.defineProperty(exports, "__esModule", { value: true });
+			__exportStar(requireFileTreeElement(), exports);
+			__exportStar(requireFileTreeAnimation(), exports);
+			__exportStar(requireFileTreeAppControl(), exports);
+			__exportStar(requireFileTreeComment(), exports);
+			__exportStar(requireFileTreeCommentSVG(), exports);
+			__exportStar(requireFileTreeDrawing(), exports);
+			__exportStar(requireFileTreeFolder(), exports);
+			__exportStar(requireFileTreeIntelliPIDLegendPosition(), exports);
+			__exportStar(requireFileTreeMarkup(), exports);
+			__exportStar(requireFileTreeModel(), exports);
+			__exportStar(requireFileTreePackage(), exports);
+			__exportStar(requireFileTreePhoto(), exports);
+			__exportStar(requireFileTreePIDSketch(), exports);
+			__exportStar(requireFileTreePointOfInterest(), exports);
+			__exportStar(requireFileTreeReport(), exports);
+			__exportStar(requireFileTreeScreenshot(), exports);
+			__exportStar(requireFileTreeSketch(), exports);
+			__exportStar(requireFileTreeSpraying(), exports);
+			__exportStar(requireFileTreeTwoDToThreeD(), exports);
+			__exportStar(requireFileTreeView(), exports);
+			__exportStar(requireFileTreeWindowLayout(), exports);
+			__exportStar(requireFileTreeManager(), exports); 
 		} (FilesTree));
 		return FilesTree;
 	}
@@ -5594,7 +5599,7 @@
 	function requireUniversal_api () {
 		if (hasRequiredUniversal_api) return universal_api;
 		hasRequiredUniversal_api = 1;
-		(function (exports$1) {
+		(function (exports) {
 			var __createBinding = (universal_api && universal_api.__createBinding) || (Object.create ? (function(o, m, k, k2) {
 			    if (k2 === undefined) k2 = k;
 			    var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5606,17 +5611,17 @@
 			    if (k2 === undefined) k2 = k;
 			    o[k2] = m[k];
 			}));
-			var __exportStar = (universal_api && universal_api.__exportStar) || function(m, exports$1) {
-			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports$1, p)) __createBinding(exports$1, m, p);
+			var __exportStar = (universal_api && universal_api.__exportStar) || function(m, exports) {
+			    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 			};
-			Object.defineProperty(exports$1, "__esModule", { value: true });
-			__exportStar(requireApplication(), exports$1);
-			__exportStar(requireTheme(), exports$1);
-			__exportStar(requireFilesTree(), exports$1);
-			__exportStar(requireScenes(), exports$1);
-			__exportStar(requireUtil(), exports$1);
-			__exportStar(requireResponseTypes(), exports$1);
-			__exportStar(requireObjects(), exports$1); 
+			Object.defineProperty(exports, "__esModule", { value: true });
+			__exportStar(requireApplication(), exports);
+			__exportStar(requireTheme(), exports);
+			__exportStar(requireFilesTree(), exports);
+			__exportStar(requireScenes(), exports);
+			__exportStar(requireUtil(), exports);
+			__exportStar(requireResponseTypes(), exports);
+			__exportStar(requireObjects(), exports); 
 		} (universal_api));
 		return universal_api;
 	}
