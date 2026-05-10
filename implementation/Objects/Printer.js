@@ -39,9 +39,10 @@ class Printer {
      * @param drawing PID to add
      * @param printMode what mode should be used
      * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+     * @param displayStyles (optional) can be used to create PDF layers based of color files
      * @returns
      */
-    async addIntellipidPage(drawing, printMode, sketchLayers = []) {
+    async addIntellipidPage(drawing, printMode, sketchLayers = [], displayStyles = []) {
         const sketchlayers = sketchLayers.map(x => ({
             Name: x.Name,
             Visible: x.Visible,
@@ -53,7 +54,8 @@ class Printer {
             AddPidToPdfPrinter: {
                 DrawingPath: drawing.Identifier,
                 PrintMode: printMode,
-                LayerSketches: sketchlayers
+                LayerSketches: sketchlayers,
+                DisplayStyles: displayStyles
             }
         };
         return (await APIConnector_1.Api.get().sendCommand(command));

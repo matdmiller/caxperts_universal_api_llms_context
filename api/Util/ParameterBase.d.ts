@@ -1,4 +1,4 @@
-import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerDisplayStyle, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -276,6 +276,7 @@ export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
     LayerSketches?: LayerSketchIdsPair[];
+    DisplayStyles?: LayerDisplayStyle[];
 }
 export declare class PlaceSymbolParameter {
     Path: string;

@@ -1,3 +1,7 @@
+# Changelog 2026.3.0
+Added
+- In Printer.addIntellipidPage added displayStyles used to create PDF layers
+
 # Changelog 2026.2.2
 Fixes
 - Fixed a race condition in Filteroperations when using the new Websocket API
@@ -63,33 +67,3 @@ Changes
 
 Fixes
 - FileTreeManager.getChildren and getSiblings could return null now a FileTreeElement is returned for unknown elements
-Package Sidebar
-Install
-npm i @caxperts/universal.api
-
-
-Weekly Downloads
-74
-
-Version
-2026.2.1
-
-License
-MIT
-
-Unpacked Size
-716 kB
-
-Total Files
-199
-
-Last publish
-2 months ago
-
-Collaborators
-caxadmin
-e.ruhland
-kayyy
-t.bergbauer
-Analyze security with SocketCheck bundle sizeView package healthExplore dependencies
-Report malware

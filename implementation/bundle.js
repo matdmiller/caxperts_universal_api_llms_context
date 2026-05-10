@@ -3220,9 +3220,10 @@ class Printer {
      * @param drawing PID to add
      * @param printMode what mode should be used
      * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+     * @param displayStyles (optional) can be used to create PDF layers based of color files
      * @returns
      */
-    async addIntellipidPage(drawing, printMode, sketchLayers = []) {
+    async addIntellipidPage(drawing, printMode, sketchLayers = [], displayStyles = []) {
         const sketchlayers = sketchLayers.map(x => ({
             Name: x.Name,
             Visible: x.Visible,
@@ -3234,7 +3235,8 @@ class Printer {
             AddPidToPdfPrinter: {
                 DrawingPath: drawing.Identifier,
                 PrintMode: printMode,
-                LayerSketches: sketchlayers
+                LayerSketches: sketchlayers,
+                DisplayStyles: displayStyles
             }
         };
         return (await APIConnector_1.Api.get().sendCommand(command));
@@ -4059,7 +4061,7 @@ exports.Theme = Theme;
 },{}],59:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LayerSketchIdsPair = exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
+exports.LayerDisplayStyle = exports.LayerSketchIdsPair = exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
 class Vector2D {
     constructor(X, Y) {
         this.X = X;
@@ -4222,6 +4224,9 @@ exports.DrawingTemplate = DrawingTemplate;
 class LayerSketchIdsPair {
 }
 exports.LayerSketchIdsPair = LayerSketchIdsPair;
+class LayerDisplayStyle {
+}
+exports.LayerDisplayStyle = LayerDisplayStyle;
 
 },{}],60:[function(require,module,exports){
 "use strict";

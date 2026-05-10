@@ -230,8 +230,32 @@ export declare class DrawingTemplate {
     Name: string;
 }
 export declare class LayerSketchIdsPair {
+    /**
+     * Name of the layer to create
+     */
     Name: string;
+    /**
+     * Should it be enabled in the PFD by default
+     */
     Visible: boolean;
     SketchIds: number[];
+}
+export declare class LayerDisplayStyle {
+    /**
+     * Base64 String of the color file
+     */
+    ColorFileBase64: string;
+    /**
+     * Name of the layer to create
+     */
+    LayerName: string;
+    /**
+     * if disabled it will not use the Layername but create layers based on the layer information in the colorfile
+     */
+    GroupNameAsLayerName: boolean;
+    /**
+     * Should it be enabled in the PFD by default
+     */
+    Visible: boolean;
 }
 //# sourceMappingURL=BaseDataTypes.d.ts.map

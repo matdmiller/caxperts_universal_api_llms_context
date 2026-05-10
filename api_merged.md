@@ -1967,7 +1967,7 @@ export declare class Pdf {
 
 <Objects/Printer.d.ts>
 ```typescript
-import { ColorMode } from "../Util";
+import { ColorMode, LayerDisplayStyle } from "../Util";
 import { ApiResponse } from "../ResponseTypes";
 import { IntelliPidDrawing } from "./IntelliPidDrawing";
 import { FileTreePIDSketch } from "../FilesTree";
@@ -1994,13 +1994,23 @@ export declare class Printer {
      * @param drawing PID to add
      * @param printMode what mode should be used
      * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+     * @param displayStyles (optional) can be used to create PDF layers based of color files
      * @returns
      */
-    addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[]): Promise<ApiResponse>;
+    addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[], displayStyles?: LayerDisplayStyle[]): Promise<ApiResponse>;
 }
 export declare class LayerSketchPairWrapper {
+    /**
+     * Name of the layer to create
+     */
     Name: string;
+    /**
+     * Should it be enabled in the PFD by default
+     */
     Visible: boolean;
+    /**
+     * Sketches this should contain
+     */
     Sketches: FileTreePIDSketch[];
 }
 //# sourceMappingURL=Printer.d.ts.map
@@ -2977,9 +2987,33 @@ export declare class DrawingTemplate {
     Name: string;
 }
 export declare class LayerSketchIdsPair {
+    /**
+     * Name of the layer to create
+     */
     Name: string;
+    /**
+     * Should it be enabled in the PFD by default
+     */
     Visible: boolean;
     SketchIds: number[];
+}
+export declare class LayerDisplayStyle {
+    /**
+     * Base64 String of the color file
+     */
+    ColorFileBase64: string;
+    /**
+     * Name of the layer to create
+     */
+    LayerName: string;
+    /**
+     * if disabled it will not use the Layername but create layers based on the layer information in the colorfile
+     */
+    GroupNameAsLayerName: boolean;
+    /**
+     * Should it be enabled in the PFD by default
+     */
+    Visible: boolean;
 }
 //# sourceMappingURL=BaseDataTypes.d.ts.map
 ```
@@ -3499,7 +3533,7 @@ export declare class GetSet<T> {
 
 <Util/ParameterBase.d.ts>
 ```typescript
-import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerDisplayStyle, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -3777,6 +3811,7 @@ export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
     LayerSketches?: LayerSketchIdsPair[];
+    DisplayStyles?: LayerDisplayStyle[];
 }
 export declare class PlaceSymbolParameter {
     Path: string;
@@ -3904,6 +3939,7 @@ export declare class AddPidToPdfPrinterParameter {
     DrawingPath: string;
     PrintMode: ColorMode;
     LayerSketches?: LayerSketchIdsPair[];
+    DisplayStyles?: LayerDisplayStyle[];
 }
 
 export declare class AnimationKeyframeParameters {
@@ -6069,15 +6105,49 @@ export declare class Application {
         private createCommand;
     }
 
+    export declare class LayerDisplayStyle {
+        /**
+         * Base64 String of the color file
+         */
+        ColorFileBase64: string;
+        /**
+         * Name of the layer to create
+         */
+        LayerName: string;
+        /**
+         * if disabled it will not use the Layername but create layers based on the layer information in the colorfile
+         */
+        GroupNameAsLayerName: boolean;
+        /**
+         * Should it be enabled in the PFD by default
+         */
+        Visible: boolean;
+    }
+
     export declare class LayerSketchIdsPair {
+        /**
+         * Name of the layer to create
+         */
         Name: string;
+        /**
+         * Should it be enabled in the PFD by default
+         */
         Visible: boolean;
         SketchIds: number[];
     }
 
     export declare class LayerSketchPairWrapper {
+        /**
+         * Name of the layer to create
+         */
         Name: string;
+        /**
+         * Should it be enabled in the PFD by default
+         */
         Visible: boolean;
+        /**
+         * Sketches this should contain
+         */
         Sketches: FileTreePIDSketch[];
     }
 
@@ -6670,9 +6740,10 @@ export declare class Application {
          * @param drawing PID to add
          * @param printMode what mode should be used
          * @param sketchLayers (optional) can be used to assign PID sketches to individual layers
+         * @param displayStyles (optional) can be used to create PDF layers based of color files
          * @returns
          */
-        addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[]): Promise<ApiResponse>;
+        addIntellipidPage(drawing: IntelliPidDrawing, printMode: ColorMode, sketchLayers?: LayerSketchPairWrapper[], displayStyles?: LayerDisplayStyle[]): Promise<ApiResponse>;
     }
 
     export declare class ProcessFileParameter {
