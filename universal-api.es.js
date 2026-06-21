@@ -1,7 +1,7 @@
 /**
  * @caxperts/universal.api - ES Module Bundle
  * Version: ** 7.2.1
- * Bundled on: 2026-06-14
+ * Bundled on: 2026-06-21
  * This file was automatically generated from the TypeScript source.
  */
 
