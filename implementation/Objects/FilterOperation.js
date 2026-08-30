@@ -117,7 +117,7 @@ class FilterOperation {
         if (getSelectedObjects.ResultData.SelectedObjects.length == 0)
             return [];
         const oldCondition = this.Condition;
-        this.Condition = new String(getSelectedObjects.ResultData.SelectedObjects.map((x) => "Uid=" + x).join('&'))
+        this.Condition = new String(getSelectedObjects.ResultData.SelectedObjects.map((x) => "Uid=" + x).join("&"))
             .toString();
         this.CombineMode = Util_1.CombineModes.Or;
         const models = await this.getObjects();

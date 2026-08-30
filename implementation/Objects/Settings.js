@@ -24,7 +24,7 @@ class Settings {
         });
         this.AvailableUiThemes = new GetSet_1.Get(async () => {
             const themes = (await this.getAvailableUiThemes()).UiThemes;
-            return Object.keys(themes).map(x => { return { id: x, description: themes[x] }; });
+            return Object.keys(themes).map((x) => { return { id: x, description: themes[x] }; });
         });
         this.Language = new GetSet_1.GetSet(async () => {
             const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetLanguage);
@@ -61,28 +61,28 @@ class Settings {
         this.WindowLayoutXML = new GetSet_1.GetSet(async () => {
             const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetWindowLayout);
             command.additionalParameters.GetWindowLayout = {
-                LayoutFormat: Enums_1.WindowLayoutFormat.Xml
+                LayoutFormat: Enums_1.WindowLayoutFormat.Xml,
             };
             return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LayoutContent;
         }, async (value) => {
             const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetWindowLayout);
             command.additionalParameters.SetWindowLayout = {
                 LayoutContent: value,
-                LayoutFormat: Enums_1.WindowLayoutFormat.Xml
+                LayoutFormat: Enums_1.WindowLayoutFormat.Xml,
             };
             (await APIConnector_1.Api.get().sendCommand(command));
         });
         this.WindowLayoutJson = new GetSet_1.GetSet(async () => {
             const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.GetWindowLayout);
             command.additionalParameters.GetWindowLayout = {
-                LayoutFormat: Enums_1.WindowLayoutFormat.Json
+                LayoutFormat: Enums_1.WindowLayoutFormat.Json,
             };
             return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LayoutContent;
         }, async (value) => {
             const command = new CaxApiCommand_1.CaxApiCommand(Enums_1.ApiCommands.SetWindowLayout);
             command.additionalParameters.SetWindowLayout = {
                 LayoutContent: value,
-                LayoutFormat: Enums_1.WindowLayoutFormat.Json
+                LayoutFormat: Enums_1.WindowLayoutFormat.Json,
             };
             (await APIConnector_1.Api.get().sendCommand(command));
         });

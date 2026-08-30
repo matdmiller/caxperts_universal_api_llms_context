@@ -38,8 +38,8 @@ class CustomAttributes {
         const command = this.createCommand(Enums_1.ApiCommands.LoadCustomAttributeConfigurationFile);
         command.additionalParameters = {
             LoadCustomAttributeConfiguration: {
-                ContentBase64: contentBase64
-            }
+                ContentBase64: contentBase64,
+            },
         };
         return await APIConnector_1.Api.get().sendCommand(command);
     }
@@ -47,8 +47,8 @@ class CustomAttributes {
         const command = this.createCommand(Enums_1.ApiCommands.LoadCustomAttributeDataFile);
         command.additionalParameters = {
             LoadCustomAttributeDataFile: {
-                ContentBase64: contentBase64
-            }
+                ContentBase64: contentBase64,
+            },
         };
         return await APIConnector_1.Api.get().sendCommand(command);
     }
@@ -58,9 +58,9 @@ class CustomAttributes {
             ImportCustomAttributeChangeSet: {
                 ShowLoadScreen: showLoadScreen,
                 ChangeSet: {
-                    Changes: changeSets
-                }
-            }
+                    Changes: changeSets,
+                },
+            },
         };
         return await APIConnector_1.Api.get().sendCommand(command);
     }
@@ -69,8 +69,8 @@ class CustomAttributes {
         command.additionalParameters = {
             SetCustomAttributeConfiguration: {
                 GeneralDefinitions: definitions,
-                UpdateMode: updateMode
-            }
+                UpdateMode: updateMode,
+            },
         };
         return await APIConnector_1.Api.get().sendCommand(command);
     }
@@ -83,8 +83,8 @@ class CustomAttributes {
         const command = this.createCommand(Enums_1.ApiCommands.ExportCustomAttributes);
         command.additionalParameters = {
             ExportCustomAttributes: {
-                ExportAllAttributes: exportAll
-            }
+                ExportAllAttributes: exportAll,
+            },
         };
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
             .ExportCustomAttributes;

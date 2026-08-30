@@ -1,4 +1,4 @@
-import { ApiEvents, ApiResponse, ApiResponseWithType } from '../ResponseTypes';
+import { ApiEvents, ApiResponse, ApiResponseWithType } from "../ResponseTypes";
 import { CaxApiCommand } from "./CaxApiCommand";
 export declare const CoverageTracker: {
     [key: string]: boolean;
@@ -34,15 +34,18 @@ export declare class ApiResponseContainer {
 export declare class Api {
     private static instance;
     static disableWebsocketApi: boolean;
-    debug: boolean;
+    private _debug;
     private apiConnector;
     private waiting;
     private waitingFailure;
     private registeredEvents;
+    private sendingTimes;
     static get(): Api;
     get AppControlsAvailable(): boolean;
     get BBVAvailable(): boolean;
     get Available(): boolean;
+    get debug(): boolean;
+    set debug(value: boolean);
     /**
      * Sets / replaces the current connector as some connectors like BBV are not yet available at start because peer
      * connection needs to be established.

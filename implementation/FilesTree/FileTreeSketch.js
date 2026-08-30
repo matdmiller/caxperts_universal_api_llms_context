@@ -8,6 +8,10 @@ const FileTreeElement_1 = require("./FileTreeElement");
 class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
     constructor(id, name, type) {
         super(id, name, type);
+        this.IsEmpty = new Util_1.Get(async () => {
+            const command = this.createCommand(Util_1.ApiCommands.GetIsSketchEmpty);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.IsEmpty;
+        });
     }
     /**
      * Places the symbol in the users hand for the user to place
@@ -39,8 +43,8 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
                 Name: name,
                 Position: position,
                 Rotation: rotation,
-                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
-            }
+                Attributes: Object.keys(attributes).map((x) => { return { Key: x, Value: attributes[x] }; }),
+            },
         };
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
@@ -64,9 +68,9 @@ class FileTreeSketch extends FileTreeElement_1.FileTreeElement {
                 Name: name,
                 Position: position,
                 Rotation: rotation,
-                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
-                Parameters: Object.keys(parameters).map(x => { return { Key: x, Value: parameters[x] }; }),
-            }
+                Attributes: Object.keys(attributes).map((x) => { return { Key: x, Value: attributes[x] }; }),
+                Parameters: Object.keys(parameters).map((x) => { return { Key: x, Value: parameters[x] }; }),
+            },
         };
         command.target = Util_1.TargetEnum.ThreeD;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;

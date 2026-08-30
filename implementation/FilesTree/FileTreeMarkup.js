@@ -21,8 +21,8 @@ class FileTreeMarkup extends FileTreeElement_1.FileTreeElement {
             SetMarkupTool: {
                 Mode: mode,
                 Size: size,
-                MarkupColor: color
-            }
+                MarkupColor: color,
+            },
         };
         await APIConnector_1.Api.get().sendCommand(command);
     }

@@ -1,5 +1,5 @@
 import { GetCatalogSymbols, GetObjects } from "../ResponseTypes";
-import { FeatureTypes, CatalogSymbol, PidSketchToolMode, Color, Set, Vector2D } from "../Util";
+import { FeatureTypes, CatalogSymbol, PidSketchToolMode, Color, Set, Vector2D, Get } from "../Util";
 import { FileTreeElement } from "./FileTreeElement";
 export declare class FileTreePIDSketch extends FileTreeElement {
     constructor(id: number, name: string, type: FeatureTypes);
@@ -7,6 +7,10 @@ export declare class FileTreePIDSketch extends FileTreeElement {
      * Set the layer color of a PID sketch
      */
     SketchColor: Set<Color>;
+    /**
+     * Is the Sketch empty
+     */
+    IsEmpty: Get<boolean>;
     /**
      * Select a symbol from the catalog for placment
      * @param symbol

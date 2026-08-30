@@ -1,6 +1,6 @@
-import { Camera, FilterOperation3d } from '../Objects';
-import { Scene } from './Scene';
-import { ClippingDescriptor, GetSet } from '../Util';
+import { Camera, FilterOperation3d } from "../Objects";
+import { Scene } from "./Scene";
+import { ClippingDescriptor, GetSet } from "../Util";
 /**
  * 3D Scene
  */
@@ -20,13 +20,13 @@ export declare class Scene3d extends Scene {
      */
     Camera: Camera;
     /**
-         * The current Tree Configuration of this scene
-         * This might move
-         */
+     * The current Tree Configuration of this scene
+     * This might move
+     */
     TreeConfiguration: GetSet<string[]>;
     /**
-     * Defines what aspects are currently visible
-     */
+ * Defines what aspects are currently visible
+ */
     VisibleAspects: GetSet<string[]>;
     /**
      * Create a new Filteropration

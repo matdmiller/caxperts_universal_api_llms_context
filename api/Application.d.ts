@@ -129,12 +129,12 @@ export declare class Application {
      */
     openPath(path: string): Promise<import("./ResponseTypes").ApiResponse>;
     /**
-    * This command will only returns once the viewer has finished loading the model.
-    * THis includes for example Meshloading, TextureLoading etc.
-    * If the user is actively moving this function might never return as new Load Jobs are started.
-    * This function could be used in automation steps for example in using to capture screenshots.
-    * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
-    */
+     * This command will only returns once the viewer has finished loading the model.
+     * THis includes for example Meshloading, TextureLoading etc.
+     * If the user is actively moving this function might never return as new Load Jobs are started.
+     * This function could be used in automation steps for example in using to capture screenshots.
+     * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
+     */
     waitForModelLoading(): Promise<import("./Util").ModelLoadMessageType>;
     /**
      * Checks if a connection to UPV is available and commands can be send to UPV

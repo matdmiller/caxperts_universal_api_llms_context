@@ -22,8 +22,8 @@ class Layer3D {
                 DrawingId: this.GroupId,
                 Instances: instances,
                 ObjLocalPath: obj,
-                SuppressLoadingScreen: suppressLoadingScreen
-            }
+                SuppressLoadingScreen: suppressLoadingScreen,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }
@@ -40,8 +40,8 @@ class Layer3D {
                 DrawingId: this.GroupId,
                 Vertices: vertices,
                 Color: color,
-                Width: width
-            }
+                Width: width,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }
@@ -63,8 +63,8 @@ class Layer3D {
                 EulerRotation: rotation,
                 Color: color,
                 Size: size,
-                TestMode: false
-            }
+                TestMode: false,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }
@@ -85,8 +85,8 @@ class Layer3D {
                 EulerRotation: rotation,
                 Color: color,
                 Angle: angle,
-                Radius: radius
-            }
+                Radius: radius,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }
@@ -102,7 +102,7 @@ class Layer3D {
                 DrawingId: this.GroupId,
                 Color: color,
                 Vertices: vertices,
-            }
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }

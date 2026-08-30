@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiConnectorVuplex = void 0;
 const APIConnector_1 = require("./APIConnector");
+const Logger_1 = require("./Logger");
 /**
  * @internal
  */
@@ -22,11 +23,11 @@ class ApiConnectorVuplex {
             this.attachListener();
         }
         else {
-            window.addEventListener('vuplexready', this.attachListener);
+            window.addEventListener("vuplexready", this.attachListener);
         }
         //add another handler for window.message. If we are in an Iframe. window.vuplex is available but the event is not working
         if (this.inIframe()) {
-            console.log("Detected Iframe. Adding additional IFrame Hook");
+            Logger_1.logger.debug("Detected Iframe. Adding additional IFrame Hook");
             addEventListener("message", (event) => {
                 const json = JSON.parse(event.data);
                 if (json.type == "ApiResponse") {
@@ -36,7 +37,7 @@ class ApiConnectorVuplex {
         }
     }
     attachListener() {
-        window.vuplex.addEventListener('message', (event) => {
+        window.vuplex.addEventListener("message", (event) => {
             const json = JSON.parse(event.data);
             if (json.type == "ApiResponse") {
                 APIConnector_1.Api.get().handleEvent(json.message);
@@ -45,8 +46,8 @@ class ApiConnectorVuplex {
     }
     async sendCommand(command) {
         window.vuplex.postMessage({
-            type: 'Command',
-            message: JSON.stringify(command)
+            type: "Command",
+            message: JSON.stringify(command),
         });
     }
 }

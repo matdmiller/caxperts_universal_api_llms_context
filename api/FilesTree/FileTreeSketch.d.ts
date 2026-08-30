@@ -1,8 +1,12 @@
 import { GetCatalogSymbols, GetObjects } from "../ResponseTypes";
-import { CatalogSymbol, FeatureTypes, PrimitiveType, Vector3D } from "../Util";
+import { CatalogSymbol, FeatureTypes, Get, PrimitiveType, Vector3D } from "../Util";
 import { FileTreeElement } from "./FileTreeElement";
 export declare class FileTreeSketch extends FileTreeElement {
     constructor(id: number, name: string, type: FeatureTypes);
+    /**
+     * Is the Sketch empty
+     */
+    IsEmpty: Get<boolean>;
     /**
      * Places the symbol in the users hand for the user to place
      * @param symbol

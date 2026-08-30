@@ -29,8 +29,8 @@ class FileTreeFolder extends FileTreeElement_1.FileTreeElement {
                 OverwriteNodesBehavior: overwriteNodesBehavior,
                 KeepFolderExpandStates: keepFolderExpandStates,
                 OverwriteEnableUi: overwriteEnableUi,
-                InsertNodeId: this.Id
-            }
+                InsertNodeId: this.Id,
+            },
         };
         return await APIConnector_1.Api.get().sendCommand(command);
     }

@@ -4,6 +4,8 @@ export * from "./Layer3D";
 export * from "./Model";
 export * from "./IntelliPidDrawing";
 export * from "./Events";
+export * from "./ApplicationClosingEvent";
+export * from "./FilesTreeEventArgs";
 export * from "./ProjectionSphereElement";
 export * from "./ClashContext";
 export * from "./FilterOperation3D";

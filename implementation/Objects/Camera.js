@@ -82,5 +82,22 @@ class Camera {
         const command = this.scene.createCommand(Util_1.ApiCommands.ResetView);
         return await APIConnector_1.Api.get().sendCommand(command);
     }
+    /**
+     * Raycast a screen coordinate into the model, returning the hit point and
+     * object. Unlike the PointerClicked
+     * event (which only fires on a real user click), this can be called on demand
+     * for any coordinate.
+     * @param screenPoint Screen coordinate. Origin (0,0) = bottom-left.
+     * @param mode Interpret {@link screenPoint} as pixels or normalized 0..1 percent (default).
+     * @returns The raycast result, including whether an object was hit.
+     */
+    async raycastScreenPoint(screenPoint, mode = Util_1.ScreenCoordinateMode.Percent) {
+        const command = this.scene.createCommand(Util_1.ApiCommands.RaycastScreenPoint);
+        command.additionalParameters.RaycastScreenPoint = {
+            ScreenPoint: screenPoint,
+            Mode: mode,
+        };
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
 }
 exports.Camera = Camera;

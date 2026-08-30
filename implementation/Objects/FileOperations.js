@@ -16,8 +16,8 @@ class FileOperations {
         command.additionalParameters = {
             LoadFileDialog: {
                 DefaultName: defaultName,
-                Extensions: extensions
-            }
+                Extensions: extensions,
+            },
         };
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
@@ -34,8 +34,8 @@ class FileOperations {
             SaveFileDialog: {
                 DataBase64: dataAsBase64,
                 DefaultName: defaultName,
-                Extensions: extensions
-            }
+                Extensions: extensions,
+            },
         };
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }

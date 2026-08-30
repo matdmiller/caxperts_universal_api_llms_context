@@ -1,6 +1,6 @@
 import { IntelliPidDrawing, Pdf, ProjectionSphereElement } from ".";
 import { ApiResponse } from "../ResponseTypes";
-import { GetPipeMeasurementResponse } from "../ResponseTypes/GetObjects";
+import { GetDistanceMeasurementResponse, GetPipeMeasurementResponse } from "../ResponseTypes/GetObjects";
 import { Scene } from "../Scenes/Scene";
 import { DrawingTemplate, ModelInfo, ProjectInfo, Vector3D } from "../Util/BaseDataTypes";
 import { ApiCommands } from "../Util/Enums";
@@ -81,6 +81,13 @@ export declare class Model {
      */
     getUniqueAttributeValuesPid(attribute: string): Promise<string[]>;
     createDiameterMeasurement(position: Vector3D): Promise<GetPipeMeasurementResponse>;
+    /**
+     * Measure the distance between two objects without opening the measurement UI.
+     * @param uid1 Uid of the first object
+     * @param uid2 Uid of the second object
+     * @returns The minimum distance between the two objects in meters
+     */
+    createDistanceMeasurement(uid1: string, uid2: string): Promise<GetDistanceMeasurementResponse>;
     /**
      * @internal
      * @param apiCommands

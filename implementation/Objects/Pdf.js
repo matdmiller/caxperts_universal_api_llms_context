@@ -37,7 +37,7 @@ class Pdf {
             DisplayName: this.Info.Document.DisplayName,
             Path: this.Info.Document.Path,
             PdfType: this.Info.Document.PdfType,
-            PhysicalFileName: this.Info.Document.PhysicalFileName
+            PhysicalFileName: this.Info.Document.PhysicalFileName,
         };
         return command;
     }

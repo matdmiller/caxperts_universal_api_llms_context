@@ -64,6 +64,18 @@ export declare class FilterOperation3d extends FilterOperation {
     getTreeStructure(): Promise<{
         [id: string]: AttributeTreeNode[];
     }>;
+    /**
+     * @experimental
+     * @param tolerance for clashes, default is 0.001. This means that if the distance between two objects is less than 0.001 units, they are considered to be in clash. The unit of the tolerance is the same as the unit of the model.
+     * @param aspectsToIgnore list of aspects to ignore during clash detection
+     * @param aspectsToInclude list of aspects to include during clash detection
+     * @param mode mode of clash detection
+     * @param includeSketches whether to include sketches in the clash detection
+     * @param computeCandidatesOnly whether to compute only clash candidates
+     * @param packageA first package for clash detection
+     * @param PackageB comparison package for clash detection, only used in PackageAAgainstPackageBWithinQuery mode
+     * @returns
+     */
     startClashComputation(tolerance?: number, aspectsToIgnore?: string[], aspectsToInclude?: string[], mode?: ClashMode, includeSketches?: boolean, computeCandidatesOnly?: boolean, packageA?: Package, PackageB?: Package): Promise<ClashContext>;
     /**
      * @internal

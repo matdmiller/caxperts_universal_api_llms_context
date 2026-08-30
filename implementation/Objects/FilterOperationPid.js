@@ -48,7 +48,7 @@ class FilterOperationPid extends FilterOperation_1.FilterOperation {
         command.additionalParameters = {};
         if (this.DrawingFilter != null) {
             command.additionalParameters = {
-                IntelliPidDrawingFilter: this.DrawingFilter
+                IntelliPidDrawingFilter: this.DrawingFilter,
             };
         }
         return command;

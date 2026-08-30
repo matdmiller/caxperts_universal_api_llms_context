@@ -20,6 +20,8 @@ __exportStar(require("./Layer3D"), exports);
 __exportStar(require("./Model"), exports);
 __exportStar(require("./IntelliPidDrawing"), exports);
 __exportStar(require("./Events"), exports);
+__exportStar(require("./ApplicationClosingEvent"), exports);
+__exportStar(require("./FilesTreeEventArgs"), exports);
 __exportStar(require("./ProjectionSphereElement"), exports);
 __exportStar(require("./ClashContext"), exports);
 __exportStar(require("./FilterOperation3D"), exports);

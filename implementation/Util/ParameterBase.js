@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SetAnimationCurrentTimeParameters = exports.SetWindowLayoutParameter = exports.GetWindowLayoutParameter = exports.SetAnimationStartParameters = exports.AnimationKeyframeParameters = exports.FilesTreeCreateDrawingParameter = exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
+exports.CreateAnimationStateParameter = exports.AnimationStateIdentifierParameter = exports.SetAnimationCurrentTimeParameters = exports.RaycastScreenPointParameter = exports.SetWindowLayoutParameter = exports.GetWindowLayoutParameter = exports.SetAnimationStartParameters = exports.AnimationKeyframeParameters = exports.FilesTreeCreateDrawingParameter = exports.DeleteChangeableAttributeParameter = exports.AddChangeableAttributeParameter = exports.PdfDocumentParameter = exports.LoadFileDialogParameters = exports.SaveFileDialogParameters = exports.AttributeKeyValue = exports.PlacePrimitiveParameter = exports.PlaceSymbolParameter = exports.AddPidToPdfPrinterParameter = exports.GetClashesParameter = exports.FilesTreeCreateCommentParameter = exports.GetFilesTreeContentParameter = exports.FilesTreeSetStateParameter = exports.SetPidSketchToolParameter = exports.OpenAuthenticationContextParameter = exports.SetMarkupToolParameter = exports.PackageCondition = exports.Package = exports.PackageFilterParameter = exports.ApiMetadata = exports.ApiSerializationContainer = exports.FilesTreeImportContainerParameter = exports.ProcessFileParameter = exports.ExportCustomAttributesParameter = exports.SetCustomAttributeConfigParameter = exports.ImportCustomAttributeChangeSetParameter = exports.LoadCustomAttributeDataFileParameter = exports.LoadCustomAttributeConfigurationFileParameter = exports.AttributePoi = exports.Link = exports.PoIWithCommentParameter = exports.PlacePoiParameter = exports.PlaceObjParameter = exports.PlacePlyParameter = exports.PlaceArcParameter = exports.PlaceTextParameter = exports.DrawLineParameter = exports.IntelliClippingDescriptor = exports.VolumeClippingDescriptor = exports.ClippingDescriptor = exports.ParameterBase = void 0;
+exports.SetAnimationStateTransitionParameter = void 0;
 const _1 = require(".");
 class ParameterBase {
 }
@@ -91,7 +92,19 @@ class PackageCondition {
             Consolidation: mode,
             Type: _1.PackageConditionTypes.Attribute,
             Parameters: [key, conditionComparision, value],
-            SubConditions: []
+            SubConditions: [],
+        };
+    }
+    /**
+     * Create an Attribute Condition that only tests whether the attribute exists or is empty.
+     * Takes no comparison value - use createAttributeCondition to compare against one.
+     */
+    static createUnaryAttributeCondition(mode, key, conditionComparision) {
+        return {
+            Consolidation: mode,
+            Type: _1.PackageConditionTypes.Attribute,
+            Parameters: [key, conditionComparision, ""],
+            SubConditions: [],
         };
     }
     /**
@@ -102,7 +115,7 @@ class PackageCondition {
             Consolidation: mode,
             Type: _1.PackageConditionTypes.Volume,
             Parameters: [volumeMode, min.X, min.Y, min.Z, max.X, max.Y, max.Z],
-            SubConditions: []
+            SubConditions: [],
         };
     }
     /**
@@ -113,7 +126,7 @@ class PackageCondition {
             Consolidation: mode,
             Type: _1.PackageConditionTypes.Group,
             Parameters: [],
-            SubConditions: packageConditions
+            SubConditions: packageConditions,
         };
     }
     /**
@@ -124,7 +137,7 @@ class PackageCondition {
             Consolidation: mode,
             Type: _1.PackageConditionTypes.IntelliVolume,
             Parameters: [radius],
-            SubConditions: packageConditions
+            SubConditions: packageConditions,
         };
     }
 }
@@ -192,6 +205,21 @@ exports.GetWindowLayoutParameter = GetWindowLayoutParameter;
 class SetWindowLayoutParameter {
 }
 exports.SetWindowLayoutParameter = SetWindowLayoutParameter;
+class RaycastScreenPointParameter {
+}
+exports.RaycastScreenPointParameter = RaycastScreenPointParameter;
 class SetAnimationCurrentTimeParameters {
 }
 exports.SetAnimationCurrentTimeParameters = SetAnimationCurrentTimeParameters;
+/**
+ * Identifies a single animation state by its timeline position and the targeted element attribute
+ */
+class AnimationStateIdentifierParameter {
+}
+exports.AnimationStateIdentifierParameter = AnimationStateIdentifierParameter;
+class CreateAnimationStateParameter extends AnimationStateIdentifierParameter {
+}
+exports.CreateAnimationStateParameter = CreateAnimationStateParameter;
+class SetAnimationStateTransitionParameter extends AnimationStateIdentifierParameter {
+}
+exports.SetAnimationStateTransitionParameter = SetAnimationStateTransitionParameter;

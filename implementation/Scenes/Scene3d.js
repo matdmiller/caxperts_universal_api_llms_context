@@ -22,7 +22,7 @@ class Scene3d extends Scene_1.Scene {
                 await APIConnector_1.Api.get().sendCommand(this.createCommand(Util_1.ApiCommands.ClearClipping));
             }
             else if (value.Mode === Util_1.ClippingMode.Intelli) {
-                await this.intelliClip(value.IntelliClipping.Elements.map((x) => { return 'Uid=' + x; }).join("&"), value.IntelliClipping.Offset, Util_1.CombineModes.Or);
+                await this.intelliClip(value.IntelliClipping.Elements.map((x) => { return "Uid=" + x; }).join("&"), value.IntelliClipping.Offset, Util_1.CombineModes.Or);
             }
             else if (value.Mode === Util_1.ClippingMode.Volume) {
                 await this.volumeClipByCoordinates(value.VolumeClipping.Bounds.Min, value.VolumeClipping.Bounds.Max);

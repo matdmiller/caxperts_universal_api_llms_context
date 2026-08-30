@@ -1,4 +1,4 @@
-import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerDisplayStyle, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, UpdateModes, Vector3D, VolumeConditionMode, WindowLayoutFormat } from ".";
+import { AttributeConditionComparison, Bounds, ChangeableAttributeUnitType, ChangeSet, ClashMode, ClippingMode, Color, ColorMode, ConsolidationMode, CustomAttributeDataType, Definition, FeatureTypes, FilesTreeImportBehaviour, FileTreeState, Instance, LayerDisplayStyle, LayerSketchIdsPair, MarkupMode, PackageConditionTypes, PdfTypes, PidSketchToolMode, PointOfInterestType, PrimitiveType, ScreenCoordinateMode, UpdateModes, Vector2D, Vector3D, VolumeConditionMode, WindowLayoutFormat, AnimationTransition, AttributeConditionComparisonUnary } from ".";
 export declare class ParameterBase {
     ClippingFilter?: ClippingDescriptor;
     DrawLine?: DrawLineParameter;
@@ -37,7 +37,15 @@ export declare class ParameterBase {
     SetAnimationStart?: SetAnimationStartParameters;
     GetWindowLayout?: GetWindowLayoutParameter;
     SetWindowLayout?: SetWindowLayoutParameter;
+    RaycastScreenPoint?: RaycastScreenPointParameter;
     SetAnimationCurrentTime?: SetAnimationCurrentTimeParameters;
+    GetAnimationValue?: AnimationStateIdentifierParameter;
+    CreateAnimationState?: CreateAnimationStateParameter;
+    DeleteAnimationState?: AnimationStateIdentifierParameter;
+    GetAnimationStateTransition?: AnimationStateIdentifierParameter;
+    SetAnimationStateTransition?: SetAnimationStateTransitionParameter;
+    ItemCount?: number;
+    StartIndex?: number;
 }
 export declare class ClippingDescriptor {
     Mode: ClippingMode;
@@ -179,6 +187,11 @@ export declare class PackageCondition {
      * Create a Attribute Condition
      */
     static createAttributeCondition(mode: ConsolidationMode, key: string, conditionComparision: AttributeConditionComparison, value: string): PackageCondition;
+    /**
+     * Create an Attribute Condition that only tests whether the attribute exists or is empty.
+     * Takes no comparison value - use createAttributeCondition to compare against one.
+     */
+    static createUnaryAttributeCondition(mode: ConsolidationMode, key: string, conditionComparision: AttributeConditionComparisonUnary): PackageCondition;
     /**
      * Create a Volume condition that contains a min and max folder
      */
@@ -357,7 +370,46 @@ export declare class SetWindowLayoutParameter {
     LayoutFormat: WindowLayoutFormat;
     LayoutContent: string;
 }
+export declare class RaycastScreenPointParameter {
+    /**
+     * Screen coordinate to raycast. Origin (0,0) = bottom-left.
+     */
+    ScreenPoint: Vector2D;
+    /**
+     * How to interpret ScreenPoint. Omit to default to Pixels.
+     */
+    Mode?: ScreenCoordinateMode;
+}
 export declare class SetAnimationCurrentTimeParameters {
     CurrentTimeMilliseconds: number;
+}
+/**
+ * Identifies a single animation state by its timeline position and the targeted element attribute
+ */
+export declare class AnimationStateIdentifierParameter {
+    /**
+     * The position of the state on the timeline in milliseconds since the start
+     */
+    MillisecondsSinceStart: number;
+    /**
+     * The element uid the state belongs to
+     */
+    Uid: string;
+    /**
+     * The attribute key the state animates
+     */
+    Attribute: string;
+}
+export declare class CreateAnimationStateParameter extends AnimationStateIdentifierParameter {
+    /**
+     * The value of the state. Can be a string, a stringified number or a hex color code
+     */
+    Value: string;
+}
+export declare class SetAnimationStateTransitionParameter extends AnimationStateIdentifierParameter {
+    /**
+     * The transition to apply to the state
+     */
+    Transition: AnimationTransition;
 }
 //# sourceMappingURL=ParameterBase.d.ts.map

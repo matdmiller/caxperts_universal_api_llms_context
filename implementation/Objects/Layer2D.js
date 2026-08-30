@@ -19,10 +19,10 @@ class Layer2D {
         command.additionalParameters = {
             DrawLine: {
                 DrawingId: this.GroupId,
-                Vertices: vertices.map(position => { return { X: position.X, Y: position.Y, Z: 0 }; }),
+                Vertices: vertices.map((position) => { return { X: position.X, Y: position.Y, Z: 0 }; }),
                 Color: color,
-                Width: width
-            }
+                Width: width,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }
@@ -44,8 +44,8 @@ class Layer2D {
                 EulerRotation: { X: 0, Y: 0, Z: rotation },
                 Color: color,
                 Size: size,
-                TestMode: false
-            }
+                TestMode: false,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }
@@ -66,8 +66,8 @@ class Layer2D {
                 EulerRotation: { X: 0, Y: 0, Z: rotation },
                 Color: color,
                 Angle: angle,
-                Radius: radius
-            }
+                Radius: radius,
+            },
         };
         APIConnector_1.Api.get().sendCommand(command);
     }

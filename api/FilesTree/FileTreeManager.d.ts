@@ -1,16 +1,18 @@
 import { FileTreeElement } from "./FileTreeElement";
-import { Color, FeatureTypes, FilesTreeImportBehaviour, FilesTreeImportContainerParameter, PointOfInterestType, Vector3D } from "../Util";
+import { Color, FeatureTypes, FilesTreeImportBehaviour, FilesTreeImportContainerParameter, FilesTreeObject, PointOfInterestType, Vector3D } from "../Util";
 import { FileTreePointOfInterest } from "./FileTreePointOfInterest";
 import { FileTreeSketch } from "./FileTreeSketch";
 import { FileTreeModel } from "./FileTreeModel";
 import { FileTreeFolder } from "./FileTreeFolder";
 import { FileTreeComment } from "./FileTreeComment";
+import { FileTreeAnimation } from "./FileTreeAnimation";
 import { FileTreePIDSketch } from "./FileTreePIDSketch";
 import { FileTreeCommentSVG } from "./FileTreeCommentSVG";
 import { FileTreeDrawing } from "./FileTreeDrawing";
 /**
  * @deprecated
- * Contains the file variants and old functions. These might be made unavailable in future versions and replaced by new commands or has been already replaced
+ * Contains the file variants and old functions. These might be made unavailable in future versions and
+ * replaced by new commands or has been already replaced
  * */
 export declare class FileTreeManagerLegacy {
     private manager;
@@ -101,6 +103,13 @@ export declare class FileTreeManager {
      */
     createSketch(parent: FileTreeFolder, name: string): Promise<FileTreePIDSketch | FileTreeSketch>;
     /**
+     * Create an animation bound to the given sketch
+     * @param sketch the sketch the animation is created for
+     * @param name name of the animation
+     * @returns the created animation
+     */
+    createAnimation(sketch: FileTreeSketch | FileTreePIDSketch | FileTreeFolder, name: string): Promise<FileTreeAnimation>;
+    /**
      * Create a Markup. Depending on if 3d,Pid,or Document/Drawing is open it will be bound to that file
      * @param name
      * @param parent
@@ -108,13 +117,15 @@ export declare class FileTreeManager {
      */
     createMarkup(parent: FileTreeFolder, name: string): Promise<FileTreeElement>;
     /**
-     * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type. It is also based on the currently selected element
+     * Create a Comment. Depending on if 3d or Pid is open it will be bound to that type.
+     * It is also based on the currently selected element
      * @param parent
      * @param name
      * @param uid if nothing provided, the selected element is used
      * @param offset the offset of the comment from the object
      * @param commentPosition Position if the comment. If not provided it will use the offset
-     * @param leaderLineEndPosition Position of the leader line end position. If not provided this is the center of the object
+     * @param leaderLineEndPosition Position of the leader line end position.
+     * If not provided this is the center of the object
      * @returns
      */
     createComment(parent: FileTreeFolder | FileTreeSketch | FileTreePIDSketch | FileTreePointOfInterest, name: string, uid?: string, offset?: number, commentPosition?: Vector3D, leaderLineEndPosition?: Vector3D): Promise<FileTreeComment | FileTreeCommentSVG>;
@@ -128,14 +139,17 @@ export declare class FileTreeManager {
      * @returns
      */
     createDrawing(parent: FileTreeFolder, name: string, templateName: string, useColors: boolean, useSelectedObjectsOnly: boolean): Promise<FileTreeDrawing>;
-    private resolveElement;
     /***
      * Load UPVF file from a base64 string into UPV
      * @param upfvBase64 base64 upvf content to load
-     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to false (default is true).
-     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
-     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this behavior can be changed with this parameter
-     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded. With this option this can be supressed
+     * @param suppressDefaultAction if only one element is in the UPVF open it by default if this is set to
+     * false (default is true).
+     * @param overwriteFoldersBehavior by default if the same folder already exists we will keepBoth but this
+     * behavior can be changed with this parameter. Replace for Folders behaves like a merge not a delete/create
+     * @param overwriteNodesBehavior by default if the same folder already exists we will keepBoth but this
+     * behavior can be changed with this parameter
+     * @param keepFolderExpandStates By default if an element is changed the containing folder will be expanded.
+     * With this option this can be supressed
      * @param overwriteEnableUi if enabled the user will be asked as if they started a manuell import
      * @returns
      * @returns
@@ -144,9 +158,16 @@ export declare class FileTreeManager {
     /**
      * This functions returns a base64 UPVF file of the tree.
      * Can be loaded again using loadUPVF
-     * It is possible to use a diffrent root by using the FileTreeElement.getUPVF funtion of the root you want to export from
+     * It is possible to use a diffrent root by using the FileTreeElement.getUPVF funtion of the root you want
+     * to export from
      * @returns
      */
     getUPVF(forceExport?: boolean, featureTypeFilters?: FeatureTypes[], fileTreeElement?: FileTreeElement[]): Promise<string>;
 }
+/**
+ * @internal
+ * Instantiates the concrete {@link FileTreeElement} subclass matching the type of the given wire object.
+ * Returns null for a null object - the parent references of the filetree events are null for root level elements
+ */
+export declare function resolveFilesTreeElement(element: FilesTreeObject): FileTreeElement;
 //# sourceMappingURL=FileTreeManager.d.ts.map

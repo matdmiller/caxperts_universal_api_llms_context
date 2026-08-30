@@ -1,4 +1,4 @@
-import { CustomAttributeDataType, ExportableOptions, FeatureTypes, PdfTypes, ProjectionSphereType } from "./Enums";
+import { CustomAttributeDataType, ExportableOptions, FeatureTypes, PdfTypes, ProjectionSphereType, AnimationTransitionType } from "./Enums";
 export declare class Vector2D {
     X: number;
     Y: number;
@@ -21,6 +21,68 @@ export declare class CameraView {
     Position: Vector3D;
     Rotation: Vector3D;
     constructor(Position: Vector3D, Rotation: Vector3D);
+}
+/**
+ * Start and end control points used to describe an animation transition curve
+ */
+export declare class AnimationTransitionOptions {
+    Start: Vector2D;
+    End: Vector2D;
+}
+/**
+ * Describes how the animation interpolates from one state to the next
+ */
+export declare class AnimationTransition {
+    /**
+     * The interpolation type of the transition
+     */
+    Type: AnimationTransitionType;
+    /**
+     * The control points of the transition
+     */
+    Options: AnimationTransitionOptions;
+}
+/**
+ * Raw data of a single animation state as returned by the viewer
+ */
+export declare class AnimationStateData {
+    /**
+     * The position of the state on the timeline in milliseconds since the start
+     */
+    MillisecondsSinceStart: number;
+    /**
+     * The element uid the state belongs to
+     */
+    Uid: string;
+    /**
+     * The attribute key the state animates
+     */
+    Attribute: string;
+    /**
+     * The value of the state. Can be a string, a stringified number or a hex color code
+     */
+    Value: string;
+}
+/**
+ * Playback information about an animation timeline
+ */
+export declare class AnimationInfo {
+    /**
+     * The start of the timeline in milliseconds
+     */
+    StartMilliseconds: number;
+    /**
+     * The end of the timeline in milliseconds
+     */
+    EndMilliseconds: number;
+    /**
+     * The current playback position in milliseconds
+     */
+    CurrentTimeMilliseconds: number;
+    /**
+     * Whether the animation is currently playing
+     */
+    IsPlaying: boolean;
 }
 export declare class Bounds {
     Min: Vector3D;
@@ -65,6 +127,7 @@ export declare class Instance {
 export declare class ModelInfo {
     URI: string;
     AvailableAttributes: string[];
+    AvailablePidAttributes: string[];
     AvailableAspects: string[];
 }
 export declare class ProjectInfo {
@@ -188,6 +251,15 @@ export declare class FileTreeState {
      * When null - keep current value
      */
     Exportable?: ExportableOptions;
+    /**
+     * Ignored when calling .set
+     */
+    HasChangesIncludingChildren?: boolean;
+    /**
+     * Index of the element within its parent; 0 when there is no parent.
+     * Ignored when calling .set
+     */
+    Index?: number;
 }
 export declare class ElementLinks {
     ThreeDUids: string[];

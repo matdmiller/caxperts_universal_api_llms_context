@@ -43,10 +43,10 @@ class Printer {
      * @returns
      */
     async addIntellipidPage(drawing, printMode, sketchLayers = [], displayStyles = []) {
-        const sketchlayers = sketchLayers.map(x => ({
+        const sketchlayers = sketchLayers.map((x) => ({
             Name: x.Name,
             Visible: x.Visible,
-            SketchIds: x.Sketches.map(s => s.Id)
+            SketchIds: x.Sketches.map((s) => s.Id),
         }));
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.PdfPrinterAddIntelliPidPage);
         command.commandParameters.push(this.printerId.toString());
@@ -55,8 +55,8 @@ class Printer {
                 DrawingPath: drawing.Identifier,
                 PrintMode: printMode,
                 LayerSketches: sketchlayers,
-                DisplayStyles: displayStyles
-            }
+                DisplayStyles: displayStyles,
+            },
         };
         return (await APIConnector_1.Api.get().sendCommand(command));
     }

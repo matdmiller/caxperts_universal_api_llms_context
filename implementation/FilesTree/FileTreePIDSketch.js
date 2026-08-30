@@ -13,10 +13,14 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
             command.additionalParameters = {
                 SetPidSketchTool: {
                     Mode: Util_1.PidSketchToolMode.None,
-                    SketchColor: newColor
-                }
+                    SketchColor: newColor,
+                },
             };
             await APIConnector_1.Api.get().sendCommand(command);
+        });
+        this.IsEmpty = new Util_1.Get(async () => {
+            const command = this.createCommand(Util_1.ApiCommands.GetIsSketchEmpty);
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.IsEmpty;
         });
     }
     /**
@@ -39,8 +43,8 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
         command.additionalParameters = {
             SetPidSketchTool: {
                 Mode: symbol,
-                SketchColor: null
-            }
+                SketchColor: null,
+            },
         };
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.Objects;
     }
@@ -53,8 +57,8 @@ class FileTreePIDSketch extends FileTreeElement_1.FileTreeElement {
                 Name: name,
                 Position: new Util_1.Vector3D(position.X, position.Y, 0),
                 Rotation: new Util_1.Vector3D(rotation, 0, 0),
-                Attributes: Object.keys(attributes).map(x => { return { Key: x, Value: attributes[x] }; }),
-            }
+                Attributes: Object.keys(attributes).map((x) => { return { Key: x, Value: attributes[x] }; }),
+            },
         };
         command.target = Util_1.TargetEnum.Intelli;
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;

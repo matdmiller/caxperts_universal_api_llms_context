@@ -30,7 +30,7 @@ class AttributeTreeNode {
         command.commandParameters.push(this.Id);
         const result = await APIConnector_1.Api.get().sendCommandWithReturnType(command);
         const returnValue = [];
-        result.ResultData.GetTreeFolderChildren.forEach(element => {
+        result.ResultData.GetTreeFolderChildren.forEach((element) => {
             returnValue.push(new AttributeTreeNode(element.Id, element.Name, element.Type));
         });
         return returnValue;
@@ -44,7 +44,7 @@ class AttributeTreeNode {
         command.commandParameters.push(this.Id);
         const result = await APIConnector_1.Api.get().sendCommandWithReturnType(command);
         const returnValue = [];
-        result.ResultData.GetTreeFolderSiblings.forEach(element => {
+        result.ResultData.GetTreeFolderSiblings.forEach((element) => {
             returnValue.push(new AttributeTreeNode(element.Id, element.Name, element.Type));
         });
         return returnValue;
@@ -54,7 +54,7 @@ class AttributeTreeNode {
         command.commandParameters.push(this.Id);
         const result = await APIConnector_1.Api.get().sendCommandWithReturnType(command);
         const returnValue = [];
-        result.ResultData.GetTreeNodesOfFolder.forEach(element => {
+        result.ResultData.GetTreeNodesOfFolder.forEach((element) => {
             returnValue.push(new AttributeTreeNode(element.Id, element.Name, element.Type));
         });
         return returnValue;

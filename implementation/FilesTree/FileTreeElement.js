@@ -40,15 +40,17 @@ class FileTreeElement {
             result.Name = response.Name;
             result.Expanded = response.Expanded;
             result.Exportable = response.Exportable;
+            result.HasChangesIncludingChildren = response.HasChangesIncludingChildren;
             result.HasChanges = response.HasChanges;
             result.Loading = response.Loading;
             result.Locked = response.Locked;
             result.Selected = response.Selected;
+            result.Index = response.Index;
             return result;
         }, async (value) => {
             const command = this.createCommand(Util_1.ApiCommands.FilesTreeSetState);
             command.additionalParameters = {
-                FilesTreeSetState: value
+                FilesTreeSetState: value,
             };
             await APIConnector_1.Api.get().sendCommand(command);
         });
@@ -83,8 +85,8 @@ class FileTreeElement {
                 RootNode: this.Id,
                 FeatureTypeFilter: featureTypeFilters,
                 ForceExport: forceExport,
-                IncludedNodes: fileTreeElement.map(x => x.Id)
-            }
+                IncludedNodes: fileTreeElement.map((x) => x.Id),
+            },
         };
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.FilesTreeContent;
     }

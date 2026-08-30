@@ -1,6 +1,6 @@
-import { Vector3D, CameraView, GetSet, ClippingPlane } from "../Util";
+import { Vector2D, Vector3D, CameraView, GetSet, ClippingPlane, ScreenCoordinateMode } from "../Util";
 import { Scene3d } from "../Scenes";
-import { ApiResponse } from "../ResponseTypes";
+import { ApiResponse, RaycastScreenPointResult } from "../ResponseTypes";
 export declare class Camera {
     private scene;
     /**
@@ -39,5 +39,15 @@ export declare class Camera {
      * @returns
      */
     resetView(): Promise<ApiResponse>;
+    /**
+     * Raycast a screen coordinate into the model, returning the hit point and
+     * object. Unlike the PointerClicked
+     * event (which only fires on a real user click), this can be called on demand
+     * for any coordinate.
+     * @param screenPoint Screen coordinate. Origin (0,0) = bottom-left.
+     * @param mode Interpret {@link screenPoint} as pixels or normalized 0..1 percent (default).
+     * @returns The raycast result, including whether an object was hit.
+     */
+    raycastScreenPoint(screenPoint: Vector2D, mode?: ScreenCoordinateMode): Promise<RaycastScreenPointResult>;
 }
 //# sourceMappingURL=Camera.d.ts.map

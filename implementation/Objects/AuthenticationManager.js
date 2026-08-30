@@ -11,8 +11,8 @@ class AuthenticationManager {
         command.additionalParameters = {
             OpenAuthenticationContext: {
                 OidcConfig: oidcConfig,
-                OidcConfigBrowserBasedViewing: OidcConfigBrowserBasedViewing
-            }
+                OidcConfigBrowserBasedViewing: OidcConfigBrowserBasedViewing,
+            },
         };
         return new AuthenticationContext((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.AuthenticationContextId);
     }

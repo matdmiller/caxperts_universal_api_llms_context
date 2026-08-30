@@ -51,7 +51,7 @@ export declare enum FeatureTypes {
     View = "View",
     Package = "Package",
     Folder = "Folder",
-    CommentSvg = "CommentSvg",
+    CommentSVG = "CommentSVG",
     Screenshot = "Screenshot",
     Photo = "Photo",
     TwoDToThreeD = "TwoDToThreeD",
@@ -144,6 +144,7 @@ export declare enum ApiCommands {
     OpenPdf = "OpenPdf",
     ClosePdf = "ClosePdf",
     CreateDiameterMeasurement = "CreateDiameterMeasurement",
+    CreateDistanceMeasurement = "CreateDistanceMeasurement",
     TakeScreenshot = "TakeScreenshot",
     TakeAndSaveScreenShot = "TakeAndSaveScreenshot",
     GetTreeConfiguration = "GetTreeConfiguration",
@@ -153,6 +154,7 @@ export declare enum ApiCommands {
     LoadColorFile = "LoadColorFile",
     LoadLinkFile = "LoadLinkFile",
     ClearLinks = "ClearLinks",
+    RaycastScreenPoint = "RaycastScreenPoint",
     FilesTreeDeleteObject = "FilesTreeDeleteObject",
     GetFilesTreeChildren = "GetFilesTreeChildren",
     GetFilesTreeSiblings = "GetFilesTreeSiblings",
@@ -182,12 +184,14 @@ export declare enum ApiCommands {
     PlacePoi = "PlacePoi",
     PlacePoiWithComment = "PlacePoiWithComment",
     SetPidSketchTool = "SetPidSketchTool",
+    GetIsSketchEmpty = "GetIsSketchEmpty",
     AddEventCallback = "AddEventCallback",
     RemoveEventCallback = "RemoveEventCallback",
     GetLifeCycleState = "GetLifeCycleState",
     ShowMessage = "ShowMessage",
     FocusViewer = "FocusViewer",
     QuitApplication = "QuitApplication",
+    RespondToApplicationClosing = "RespondToApplicationClosing",
     CacheModel = "CacheModel",
     LoadModel = "LoadModel",
     DeleteModel = "DeleteModel",
@@ -232,6 +236,7 @@ export declare enum ApiCommands {
     GetClashCandidates = "GetClashCandidates",
     GetClashResults = "GetClashResults",
     CancelClashComputation = "CancelClashComputation",
+    CleanClashResults = "CleanClashResults",
     PdfPrinterCreate = "PdfPrinterCreate",
     PdfPrinterDelete = "PdfPrinterDelete",
     PdfPrinterPrintToBase64 = "PdfPrinterPrintToBase64",
@@ -249,8 +254,28 @@ export declare enum ApiCommands {
     GenericLoadFromFile = "GenericLoadFromFile",
     GenerateAnimationKeyframe = "GenerateAnimationKeyframe",
     SetAnimationCurrentTime = "SetAnimationCurrentTime",
+    FilesTreeCreateAnimation = "FilesTreeCreateAnimation",
+    GetAnimationValue = "GetAnimationValue",
+    CreateAnimationState = "CreateAnimationState",
+    GetAnimationStates = "GetAnimationStates",
+    DeleteAnimationState = "DeleteAnimationState",
+    GetAnimationStateTransition = "GetAnimationStateTransition",
+    SetAnimationStateTransition = "SetAnimationStateTransition",
+    GetAnimationInfo = "GetAnimationInfo",
+    AnimationStart = "AnimationStart",
+    AnimationStop = "AnimationStop",
+    AnimationPause = "AnimationPause",
     GetWindowLayout = "GetWindowLayout",
     SetWindowLayout = "SetWindowLayout"
+}
+/**
+ * Interpretation of a screen coordinate passed to a raycast.
+ */
+export declare enum ScreenCoordinateMode {
+    /** X/Y are pixels. Origin (0,0) = bottom-left. */
+    Pixels = 0,
+    /** X/Y are normalized 0..1. (0,0) = bottom-left, (1,1) = top-right. */
+    Percent = 1
 }
 export declare enum PackageConditionTypes {
     None = "None",
@@ -269,7 +294,17 @@ export declare enum AttributeConditionComparison {
     Equals = "==",
     NotEquals = "!=",
     Like = "Like",
-    NotLike = "Not Like"
+    NotLike = "Not Like",
+    GreaterThan = ">",
+    GreaterThanOrEqual = ">=",
+    LessThan = "<",
+    LessThanOrEqual = "<="
+}
+export declare enum AttributeConditionComparisonUnary {
+    IsEmpty = "IsEmpty",
+    IsNotEmpty = "IsNotEmpty",
+    Exists = "Exists",
+    DoesNotExist = "DoesNotExist"
 }
 export declare enum VolumeConditionMode {
     Includes = "Includes",
@@ -402,6 +437,14 @@ export declare enum AnimationMessageTypes {
     AnimationNotFound = 1,
     Success = 2
 }
+/**
+ * Interpolation type used between two animation states
+ */
+export declare enum AnimationTransitionType {
+    Linear = 0,
+    BSpline = 1,
+    Jump = 2
+}
 export declare enum WindowLayoutFormat {
     Xml = 1,
     Json = 2
@@ -410,5 +453,12 @@ export declare enum FilesTreeImportBehaviour {
     KeepBoth = 0,
     Replace = 1,
     Skip = 2
+}
+/**
+ * How a filetree element was added to the tree
+ */
+export declare enum FilesTreeObjectAddedSource {
+    Other = 0,
+    ByUserInteraction = 1
 }
 //# sourceMappingURL=Enums.d.ts.map

@@ -113,13 +113,25 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
             if (Object.prototype.hasOwnProperty.call(result.ResultData.GetTreeStructure, key)) {
                 returnValue[key] = [];
                 const element = result.ResultData.GetTreeStructure[key];
-                element.forEach(element => {
+                element.forEach((element) => {
                     returnValue[key].push(new AttributeTree_1.AttributeTreeNode(element.Id, element.Name, element.Type));
                 });
             }
         }
         return returnValue;
     }
+    /**
+     * @experimental
+     * @param tolerance for clashes, default is 0.001. This means that if the distance between two objects is less than 0.001 units, they are considered to be in clash. The unit of the tolerance is the same as the unit of the model.
+     * @param aspectsToIgnore list of aspects to ignore during clash detection
+     * @param aspectsToInclude list of aspects to include during clash detection
+     * @param mode mode of clash detection
+     * @param includeSketches whether to include sketches in the clash detection
+     * @param computeCandidatesOnly whether to compute only clash candidates
+     * @param packageA first package for clash detection
+     * @param PackageB comparison package for clash detection, only used in PackageAAgainstPackageBWithinQuery mode
+     * @returns
+     */
     async startClashComputation(tolerance = 0.001, aspectsToIgnore = [], aspectsToInclude = [], mode = Util_1.ClashMode.WithinQueryOnly, includeSketches = false, computeCandidatesOnly = false, packageA, PackageB) {
         const command = this.createCommand(Util_1.ApiCommands.StartClashComputation);
         command.additionalParameters.StartClashComputation = {
@@ -130,11 +142,11 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
             IncludeSketches: includeSketches,
             ComputeCandidatesOnly: computeCandidatesOnly,
             PackageA: {
-                Package: packageA
+                Package: packageA,
             },
             PackageB: {
-                Package: PackageB
-            }
+                Package: PackageB,
+            },
         };
         await APIConnector_1.Api.get().sendCommand(command);
         return new ClashContext_1.ClashContext();
@@ -149,7 +161,7 @@ class FilterOperation3d extends FilterOperation_1.FilterOperation {
         command.condition = this.Condition;
         command.conditionCombineMode = this.CombineMode;
         command.additionalParameters = {
-            ClippingFilter: this.ApiClippingDescriptor
+            ClippingFilter: this.ApiClippingDescriptor,
         };
         if (this.APIPackageFilter != null) {
             command.additionalParameters.PackageFilter = { Package: this.APIPackageFilter };

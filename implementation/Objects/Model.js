@@ -61,32 +61,32 @@ class Model {
         });
         this.Pids = new GetSet_1.Get(async () => {
             const command = this.createCommand(Enums_1.ApiCommands.GetAllPids);
-            return Object.values((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetIntelliPidDrawings).map(x => new _1.IntelliPidDrawing(x, this));
+            return Object.values((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetIntelliPidDrawings).map((x) => new _1.IntelliPidDrawing(x, this));
         });
         this.OpenPids = new GetSet_1.Get(async () => {
             const command = this.createCommand(Enums_1.ApiCommands.GetOpenPids);
-            return Object.values((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetIntelliPidDrawings).map(x => new _1.IntelliPidDrawing(x, this));
+            return Object.values((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetIntelliPidDrawings).map((x) => new _1.IntelliPidDrawing(x, this));
         });
         this.ActivePid = new GetSet_1.Get(async () => {
             var _a;
             const command = this.createCommand(Enums_1.ApiCommands.GetActivePid);
-            return (_a = Object.values((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetIntelliPidDrawings).map(x => new _1.IntelliPidDrawing(x, this)).find(_ => true)) !== null && _a !== void 0 ? _a : null;
+            return (_a = Object.values((await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetIntelliPidDrawings).map((x) => new _1.IntelliPidDrawing(x, this)).find((_) => true)) !== null && _a !== void 0 ? _a : null;
         });
         this.Pdfs = new GetSet_1.Get(async () => {
             const command = this.createCommand(Enums_1.ApiCommands.GetAllPdfs);
             command.commandParameters.push(Enums_1.PdfTypes.All);
-            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map(x => new _1.Pdf(x, this));
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map((x) => new _1.Pdf(x, this));
         });
         this.OpenPdfs = new GetSet_1.Get(async () => {
             const command = this.createCommand(Enums_1.ApiCommands.GetOpenPdfsTabs);
             command.commandParameters.push(Enums_1.PdfTypes.All);
-            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map(x => new _1.Pdf(x, this));
+            return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map((x) => new _1.Pdf(x, this));
         });
         this.ActivePdf = new GetSet_1.Get(async () => {
             var _a;
             const command = this.createCommand(Enums_1.ApiCommands.GetActivePdfTab);
             command.commandParameters.push(Enums_1.PdfTypes.All);
-            return (_a = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map(x => new _1.Pdf(x, this)).find(_ => true)) !== null && _a !== void 0 ? _a : null;
+            return (_a = (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.GetPdfInfos.map((x) => new _1.Pdf(x, this)).find((_) => true)) !== null && _a !== void 0 ? _a : null;
         });
         this.DrawingTemplates = new GetSet_1.Get(async () => {
             const command = this.createCommand(Enums_1.ApiCommands.GetDrawingTemplates);
@@ -120,6 +120,18 @@ class Model {
         command.commandParameters.push(position.X.toString());
         command.commandParameters.push(position.Y.toString());
         command.commandParameters.push(position.Z.toString());
+        return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
+    }
+    /**
+     * Measure the distance between two objects without opening the measurement UI.
+     * @param uid1 Uid of the first object
+     * @param uid2 Uid of the second object
+     * @returns The minimum distance between the two objects in meters
+     */
+    async createDistanceMeasurement(uid1, uid2) {
+        const command = this.createCommand(Enums_1.ApiCommands.CreateDistanceMeasurement);
+        command.commandParameters.push(uid1);
+        command.commandParameters.push(uid2);
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData;
     }
     /**

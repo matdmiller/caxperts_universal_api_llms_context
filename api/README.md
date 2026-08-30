@@ -1,3 +1,42 @@
+# Changelog 2026.4.0
+Added
+- Camera.raycastScreenPoint to raycast any screen coordinate on demand, returning hit point, object uid, distance and surface normal
+    - added ScreenCoordinateMode (Pixels / Percent, default Percent)
+- PointerClicked now also contains ObjectId, SurfaceNormal and Distance
+- Model.createDistanceMeasurement to measure the distance between two objects without opening the measurement UI
+- Events.registerApplicationClosingEvent - the callback receives an ApplicationClosingEvent with respondToClosing to allow or defer the viewer/window close
+- New FileTree events
+    - Events.registerFilesTreeObjectMovedEvent
+    - Events.registerFilesTreeObjectNameChangedEvent
+    - Events.registerFilesTreeObjectHasChangesChangedEvent
+    - Events.registerFilesTreeObjectAddedEvent
+    - Events.registerFilesTreeObjectRemovedEvent
+- New animation APIs
+    - FileTreeManager.createAnimation
+    - FileTreeAnimation.start, stop and pause
+    - FileTreeAnimation.getValue
+    - FileTreeAnimation.createState, createStates and deleteState
+    - FileTreeAnimation.AnimationStates and FileTreeAnimation.Info
+    - AnimationState with a settable Transition
+- FileTreeSketch.IsEmpty and FileTreePIDSketch.IsEmpty
+- FileTreeElement.State.HasChangesIncludingChildren
+- ModelInfo.AvailablePidAttributes
+- ClashContext.cleanClashResults to free resources after the clash results were consumed
+- AttributeConditionComparison extended with GreaterThan, GreaterThanOrEqual, LessThan and LessThanOrEqual
+- PackageCondition.createUnaryAttributeCondition to build attribute conditions that take no comparison value
+    - added AttributeConditionComparisonUnary (IsEmpty / IsNotEmpty / Exists / DoesNotExist)
+
+Fixes
+- CommentSVG filetree elements now resolve to FileTreeCommentSVG. FeatureTypes.CommentSvg is renamed to FeatureTypes.CommentSVG
+
+Changes
+- ClashContext.getClashResults added startIndex and maxResults for paging
+- FileTreeAnimation.AnimationCurrentTime changed from Set to GetSet, the current timeline position can now also be read
+- Theme.getTheme now uses the UDiTH UI variables
+- Theme.getTheme the theme or a placeholder if it is not yet available. And calls the passed function when it becomes available
+- The API connection is preloaded on startup
+- Some Websocket errors were lowered to warnings and request timings are logged through a structured logger
+
 # Changelog 2026.3.0
 Added
 - In Printer.addIntellipidPage added displayStyles used to create PDF layers

@@ -1,4 +1,4 @@
-import { ApiSerializationContainer, AttributeTreeNodeType, BoundsInfo, CameraView, ClippingDescriptor, Definition, ExportCustomAttributes, FilesTreeObject, CatalogSymbol, IntelliPidDrawingInfo, ModelInfo, ObjectColors, ProjectInfo, ProjectionSphere, SnapInfo, TakeScreenshot, ExportableOptions, Bounds, Vector3D, FileDialogApiReturnType, GenericLoadFromFileResponseResultType, ElementLinks, Intellipid, PdfInfo, TextureRenderMode, ViewerVersion, ViewerFileVersion, QualityLevel, ModelLoadMessageType, DrawingTemplate, AnimationMessageTypes } from "../Util";
+import { ApiSerializationContainer, AttributeTreeNodeType, BoundsInfo, CameraView, ClippingDescriptor, Definition, ExportCustomAttributes, FilesTreeObject, CatalogSymbol, IntelliPidDrawingInfo, ModelInfo, ObjectColors, ProjectInfo, ProjectionSphere, SnapInfo, TakeScreenshot, ExportableOptions, Bounds, Quaternion, Vector2D, Vector3D, FileDialogApiReturnType, GenericLoadFromFileResponseResultType, ElementLinks, Intellipid, PdfInfo, TextureRenderMode, ViewerVersion, ViewerFileVersion, QualityLevel, ModelLoadMessageType, DrawingTemplate, AnimationMessageTypes, AnimationTransition, AnimationStateData, AnimationInfo } from "../Util";
 export declare class GetObjects {
     Objects: string[];
 }
@@ -42,6 +42,38 @@ export declare class GetProjectInfo {
 }
 export declare class TakeScreenshotResult {
     TakeScreenshot: TakeScreenshot;
+}
+export declare class RaycastScreenPointResult {
+    /**
+     * True if a model object was hit.
+     */
+    Hit: boolean;
+    /**
+     * Resolved coordinate in pixels (always populated).
+     */
+    ScreenPixels: Vector2D;
+    /**
+     * Resolved coordinate normalized 0..1 (always populated).
+     */
+    ScreenPercent: Vector2D;
+    /**
+     * UID of the hit object; undefined on miss.
+     */
+    ObjectId?: string;
+    /**
+     * Hit point in engineering/model coordinates; undefined on miss.
+     */
+    ModelPosition?: Vector3D;
+    /**
+     * Surface normal orientation as a unit quaternion in engineering/model space
+     * whose forward (+Z) axis points along the surface normal; recover the direction
+     * with `quaternion * (0,0,1)`. Undefined on miss or edge/point hits.
+     */
+    SurfaceNormal?: Quaternion;
+    /**
+     * Distance from camera to hit point; undefined on miss.
+     */
+    Distance?: number;
 }
 export declare class GetFilesTreeObject {
     FilesTreeObject: FilesTreeObject;
@@ -133,7 +165,12 @@ export declare class FilesTreeGetStateResponse {
     Locked: boolean;
     Expanded: boolean;
     HasChanges: boolean;
+    HasChangesIncludingChildren: boolean;
     Exportable: ExportableOptions;
+    /**
+     * Index within the parent; 0 when there is no parent
+     */
+    Index: number;
 }
 export declare class GetChangeableAttributesResponse {
     ChangeableAttributes: {
@@ -143,6 +180,7 @@ export declare class GetChangeableAttributesResponse {
     };
 }
 export declare class GetClashes {
+    TotalClashes: number;
     Pairs: Clash[];
 }
 export declare class GetClashCandidates {
@@ -219,6 +257,12 @@ export declare class GetPipeMeasurementResponse {
     PipeFound: boolean;
     PipeDiameter: number;
 }
+export declare class GetDistanceMeasurementResponse {
+    /**
+     * The distance between the two objects in meters
+     */
+    Distance: number;
+}
 export declare class GetExportUpvObjectAsDgnResponse {
     DgnBase64: string;
 }
@@ -259,7 +303,28 @@ export declare class GetAnimationStart {
 export declare class GetGenerateAnimationKeyframe {
     AnimationStatus: AnimationMessageTypes;
 }
+/**
+ * Raw data of a single animation state as returned by the viewer
+ */
+export declare class GetAnimationValue {
+    Value: string;
+}
+export declare class GetAnimationState {
+    AnimationState: AnimationStateData;
+}
+export declare class GetAnimationStates {
+    AnimationStates: AnimationStateData[];
+}
+export declare class GetAnimationStateTransition {
+    Transition: AnimationTransition;
+}
+export declare class GetAnimationInfo {
+    AnimationInfo: AnimationInfo;
+}
 export declare class GetWindowLayoutResponse {
     LayoutContent: string;
+}
+export declare class GetIsSketchEmptyResponse {
+    IsEmpty: boolean;
 }
 //# sourceMappingURL=GetObjects.d.ts.map

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LayerDisplayStyle = exports.LayerSketchIdsPair = exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
+exports.LayerDisplayStyle = exports.LayerSketchIdsPair = exports.DrawingTemplate = exports.ViewerFileVersion = exports.ViewerVersion = exports.PdfDocument = exports.Intellipid = exports.PidLink = exports.UrlLink = exports.ElementLinks = exports.FileTreeState = exports.CatalogSymbol = exports.ProjectionSphere = exports.Quaternion = exports.AttributeTreeNodeType = exports.PdfInfo = exports.IntelliPidDrawingInfo = exports.CustomAttributeSourceDefinition = exports.Definition = exports.Change = exports.ExportCustomAttributes = exports.ChangeSetLine = exports.ChangeSet = exports.FilesTreeObject = exports.TakeScreenshot = exports.SnapCircle = exports.SnapInfo = exports.ProjectInfo = exports.ModelInfo = exports.Instance = exports.ClippingPlane = exports.Color = exports.ObjectColors = exports.BoundsInfo = exports.Bounds = exports.AnimationInfo = exports.AnimationStateData = exports.AnimationTransition = exports.AnimationTransitionOptions = exports.CameraView = exports.Vector4D = exports.Vector3D = exports.Vector2D = void 0;
 class Vector2D {
     constructor(X, Y) {
         this.X = X;
@@ -32,6 +32,30 @@ class CameraView {
     }
 }
 exports.CameraView = CameraView;
+/**
+ * Start and end control points used to describe an animation transition curve
+ */
+class AnimationTransitionOptions {
+}
+exports.AnimationTransitionOptions = AnimationTransitionOptions;
+/**
+ * Describes how the animation interpolates from one state to the next
+ */
+class AnimationTransition {
+}
+exports.AnimationTransition = AnimationTransition;
+/**
+ * Raw data of a single animation state as returned by the viewer
+ */
+class AnimationStateData {
+}
+exports.AnimationStateData = AnimationStateData;
+/**
+ * Playback information about an animation timeline
+ */
+class AnimationInfo {
+}
+exports.AnimationInfo = AnimationInfo;
 class Bounds {
 }
 exports.Bounds = Bounds;
@@ -121,7 +145,7 @@ class Quaternion {
             W: cr * cp * cy + sr * sp * sy,
             X: sr * cp * cy - cr * sp * sy,
             Y: cr * sp * cy + sr * cp * sy,
-            Z: cr * cp * sy - sr * sp * cy
+            Z: cr * cp * sy - sr * sp * cy,
         };
         return q;
     }

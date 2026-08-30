@@ -124,8 +124,8 @@ class ModelObject {
                 Mode: mode,
                 UnitType: unitType,
                 CodeListEntriesNames: codelist,
-                CodeListEntriesColors: codelistColors
-            }
+                CodeListEntriesColors: codelistColors,
+            },
         };
         await APIConnector_1.Api.get().sendCommand(command);
         if (this.Attributes) {
@@ -149,12 +149,12 @@ class ModelObject {
             DeleteChangeableAttribute: {
                 Uid: this.Uid,
                 DrawingPathForPid: drawingPath,
-                Name: name
-            }
+                Name: name,
+            },
         };
         await APIConnector_1.Api.get().sendCommand(command);
         if (this.Attributes) {
-            this.Attributes = this.Attributes.filter(x => x.Key != name);
+            this.Attributes = this.Attributes.filter((x) => x.Key != name);
         }
     }
 }
@@ -168,10 +168,10 @@ class Attribute {
         this.IsChangeableAttribute = isChangeableAttribute;
         this.SetCustomAttribute = new Util_1.Set(async (value) => {
             if (customAttributeDefinition == null) {
-                throw new Error('no CustomAttribute information loaded. Specify in Filter or Attribute is no Custom Attribute');
+                throw new Error("no CustomAttribute information loaded. Specify in Filter or Attribute is no Custom Attribute");
             }
             if (customAttributeDefinition.ReadOnly) {
-                throw new Error('CustomAttribute is readonly');
+                throw new Error("CustomAttribute is readonly");
             }
             const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.ImportCustomAttributeChangeSet);
             command.target = target.Id;
@@ -185,10 +185,10 @@ class Attribute {
                                 IsSessionChange: true,
                                 SourceValue: customAttributeSourceValue,
                                 Timestamp: new Date().toISOString().replace("T", " ").split(".")[0],
-                                User: value.user
-                            }]
-                    }
-                }
+                                User: value.user,
+                            }],
+                    },
+                },
             };
             await APIConnector_1.Api.get().sendCommand(command);
             this.Value = value.value;

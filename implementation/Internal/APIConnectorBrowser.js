@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ApiConnectorBrowser = void 0;
 const APIConnector_1 = require("./APIConnector");
+const Logger_1 = require("./Logger");
 /**
  * @internal
  */
@@ -20,7 +21,7 @@ class ApiConnectorBrowser {
         return this.connected;
     }
     initialize() {
-        if (!window.vuplex && 'WebSocket' in window) {
+        if (!window.vuplex && "WebSocket" in window) {
             this.connectWebSocket();
         }
     }
@@ -28,7 +29,7 @@ class ApiConnectorBrowser {
         try {
             this.webSocket = new WebSocket(this.wsUrl);
             this.webSocket.onopen = () => {
-                console.log('WebSocket connection established');
+                Logger_1.logger.debug("WebSocket connection established");
                 this.connected = true;
             };
             this.webSocket.onmessage = (event) => {
@@ -37,7 +38,7 @@ class ApiConnectorBrowser {
                     if (json.type === "ApiResponse") {
                         // check if the response contains Rejected error message
                         if (json.message && json.message.ErrorCode != 0 && json.message.ErrorMessage.startsWith("Rejected")) {
-                            console.error("API Response Error:", json.message.ErrorMessage);
+                            Logger_1.logger.error("API response error", json.message.ErrorMessage);
                             this.userRejected = true;
                         }
                         else {
@@ -46,7 +47,7 @@ class ApiConnectorBrowser {
                     }
                 }
                 catch (error) {
-                    console.error('Error parsing message:', error);
+                    Logger_1.logger.error("Error parsing message", error);
                 }
             };
             this.webSocket.onclose = () => {
@@ -56,42 +57,42 @@ class ApiConnectorBrowser {
                 }
                 if (this.reconnectAttempts < this.maxReconnectAttempts) {
                     this.reconnectAttempts++;
-                    console.log(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+                    Logger_1.logger.debug(`Attempting to reconnect (${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
                     setTimeout(() => this.connectWebSocket(), this.reconnectDelay);
                 }
                 else {
-                    console.error('Connection failed after maximum retry attempts');
+                    Logger_1.logger.warn("Connection failed after maximum retry attempts");
                 }
             };
             this.webSocket.onerror = (error) => {
-                console.error('Error:', error);
+                Logger_1.logger.warn("WebSocket error", error);
             };
         }
         catch (error) {
-            console.error('Error creating connection:', error);
+            Logger_1.logger.error("Error creating connection", error);
         }
     }
     async sendCommand(command) {
         // Wait for WebSocket connection to be ready
         const message = JSON.stringify({
-            type: 'Command',
-            message: JSON.stringify(command)
+            type: "Command",
+            message: JSON.stringify(command),
         });
         //This causes a race condition with the current optimisations in for example FilterOperation
         //The Command can be already reused in which case the second command is send twice and the first one zero times
         await this.waitForConnection();
         if (!this.webSocket || this.webSocket.readyState !== WebSocket.OPEN) {
-            throw new Error('WebSocket is not connected');
+            throw new Error("WebSocket is not connected");
         }
         this.webSocket.send(message);
     }
     waitForConnection(timeoutMs = 5000) {
         return new Promise((resolve, reject) => {
             if (!this.webSocket) {
-                return reject(new Error('No WebSocket instance available'));
+                return reject(new Error("No WebSocket instance available"));
             }
             const timeout = setTimeout(() => {
-                reject(new Error('WebSocket connection timeout'));
+                reject(new Error("WebSocket connection timeout"));
             }, timeoutMs);
             const checkConnection = () => {
                 var _a, _b;
@@ -104,7 +105,7 @@ class ApiConnectorBrowser {
                 }
                 else {
                     clearTimeout(timeout);
-                    reject(new Error('WebSocket connection failed'));
+                    reject(new Error("WebSocket connection failed"));
                 }
             };
             checkConnection();

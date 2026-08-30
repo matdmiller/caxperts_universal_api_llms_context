@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.FilesTreeImportBehaviour = exports.WindowLayoutFormat = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
+exports.FilesTreeObjectAddedSource = exports.FilesTreeImportBehaviour = exports.WindowLayoutFormat = exports.AnimationTransitionType = exports.AnimationMessageTypes = exports.DrawingExportType = exports.ModelLoadMessageType = exports.QualityLevel = exports.TextureRenderMode = exports.ChangeableAttributeUnitType = exports.PdfTypes = exports.GenericLoadFromFileResponseResultType = exports.ClashMode = exports.FileDialogApiReturnType = exports.PrimitiveType = exports.ColorMode = exports.ExportableOptions = exports.PidSketchToolMode = exports.MarkupMode = exports.ClippingMode = exports.PointOfInterestType = exports.VolumeConditionMode = exports.AttributeConditionComparisonUnary = exports.AttributeConditionComparison = exports.ConsolidationMode = exports.PackageConditionTypes = exports.ScreenCoordinateMode = exports.ApiCommands = exports.ProjectionSphereType = exports.FeatureTypes = exports.CustomAttributeDataType = exports.UpdateModes = exports.SceneType = exports.CombineModes = exports.TargetEnum = void 0;
 /**
  * @deprecated
  * Old UPV Target codes
@@ -62,7 +62,7 @@ var FeatureTypes;
     FeatureTypes["View"] = "View";
     FeatureTypes["Package"] = "Package";
     FeatureTypes["Folder"] = "Folder";
-    FeatureTypes["CommentSvg"] = "CommentSvg";
+    FeatureTypes["CommentSVG"] = "CommentSVG";
     FeatureTypes["Screenshot"] = "Screenshot";
     FeatureTypes["Photo"] = "Photo";
     FeatureTypes["TwoDToThreeD"] = "TwoDToThreeD";
@@ -162,6 +162,7 @@ var ApiCommands;
     ApiCommands["OpenPdf"] = "OpenPdf";
     ApiCommands["ClosePdf"] = "ClosePdf";
     ApiCommands["CreateDiameterMeasurement"] = "CreateDiameterMeasurement";
+    ApiCommands["CreateDistanceMeasurement"] = "CreateDistanceMeasurement";
     //Scene
     ApiCommands["TakeScreenshot"] = "TakeScreenshot";
     ApiCommands["TakeAndSaveScreenShot"] = "TakeAndSaveScreenshot";
@@ -172,6 +173,7 @@ var ApiCommands;
     ApiCommands["LoadColorFile"] = "LoadColorFile";
     ApiCommands["LoadLinkFile"] = "LoadLinkFile";
     ApiCommands["ClearLinks"] = "ClearLinks";
+    ApiCommands["RaycastScreenPoint"] = "RaycastScreenPoint";
     //FilesTree
     ApiCommands["FilesTreeDeleteObject"] = "FilesTreeDeleteObject";
     ApiCommands["GetFilesTreeChildren"] = "GetFilesTreeChildren";
@@ -205,6 +207,7 @@ var ApiCommands;
     ApiCommands["PlacePoiWithComment"] = "PlacePoiWithComment";
     // PidSketch
     ApiCommands["SetPidSketchTool"] = "SetPidSketchTool";
+    ApiCommands["GetIsSketchEmpty"] = "GetIsSketchEmpty";
     //Events
     ApiCommands["AddEventCallback"] = "AddEventCallback";
     ApiCommands["RemoveEventCallback"] = "RemoveEventCallback";
@@ -213,6 +216,7 @@ var ApiCommands;
     ApiCommands["ShowMessage"] = "ShowMessage";
     ApiCommands["FocusViewer"] = "FocusViewer";
     ApiCommands["QuitApplication"] = "QuitApplication";
+    ApiCommands["RespondToApplicationClosing"] = "RespondToApplicationClosing";
     ApiCommands["CacheModel"] = "CacheModel";
     ApiCommands["LoadModel"] = "LoadModel";
     ApiCommands["DeleteModel"] = "DeleteModel";
@@ -262,6 +266,7 @@ var ApiCommands;
     ApiCommands["GetClashCandidates"] = "GetClashCandidates";
     ApiCommands["GetClashResults"] = "GetClashResults";
     ApiCommands["CancelClashComputation"] = "CancelClashComputation";
+    ApiCommands["CleanClashResults"] = "CleanClashResults";
     //PDF Printer
     ApiCommands["PdfPrinterCreate"] = "PdfPrinterCreate";
     ApiCommands["PdfPrinterDelete"] = "PdfPrinterDelete";
@@ -284,12 +289,33 @@ var ApiCommands;
     // Animation
     ApiCommands["GenerateAnimationKeyframe"] = "GenerateAnimationKeyframe";
     ApiCommands["SetAnimationCurrentTime"] = "SetAnimationCurrentTime";
+    ApiCommands["FilesTreeCreateAnimation"] = "FilesTreeCreateAnimation";
+    ApiCommands["GetAnimationValue"] = "GetAnimationValue";
+    ApiCommands["CreateAnimationState"] = "CreateAnimationState";
+    ApiCommands["GetAnimationStates"] = "GetAnimationStates";
+    ApiCommands["DeleteAnimationState"] = "DeleteAnimationState";
+    ApiCommands["GetAnimationStateTransition"] = "GetAnimationStateTransition";
+    ApiCommands["SetAnimationStateTransition"] = "SetAnimationStateTransition";
+    ApiCommands["GetAnimationInfo"] = "GetAnimationInfo";
+    ApiCommands["AnimationStart"] = "AnimationStart";
+    ApiCommands["AnimationStop"] = "AnimationStop";
+    ApiCommands["AnimationPause"] = "AnimationPause";
     //    SetAnimationStart = "SetAnimationStart",
     //    GetAnimationStart = "GetAnimationStart",
     // Layout
     ApiCommands["GetWindowLayout"] = "GetWindowLayout";
     ApiCommands["SetWindowLayout"] = "SetWindowLayout";
 })(ApiCommands || (exports.ApiCommands = ApiCommands = {}));
+/**
+ * Interpretation of a screen coordinate passed to a raycast.
+ */
+var ScreenCoordinateMode;
+(function (ScreenCoordinateMode) {
+    /** X/Y are pixels. Origin (0,0) = bottom-left. */
+    ScreenCoordinateMode[ScreenCoordinateMode["Pixels"] = 0] = "Pixels";
+    /** X/Y are normalized 0..1. (0,0) = bottom-left, (1,1) = top-right. */
+    ScreenCoordinateMode[ScreenCoordinateMode["Percent"] = 1] = "Percent";
+})(ScreenCoordinateMode || (exports.ScreenCoordinateMode = ScreenCoordinateMode = {}));
 var PackageConditionTypes;
 (function (PackageConditionTypes) {
     PackageConditionTypes["None"] = "None";
@@ -311,7 +337,18 @@ var AttributeConditionComparison;
     AttributeConditionComparison["NotEquals"] = "!=";
     AttributeConditionComparison["Like"] = "Like";
     AttributeConditionComparison["NotLike"] = "Not Like";
+    AttributeConditionComparison["GreaterThan"] = ">";
+    AttributeConditionComparison["GreaterThanOrEqual"] = ">=";
+    AttributeConditionComparison["LessThan"] = "<";
+    AttributeConditionComparison["LessThanOrEqual"] = "<=";
 })(AttributeConditionComparison || (exports.AttributeConditionComparison = AttributeConditionComparison = {}));
+var AttributeConditionComparisonUnary;
+(function (AttributeConditionComparisonUnary) {
+    AttributeConditionComparisonUnary["IsEmpty"] = "IsEmpty";
+    AttributeConditionComparisonUnary["IsNotEmpty"] = "IsNotEmpty";
+    AttributeConditionComparisonUnary["Exists"] = "Exists";
+    AttributeConditionComparisonUnary["DoesNotExist"] = "DoesNotExist";
+})(AttributeConditionComparisonUnary || (exports.AttributeConditionComparisonUnary = AttributeConditionComparisonUnary = {}));
 var VolumeConditionMode;
 (function (VolumeConditionMode) {
     /// <summary>
@@ -375,7 +412,7 @@ var PidSketchToolMode;
     PidSketchToolMode[PidSketchToolMode["FreeHand"] = 15] = "FreeHand";
     PidSketchToolMode[PidSketchToolMode["PolyLine"] = 16] = "PolyLine";
     //
-    // These are added extra 
+    // These are added extra
     PidSketchToolMode[PidSketchToolMode["BreakLine"] = 99] = "BreakLine";
     PidSketchToolMode[PidSketchToolMode["UnBreakLine"] = 100] = "UnBreakLine";
     PidSketchToolMode[PidSketchToolMode["Copy"] = 101] = "Copy";
@@ -483,6 +520,15 @@ var AnimationMessageTypes;
     AnimationMessageTypes[AnimationMessageTypes["AnimationNotFound"] = 1] = "AnimationNotFound";
     AnimationMessageTypes[AnimationMessageTypes["Success"] = 2] = "Success";
 })(AnimationMessageTypes || (exports.AnimationMessageTypes = AnimationMessageTypes = {}));
+/**
+ * Interpolation type used between two animation states
+ */
+var AnimationTransitionType;
+(function (AnimationTransitionType) {
+    AnimationTransitionType[AnimationTransitionType["Linear"] = 0] = "Linear";
+    AnimationTransitionType[AnimationTransitionType["BSpline"] = 1] = "BSpline";
+    AnimationTransitionType[AnimationTransitionType["Jump"] = 2] = "Jump";
+})(AnimationTransitionType || (exports.AnimationTransitionType = AnimationTransitionType = {}));
 var WindowLayoutFormat;
 (function (WindowLayoutFormat) {
     WindowLayoutFormat[WindowLayoutFormat["Xml"] = 1] = "Xml";
@@ -494,3 +540,11 @@ var FilesTreeImportBehaviour;
     FilesTreeImportBehaviour[FilesTreeImportBehaviour["Replace"] = 1] = "Replace";
     FilesTreeImportBehaviour[FilesTreeImportBehaviour["Skip"] = 2] = "Skip";
 })(FilesTreeImportBehaviour || (exports.FilesTreeImportBehaviour = FilesTreeImportBehaviour = {}));
+/**
+ * How a filetree element was added to the tree
+ */
+var FilesTreeObjectAddedSource;
+(function (FilesTreeObjectAddedSource) {
+    FilesTreeObjectAddedSource[FilesTreeObjectAddedSource["Other"] = 0] = "Other";
+    FilesTreeObjectAddedSource[FilesTreeObjectAddedSource["ByUserInteraction"] = 1] = "ByUserInteraction";
+})(FilesTreeObjectAddedSource || (exports.FilesTreeObjectAddedSource = FilesTreeObjectAddedSource = {}));

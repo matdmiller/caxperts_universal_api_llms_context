@@ -18,6 +18,8 @@ class Application {
      *
      */
     constructor() {
+        //preload the API connection
+        APIConnector_1.Api.get().sendCommandWithReturnType(new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetViewerVersion));
         this.State = new Util_1.Get(async () => {
             const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.GetLifeCycleState);
             return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData
@@ -170,12 +172,12 @@ class Application {
         return await APIConnector_1.Api.get().sendCommand(command);
     }
     /**
-    * This command will only returns once the viewer has finished loading the model.
-    * THis includes for example Meshloading, TextureLoading etc.
-    * If the user is actively moving this function might never return as new Load Jobs are started.
-    * This function could be used in automation steps for example in using to capture screenshots.
-    * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
-    */
+     * This command will only returns once the viewer has finished loading the model.
+     * THis includes for example Meshloading, TextureLoading etc.
+     * If the user is actively moving this function might never return as new Load Jobs are started.
+     * This function could be used in automation steps for example in using to capture screenshots.
+     * Depending on the state it will signal that either the model was already loaded or that it now finished loading.
+     */
     async waitForModelLoading() {
         const command = new CaxApiCommand_1.CaxApiCommand(Util_1.ApiCommands.WaitForModelLoading);
         return (await APIConnector_1.Api.get().sendCommandWithReturnType(command)).ResultData.LoadStatus;

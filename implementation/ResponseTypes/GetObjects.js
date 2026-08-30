@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SaveFileApiReturnType = exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
-exports.GetWindowLayoutResponse = exports.GetGenerateAnimationKeyframe = exports.GetAnimationStart = exports.GetDrawingTemplates = exports.GetExportedDrawing = exports.GetWaitForModelLoading = exports.GetPanoramaCentresVisibility = exports.GetRenderQuality = exports.GetViewerVersion = exports.GetRenderMode = exports.GetExportUpvObjectAsUpvcResponse = exports.GetExportUpvObjectAsDgnResponse = exports.GetPipeMeasurementResponse = exports.GetLinkedElements = exports.GetModelAttributeValues = exports.GenericLoadFromFileResponse = void 0;
+exports.LoadFileApiReturnType = exports.GetUiThemes = exports.GetUiVariables = exports.GetUiColors = exports.GetStorageVariablesList = exports.GetStorageVariable = exports.GetPdfPrinterResult = exports.GetPdfPrinter = exports.ClashCandidate = exports.Clash = exports.GetClashCandidates = exports.GetClashes = exports.GetChangeableAttributesResponse = exports.FilesTreeGetStateResponse = exports.GetFilesTreeContent = exports.GetCatalogSymbols = exports.OpenAuthenticationContextResult = exports.GetWfsRemoteContent = exports.FilesTreeContainerObject = exports.GetFilesTreeContainerObject = exports.GetLanguage = exports.GetProjectionSpheres = exports.GetTreeStructure = exports.GetTreeNodesOfFolder = exports.GetTreeFolderSiblings = exports.GetTreeFolderChildren = exports.GetTreeRootNode = exports.GetPdfInfo = exports.GetIntellipidDrawings = exports.ExportCustomAttributesResult = exports.GetRawSvgPidObjects = exports.GetCustomAttributesConfiguration = exports.LifeCycleState = exports.GetLifeCycleState = exports.GetVisibleAspects = exports.GetTreeConfiguration = exports.GetFilesTreeObjects = exports.GetFilesTreeObject = exports.RaycastScreenPointResult = exports.TakeScreenshotResult = exports.GetProjectInfo = exports.GetCameraView = exports.GetObjectsSnapInfo = exports.GetClippingInfoResult = exports.GetModelInfo = exports.GetObjectsColors = exports.GetObjectsBoundingBox = exports.GetObjectsAttributes = exports.GetSelectedObjects = exports.GetObjects = void 0;
+exports.GetIsSketchEmptyResponse = exports.GetWindowLayoutResponse = exports.GetAnimationInfo = exports.GetAnimationStateTransition = exports.GetAnimationStates = exports.GetAnimationState = exports.GetAnimationValue = exports.GetGenerateAnimationKeyframe = exports.GetAnimationStart = exports.GetDrawingTemplates = exports.GetExportedDrawing = exports.GetWaitForModelLoading = exports.GetPanoramaCentresVisibility = exports.GetRenderQuality = exports.GetViewerVersion = exports.GetRenderMode = exports.GetExportUpvObjectAsUpvcResponse = exports.GetExportUpvObjectAsDgnResponse = exports.GetDistanceMeasurementResponse = exports.GetPipeMeasurementResponse = exports.GetLinkedElements = exports.GetModelAttributeValues = exports.GenericLoadFromFileResponse = exports.SaveFileApiReturnType = void 0;
 class GetObjects {
 }
 exports.GetObjects = GetObjects;
@@ -47,6 +47,9 @@ exports.GetProjectInfo = GetProjectInfo;
 class TakeScreenshotResult {
 }
 exports.TakeScreenshotResult = TakeScreenshotResult;
+class RaycastScreenPointResult {
+}
+exports.RaycastScreenPointResult = RaycastScreenPointResult;
 class GetFilesTreeObject {
 }
 exports.GetFilesTreeObject = GetFilesTreeObject;
@@ -200,6 +203,9 @@ exports.GetLinkedElements = GetLinkedElements;
 class GetPipeMeasurementResponse {
 }
 exports.GetPipeMeasurementResponse = GetPipeMeasurementResponse;
+class GetDistanceMeasurementResponse {
+}
+exports.GetDistanceMeasurementResponse = GetDistanceMeasurementResponse;
 class GetExportUpvObjectAsDgnResponse {
 }
 exports.GetExportUpvObjectAsDgnResponse = GetExportUpvObjectAsDgnResponse;
@@ -233,6 +239,27 @@ exports.GetAnimationStart = GetAnimationStart;
 class GetGenerateAnimationKeyframe {
 }
 exports.GetGenerateAnimationKeyframe = GetGenerateAnimationKeyframe;
+/**
+ * Raw data of a single animation state as returned by the viewer
+ */
+class GetAnimationValue {
+}
+exports.GetAnimationValue = GetAnimationValue;
+class GetAnimationState {
+}
+exports.GetAnimationState = GetAnimationState;
+class GetAnimationStates {
+}
+exports.GetAnimationStates = GetAnimationStates;
+class GetAnimationStateTransition {
+}
+exports.GetAnimationStateTransition = GetAnimationStateTransition;
+class GetAnimationInfo {
+}
+exports.GetAnimationInfo = GetAnimationInfo;
 class GetWindowLayoutResponse {
 }
 exports.GetWindowLayoutResponse = GetWindowLayoutResponse;
+class GetIsSketchEmptyResponse {
+}
+exports.GetIsSketchEmptyResponse = GetIsSketchEmptyResponse;
